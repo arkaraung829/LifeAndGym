@@ -148,14 +148,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (isGuest)
                       const GuestModeIndicator()
                     else
-                      CircleAvatar(
-                        radius: 24,
-                        backgroundColor: AppColors.primary,
-                        child: Text(
-                          user?.initials ?? 'U',
-                          style: AppTypography.bodyLarge.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                      GestureDetector(
+                        onTap: () => _showProfileMenu(context),
+                        child: CircleAvatar(
+                          radius: 24,
+                          backgroundColor: AppColors.primary,
+                          child: Text(
+                            user?.initials ?? 'U',
+                            style: AppTypography.bodyLarge.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -424,7 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (hasActiveSession) {
           context.push(RoutePaths.activeWorkout);
         } else {
-          _startQuickWorkout(context);
+          _showWorkoutOptionsDialog(context);
         }
       },
       child: Row(
@@ -452,9 +455,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   hasActiveSession
                       ? l10n.continueYourSession
-                      : userWorkouts.isNotEmpty
-                          ? userWorkouts.first.name
-                          : l10n.startQuickWorkout,
+                      : l10n.startWorkout,
                   style: AppTypography.bodyLarge.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -465,7 +466,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   hasActiveSession
                       ? l10n.tapToResume
                       : userWorkouts.isNotEmpty
-                          ? l10n.estimatedMinutes(userWorkouts.first.estimatedDuration)
+                          ? '${userWorkouts.length} workout plans available'
                           : l10n.noPlannedWorkouts,
                   style: AppTypography.bodySmall.copyWith(
                     color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
@@ -480,7 +481,159 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _startQuickWorkout(BuildContext context) async {
+  void _showWorkoutOptionsDialog(BuildContext context) {
+    final workoutProvider = context.read<WorkoutProvider>();
+    final userWorkouts = workoutProvider.userWorkouts;
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Start Workout',
+              style: AppTypography.heading3,
+            ),
+            AppSpacing.vGapMd,
+
+            // Quick Workout option
+            CardContainer(
+              padding: const EdgeInsets.all(12),
+              onTap: () {
+                Navigator.pop(context);
+                _startWorkout(context, workoutId: null);
+              },
+              child: Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.flash_on,
+                      color: AppColors.primary,
+                      size: 24,
+                    ),
+                  ),
+                  AppSpacing.hGapMd,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Quick Workout',
+                          style: AppTypography.bodyLarge.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          'Start a free-form workout',
+                          style: AppTypography.bodySmall.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.chevron_right),
+                ],
+              ),
+            ),
+
+            // User's workout plans
+            if (userWorkouts.isNotEmpty) ...[
+              AppSpacing.vGapMd,
+              Text(
+                'Your Workout Plans',
+                style: AppTypography.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              AppSpacing.vGapSm,
+              ...userWorkouts.take(3).map((workout) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: CardContainer(
+                    padding: const EdgeInsets.all(12),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _startWorkout(context, workoutId: workout.id);
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: AppColors.success.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.fitness_center,
+                            color: AppColors.success,
+                            size: 24,
+                          ),
+                        ),
+                        AppSpacing.hGapMd,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                workout.name,
+                                style: AppTypography.bodyLarge.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                '${workout.estimatedDuration} min • ${workout.difficulty}',
+                                style: AppTypography.bodySmall.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.6),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.chevron_right),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+
+              // View all workouts link
+              if (userWorkouts.length > 3)
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    context.push(RoutePaths.workouts);
+                  },
+                  child: const Text('View All Workouts'),
+                ),
+            ],
+
+            AppSpacing.vGapMd,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _startWorkout(BuildContext context, {String? workoutId}) async {
     final authProvider = context.read<AuthProvider>();
     final workoutProvider = context.read<WorkoutProvider>();
 
@@ -488,12 +641,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final success = await workoutProvider.startWorkoutSession(
       userId: authProvider.user!.id,
+      workoutId: workoutId,
     );
 
     if (!mounted) return;
 
     if (success) {
       context.push(RoutePaths.activeWorkout);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(workoutProvider.errorMessage ?? 'Failed to start workout'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
     }
   }
 
@@ -705,18 +866,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Calculate which days had workouts this week
     final now = DateTime.now();
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    // Get start of week (Monday at 00:00:00)
+    final startOfWeek = DateTime(now.year, now.month, now.day)
+        .subtract(Duration(days: now.weekday - 1));
     final completedDays = <int>{};
 
     for (final session in history) {
       if (session.status == SessionStatus.completed &&
-          session.startedAt.isAfter(startOfWeek)) {
+          session.startedAt.isAfter(startOfWeek) &&
+          session.startedAt.isBefore(now.add(const Duration(days: 1)))) {
         completedDays.add(session.startedAt.weekday);
       }
     }
 
     final days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    final weeklyGoal = 5; // Default weekly goal
+    final weeklyGoal = stats?['weeklyGoal'] as int? ?? 5; // Get from stats or default to 5
     final completedCount = completedDays.length;
     final streak = stats?['currentStreak'] as int? ?? 0;
 
@@ -903,6 +1067,125 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             }).toList(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showProfileMenu(BuildContext context) {
+    final authProvider = context.read<AuthProvider>();
+    final user = authProvider.user;
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Profile header
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 32,
+                  backgroundColor: AppColors.primary,
+                  child: Text(
+                    user?.initials ?? 'U',
+                    style: AppTypography.heading3.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                AppSpacing.hGapMd,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user?.fullName ?? 'User',
+                        style: AppTypography.heading4,
+                      ),
+                      Text(
+                        user?.email ?? '',
+                        style: AppTypography.bodySmall.copyWith(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            AppSpacing.vGapLg,
+            const Divider(),
+            AppSpacing.vGapMd,
+
+            // Menu options
+            ListTile(
+              leading: const Icon(Icons.person_outline),
+              title: const Text('My Profile'),
+              onTap: () {
+                Navigator.pop(context);
+                context.push(RoutePaths.profile);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.card_membership_outlined),
+              title: const Text('Membership'),
+              onTap: () {
+                Navigator.pop(context);
+                context.push(RoutePaths.membership);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings_outlined),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.pop(context);
+                // TODO: Navigate to settings screen
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Settings screen coming soon')),
+                );
+              },
+            ),
+            AppSpacing.vGapMd,
+            const Divider(),
+            AppSpacing.vGapMd,
+            ListTile(
+              leading: const Icon(Icons.logout, color: AppColors.error),
+              title: const Text('Sign Out', style: TextStyle(color: AppColors.error)),
+              onTap: () async {
+                Navigator.pop(context);
+                final confirmed = await showDialog<bool>(
+                  context: context,
+                  builder: (dialogContext) => AlertDialog(
+                    title: const Text('Sign Out'),
+                    content: const Text('Are you sure you want to sign out?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(dialogContext, false),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(dialogContext, true),
+                        child: const Text('Sign Out'),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (confirmed == true && context.mounted) {
+                  await authProvider.signOut();
+                }
+              },
+            ),
+            AppSpacing.vGapMd,
           ],
         ),
       ),

@@ -46,7 +46,7 @@ class LifeAndGymApp extends StatelessWidget {
             // Theme
             theme: ThemeConfig.lightTheme,
             darkTheme: ThemeConfig.darkTheme,
-            themeMode: ThemeMode.dark,
+            themeMode: ThemeMode.light,
 
             // Router
             routerConfig: AppRouter.router,
