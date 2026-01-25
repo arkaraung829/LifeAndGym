@@ -520,9 +520,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: AppTypography.heading4,
             ),
             TextButton(
-              onPressed: () {
-                // Navigate to classes tab
-              },
+              onPressed: () => context.go(RoutePaths.book),
               child: Text(l10n.seeAll),
             ),
           ],
@@ -549,9 +547,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   margin: const EdgeInsets.only(right: 12),
                   child: CardContainer(
                     padding: AppSpacing.cardPaddingSmall,
-                    onTap: () {
-                      // Navigate to class detail
-                    },
+                    onTap: () => context.go(RoutePaths.book),
                     child: Column(
                       children: [
                         Text(
