@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { errorResponse } from '@/lib/utils/response';
 import { NotFoundError } from '@/lib/utils/errors';
 
@@ -8,6 +8,18 @@ import * as gyms from './handlers/gyms';
 import * as memberships from './handlers/memberships';
 import * as workouts from './handlers/workouts';
 import * as classes from './handlers/classes';
+
+// Helper to return JSON error for debugging
+function jsonError(message: string, error?: unknown) {
+  return NextResponse.json(
+    {
+      success: false,
+      error: message,
+      details: error instanceof Error ? error.message : String(error)
+    },
+    { status: 500 }
+  );
+}
 
 function parsePath(params: { path?: string[] }): { domain: string; subpath: string[] } {
   const path = params.path || [];
@@ -44,7 +56,8 @@ export async function GET(
         return errorResponse(new NotFoundError('Endpoint'), request);
     }
   } catch (error) {
-    return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
+    console.error('GET Error:', error);
+    return jsonError('GET handler failed', error);
   }
 }
 
@@ -69,7 +82,8 @@ export async function POST(
         return errorResponse(new NotFoundError('Endpoint'), request);
     }
   } catch (error) {
-    return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
+    console.error('POST Error:', error);
+    return jsonError('POST handler failed', error);
   }
 }
 
@@ -88,7 +102,8 @@ export async function PATCH(
         return errorResponse(new NotFoundError('Endpoint'), request);
     }
   } catch (error) {
-    return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
+    console.error('PATCH Error:', error);
+    return jsonError('PATCH handler failed', error);
   }
 }
 
