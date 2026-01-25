@@ -1,0 +1,16 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/mcp.json",
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase"
+      ],
+      "env": {
+        "SUPABASE_URL": "your_supabase_project_url_here",
+        "SUPABASE_SERVICE_ROLE_KEY": "your_service_role_key_here"
+      }
+    }
+  }
+}
