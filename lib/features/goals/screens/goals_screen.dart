@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_spacing.dart';
-import '../../../core/extensions/context_extensions.dart';
-import '../../../shared/widgets/guest_mode_banner.dart';
 
 /// Goals screen for tracking fitness goals.
 class GoalsScreen extends StatelessWidget {
@@ -10,7 +8,6 @@ class GoalsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(

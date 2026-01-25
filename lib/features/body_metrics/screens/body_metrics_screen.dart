@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_spacing.dart';
-import '../../../core/extensions/context_extensions.dart';
 
 /// Body metrics screen for tracking measurements.
 class BodyMetricsScreen extends StatelessWidget {

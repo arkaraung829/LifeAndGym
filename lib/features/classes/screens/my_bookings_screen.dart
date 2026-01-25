@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../models/booking_model.dart';
 import '../providers/classes_provider.dart';
 
 /// My Bookings screen showing user's class bookings.
@@ -85,33 +87,33 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                           contentPadding: const EdgeInsets.all(16),
                           leading: CircleAvatar(
                             child: Icon(
-                              booking.status == 'confirmed'
+                              booking.status == BookingStatus.confirmed
                                   ? Icons.check_circle
-                                  : booking.status == 'cancelled'
+                                  : booking.status == BookingStatus.cancelled
                                       ? Icons.cancel
                                       : Icons.access_time,
                             ),
                           ),
-                          title: Text(schedule?.gymClass?.name ?? 'Class'),
+                          title: Text(schedule?.classInfo?.name ?? 'Class'),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               AppSpacing.vGapXs,
                               if (schedule?.scheduledAt != null)
                                 Text(
-                                  '${schedule!.formattedDate} at ${schedule.formattedTime}',
+                                  '${_formatDate(schedule!.scheduledAt)} at ${_formatTime(schedule.scheduledAt)}',
                                 ),
                               AppSpacing.vGapXs,
                               Chip(
                                 label: Text(
-                                  booking.status.toUpperCase(),
+                                  booking.status.displayName.toUpperCase(),
                                   style: const TextStyle(fontSize: 12),
                                 ),
                                 visualDensity: VisualDensity.compact,
                               ),
                             ],
                           ),
-                          trailing: booking.status == 'confirmed'
+                          trailing: booking.status == BookingStatus.confirmed
                               ? IconButton(
                                   icon: const Icon(Icons.close),
                                   onPressed: () {
@@ -125,5 +127,13 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                   ),
                 ),
     );
+  }
+
+  String _formatDate(DateTime date) {
+    return DateFormat('MMM d, yyyy').format(date);
+  }
+
+  String _formatTime(DateTime time) {
+    return DateFormat('h:mm a').format(time);
   }
 }
