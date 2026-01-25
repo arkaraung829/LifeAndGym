@@ -234,15 +234,11 @@ async function handleCancelBooking(request: NextRequest, bookingId: string) {
 
   const wasConfirmed = booking.status === 'confirmed';
 
-  const { data: updatedBooking, error } = await supabaseAdmin
+  // Delete the booking instead of updating to avoid unique constraint issues on re-booking
+  const { error } = await supabaseAdmin
     .from(Tables.bookings)
-    .update({
-      status: 'cancelled',
-      cancelled_at: new Date().toISOString(),
-    })
-    .eq('id', bookingId)
-    .select(`*, schedule:${Tables.classSchedules}(*, classes:${Tables.classes}(*))`)
-    .single();
+    .delete()
+    .eq('id', bookingId);
 
   if (error) throw new DatabaseError('Failed to cancel booking');
 
@@ -269,5 +265,5 @@ async function handleCancelBooking(request: NextRequest, bookingId: string) {
     }
   }
 
-  return successResponse({ booking: updatedBooking }, request);
+  return successResponse({ message: 'Booking cancelled successfully' }, request);
 }
