@@ -271,7 +271,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        session.workoutName ?? 'Quick Workout',
+                        session.workout?.name ?? 'Quick Workout',
                         style: AppTypography.bodyLarge.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -288,10 +288,10 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
                     ],
                   ),
                 ),
-                if (session.duration != null)
+                if (session.durationMinutes != null)
                   Chip(
                     label: Text(
-                      '${session.duration} min',
+                      '${session.durationMinutes} min',
                       style: const TextStyle(fontSize: 12),
                     ),
                     visualDensity: VisualDensity.compact,
@@ -310,7 +310,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
         return AppColors.success;
       case SessionStatus.cancelled:
         return AppColors.error;
-      case SessionStatus.active:
+      case SessionStatus.inProgress:
         return AppColors.warning;
     }
   }
@@ -321,7 +321,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
         return Icons.check_circle;
       case SessionStatus.cancelled:
         return Icons.cancel;
-      case SessionStatus.active:
+      case SessionStatus.inProgress:
         return Icons.play_circle;
     }
   }

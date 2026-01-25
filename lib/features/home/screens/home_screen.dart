@@ -554,7 +554,7 @@ class _HomeScreenState extends State<HomeScreen> {
               AppSpacing.vGapMd,
               Text(
                 'Your Workout Plans',
-                style: AppTypography.bodyMedium.copyWith(
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
