@@ -13,8 +13,8 @@ class ApiConfig {
     if (envUrl.isNotEmpty) return envUrl;
 
     return switch (AppConfig.environment) {
-      'production' => 'https://lifeandgym.vercel.app',
-      'staging' => 'https://lifeandgym-staging.vercel.app',
+      'production' => 'https://life-and-gym-ktbz.vercel.app',
+      'staging' => 'https://life-and-gym-ktbz.vercel.app',
       _ => 'http://localhost:3000', // Local Next.js dev server
     };
   }
