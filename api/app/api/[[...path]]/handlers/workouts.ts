@@ -137,7 +137,7 @@ async function handleListWorkouts(request: NextRequest) {
 
   const { data: workouts, error } = await supabaseAdmin
     .from(Tables.workouts)
-    .select(`*, exercises:${Tables.workoutExercises}(*, exercise:${Tables.exercises}(*))`)
+    .select('*')
     .eq('user_id', user.id)
     .order('updated_at', { ascending: false });
 
@@ -150,7 +150,7 @@ async function handleGetWorkout(request: NextRequest, workoutId: string) {
 
   const { data: workout, error } = await supabaseAdmin
     .from(Tables.workouts)
-    .select(`*, exercises:${Tables.workoutExercises}(*, exercise:${Tables.exercises}(*))`)
+    .select('*')
     .eq('id', workoutId)
     .or(`user_id.eq.${user.id},is_public.eq.true`)
     .single();
@@ -166,7 +166,7 @@ async function handleGetWorkout(request: NextRequest, workoutId: string) {
 async function handleListPublicWorkouts(request: NextRequest) {
   const { data: workouts, error } = await supabaseAdmin
     .from(Tables.workouts)
-    .select(`*, exercises:${Tables.workoutExercises}(*, exercise:${Tables.exercises}(*))`)
+    .select('*')
     .eq('is_public', true)
     .eq('is_template', true)
     .order('name');
@@ -186,10 +186,10 @@ async function handleCreateWorkout(request: NextRequest) {
       user_id: user.id,
       name: body.name,
       description: body.description,
-      category: body.category,
-      estimated_duration: body.estimatedDuration,
+      workout_type: body.category,
+      estimated_duration_minutes: body.estimatedDuration,
       difficulty: body.difficulty,
-      target_muscles: body.targetMuscles,
+      exercises: body.exercises || [],
       is_public: body.isPublic,
       is_template: body.isTemplate,
       created_at: now,
@@ -200,44 +200,19 @@ async function handleCreateWorkout(request: NextRequest) {
 
   if (error) throw new DatabaseError('Failed to create workout');
 
-  if (body.exercises && body.exercises.length > 0) {
-    const exerciseData = body.exercises.map((e) => ({
-      workout_id: workout.id,
-      exercise_id: e.exerciseId,
-      order_index: e.orderIndex,
-      sets: e.sets,
-      reps: e.reps,
-      duration: e.duration,
-      weight: e.weight,
-      rest_seconds: e.restSeconds,
-      notes: e.notes,
-    }));
-
-    const { error: exerciseError } = await supabaseAdmin
-      .from(Tables.workoutExercises)
-      .insert(exerciseData);
-
-    if (exerciseError) throw new DatabaseError('Failed to add exercises to workout');
-  }
-
-  const { data: completeWorkout } = await supabaseAdmin
-    .from(Tables.workouts)
-    .select(`*, exercises:${Tables.workoutExercises}(*, exercise:${Tables.exercises}(*))`)
-    .eq('id', workout.id)
-    .single();
-
-  return successResponse({ workout: completeWorkout }, request, { status: 201 });
+  return successResponse({ workout }, request, { status: 201 });
 }
 
 async function handleStartSession(request: NextRequest) {
   const { user } = await verifyAuth(request);
   const body = await parseBody(request, sessionSchema);
 
+  // Check for existing active session (one without completed_at)
   const { data: existingSession } = await supabaseAdmin
     .from(Tables.workoutSessions)
     .select('*')
     .eq('user_id', user.id)
-    .eq('status', 'in_progress')
+    .is('completed_at', null)
     .single();
 
   if (existingSession) {
@@ -250,8 +225,8 @@ async function handleStartSession(request: NextRequest) {
       user_id: user.id,
       workout_id: body.workoutId,
       notes: body.notes,
+      name: body.workoutId ? '' : 'Quick Workout',
       started_at: new Date().toISOString(),
-      status: 'in_progress',
     })
     .select(`*, workout:${Tables.workouts}(*)`)
     .single();
@@ -267,7 +242,7 @@ async function handleGetActiveSession(request: NextRequest) {
     .from(Tables.workoutSessions)
     .select(`*, workout:${Tables.workouts}(*), logs:${Tables.workoutLogs}(*)`)
     .eq('user_id', user.id)
-    .eq('status', 'in_progress')
+    .is('completed_at', null)
     .single();
 
   if (error) {
@@ -289,7 +264,7 @@ async function handleLogSet(request: NextRequest, sessionId: string) {
     .select('*')
     .eq('id', sessionId)
     .eq('user_id', user.id)
-    .eq('status', 'in_progress')
+    .is('completed_at', null)
     .single();
 
   if (sessionError || !session) {
@@ -304,7 +279,7 @@ async function handleLogSet(request: NextRequest, sessionId: string) {
       set_number: body.setNumber,
       reps: body.reps,
       weight: body.weight,
-      duration: body.duration,
+      duration_seconds: body.duration,
       notes: body.notes,
       completed_at: new Date().toISOString(),
     })
@@ -323,7 +298,7 @@ async function handleCompleteSession(request: NextRequest, sessionId: string) {
     .select(`*, logs:${Tables.workoutLogs}(*)`)
     .eq('id', sessionId)
     .eq('user_id', user.id)
-    .eq('status', 'in_progress')
+    .is('completed_at', null)
     .single();
 
   if (sessionError || !session) {
@@ -337,7 +312,7 @@ async function handleCompleteSession(request: NextRequest, sessionId: string) {
   const logs = session.logs || [];
   const totalSets = logs.length;
   const totalReps = logs.reduce((sum: number, l: { reps?: number }) => sum + (l.reps || 0), 0);
-  const totalWeight = logs.reduce((sum: number, l: { weight?: number; reps?: number }) => sum + ((l.weight || 0) * (l.reps || 1)), 0);
+  const totalVolume = logs.reduce((sum: number, l: { weight?: number; reps?: number }) => sum + ((l.weight || 0) * (l.reps || 1)), 0);
 
   const { data: updatedSession, error } = await supabaseAdmin
     .from(Tables.workoutSessions)
@@ -346,8 +321,7 @@ async function handleCompleteSession(request: NextRequest, sessionId: string) {
       duration_minutes: durationMinutes,
       total_sets: totalSets,
       total_reps: totalReps,
-      total_weight: totalWeight,
-      status: 'completed',
+      total_volume: totalVolume,
     })
     .eq('id', sessionId)
     .select(`*, workout:${Tables.workouts}(*)`)
@@ -369,7 +343,7 @@ async function handleGetWorkoutHistory(request: NextRequest) {
     .from(Tables.workoutSessions)
     .select(`*, workout:${Tables.workouts}(*)`, { count: 'exact' })
     .eq('user_id', user.id)
-    .eq('status', 'completed');
+    .not('completed_at', 'is', null);
 
   if (startDate) {
     const start = new Date(startDate);
@@ -395,9 +369,9 @@ async function handleGetWorkoutStats(request: NextRequest) {
 
   const { data: sessions, error } = await supabaseAdmin
     .from(Tables.workoutSessions)
-    .select('duration_minutes, total_sets, total_reps, total_weight, completed_at')
+    .select('duration_minutes, total_sets, total_reps, total_volume, completed_at')
     .eq('user_id', user.id)
-    .eq('status', 'completed');
+    .not('completed_at', 'is', null);
 
   if (error) throw new DatabaseError('Failed to fetch workout stats');
 
@@ -405,7 +379,7 @@ async function handleGetWorkoutStats(request: NextRequest) {
   const totalMinutes = sessions?.reduce((sum, s) => sum + (s.duration_minutes || 0), 0) || 0;
   const totalSets = sessions?.reduce((sum, s) => sum + (s.total_sets || 0), 0) || 0;
   const totalReps = sessions?.reduce((sum, s) => sum + (s.total_reps || 0), 0) || 0;
-  const totalWeight = sessions?.reduce((sum, s) => sum + (s.total_weight || 0), 0) || 0;
+  const totalVolume = sessions?.reduce((sum, s) => sum + (Number(s.total_volume) || 0), 0) || 0;
 
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() - 7);
@@ -417,7 +391,7 @@ async function handleGetWorkoutStats(request: NextRequest) {
       totalMinutes,
       totalSets,
       totalReps,
-      totalWeightLifted: totalWeight,
+      totalWeightLifted: totalVolume,
       workoutsThisWeek,
       averageDurationMinutes: totalWorkouts > 0 ? Math.round(totalMinutes / totalWorkouts) : 0,
     },

@@ -46,7 +46,6 @@ export const Tables = {
   bookings: 'bookings',
   exercises: 'exercises',
   workouts: 'workouts',
-  workoutExercises: 'workout_exercises',
   workoutSessions: 'workout_sessions',
   workoutLogs: 'workout_logs',
   goals: 'goals',

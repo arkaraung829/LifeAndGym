@@ -93,7 +93,7 @@ async function handleListSchedules(request: NextRequest) {
   let dbQuery = supabaseAdmin
     .from(Tables.classSchedules)
     .select(`*, gym_class:${Tables.classes}(*)`)
-    .eq('is_cancelled', false)
+    .neq('status', 'cancelled')
     .gt('scheduled_at', new Date().toISOString());
 
   if (query.gymId) {
