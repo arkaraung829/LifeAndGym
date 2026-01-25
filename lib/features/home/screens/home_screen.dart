@@ -210,57 +210,53 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildQRCheckInCard(BuildContext context) {
     final l10n = context.l10n;
     final membershipProvider = context.watch<MembershipProvider>();
-    final membership = membershipProvider.activeMembership;
     final isCheckedIn = membershipProvider.isCheckedIn;
 
     return GradientCard(
       gradient: isCheckedIn ? AppColors.successGradient : AppColors.primaryGradient,
-      padding: AppSpacing.cardPaddingLarge,
+      padding: const EdgeInsets.all(16),
       onTap: () {
         _showQRDialog(context);
       },
-      child: Column(
+      child: Row(
         children: [
-          Row(
-            children: [
-              Icon(
-                isCheckedIn ? Icons.check_circle : Icons.qr_code_2,
-                color: Colors.white,
-                size: 24,
-              ),
-              AppSpacing.hGapSm,
-              Text(
-                isCheckedIn ? l10n.checkedIn : l10n.tapToCheckIn,
-                style: AppTypography.labelLarge.copyWith(
-                  color: Colors.white,
-                  letterSpacing: 1,
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.vGapMd,
           Container(
-            padding: const EdgeInsets.all(12),
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: AppSpacing.borderRadiusMd,
+              color: Colors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: QrImageView(
-              data: membership != null
-                  ? 'MEMBER-${membership.id}'
-                  : 'MEMBER-${DateTime.now().millisecondsSinceEpoch}',
-              version: QrVersions.auto,
-              size: 120,
+            child: Icon(
+              isCheckedIn ? Icons.check_circle : Icons.qr_code_2,
+              color: Colors.white,
+              size: 24,
             ),
           ),
-          AppSpacing.vGapMd,
-          Text(
-            membership != null
-                ? l10n.memberType(membership.planType.name)
-                : l10n.noActiveMembership,
-            style: AppTypography.bodySmall.copyWith(
-              color: Colors.white.withValues(alpha: 0.9),
+          AppSpacing.hGapMd,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isCheckedIn ? l10n.checkedIn : l10n.tapToCheckIn,
+                  style: AppTypography.bodyLarge.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  isCheckedIn ? 'Active session' : 'Show QR code',
+                  style: AppTypography.bodySmall.copyWith(
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
+                ),
+              ],
             ),
+          ),
+          const Icon(
+            Icons.chevron_right,
+            color: Colors.white,
           ),
         ],
       ),
