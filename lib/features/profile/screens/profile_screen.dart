@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/extensions/context_extensions.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/router/route_names.dart';
 import '../../../shared/widgets/card_container.dart';
 import '../../../shared/widgets/guest_mode_banner.dart';
@@ -19,10 +21,11 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
     final user = authProvider.user;
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(l10n.profile),
         actions: [
           if (!authProvider.isGuest)
             IconButton(
@@ -137,7 +140,7 @@ class ProfileScreen extends StatelessWidget {
             context.push(RoutePaths.editProfile);
           },
           icon: const Icon(Icons.edit, size: 18),
-          label: const Text('Edit Profile'),
+          label: Text(context.l10n.editProfile),
         ),
       ],
     );
@@ -251,47 +254,12 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _buildMenuSection(BuildContext context) {
-    final menuItems = [
-      {
-        'icon': Icons.notifications_outlined,
-        'title': 'Notifications',
-        'onTap': () {},
-      },
-      {
-        'icon': Icons.flag_outlined,
-        'title': 'Goals',
-        'onTap': () {},
-      },
-      {
-        'icon': Icons.monitor_weight_outlined,
-        'title': 'Body Metrics',
-        'onTap': () {},
-      },
-      {
-        'icon': Icons.history,
-        'title': 'Workout History',
-        'onTap': () {},
-      },
-      {
-        'icon': Icons.calendar_today_outlined,
-        'title': 'My Bookings',
-        'onTap': () {},
-      },
-      {
-        'icon': Icons.help_outline,
-        'title': 'Help & Support',
-        'onTap': () {},
-      },
-      {
-        'icon': Icons.info_outline,
-        'title': 'About',
-        'onTap': () {},
-      },
-    ];
+    final l10n = context.l10n;
+    final localeProvider = context.watch<LocaleProvider>();
 
     return Column(
-      children: menuItems.map((item) {
-        return ListTileCard(
+      children: [
+        ListTileCard(
           leading: Container(
             width: 40,
             height: 40,
@@ -300,36 +268,200 @@ class ProfileScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
-              item['icon'] as IconData,
+              Icons.notifications_outlined,
               size: 20,
               color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
             ),
           ),
-          title: item['title'] as String,
-          onTap: item['onTap'] as VoidCallback,
-        );
-      }).toList(),
+          title: l10n.notifications,
+          onTap: () {},
+        ),
+        ListTileCard(
+          leading: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              Icons.language,
+              size: 20,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+          ),
+          title: l10n.language,
+          trailing: Text(
+            localeProvider.currentLocaleName,
+            style: AppTypography.bodySmall.copyWith(
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+          ),
+          onTap: () => _showLanguageDialog(context),
+        ),
+        ListTileCard(
+          leading: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              Icons.flag_outlined,
+              size: 20,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+          ),
+          title: 'Goals',
+          onTap: () {},
+        ),
+        ListTileCard(
+          leading: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              Icons.monitor_weight_outlined,
+              size: 20,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+          ),
+          title: 'Body Metrics',
+          onTap: () {},
+        ),
+        ListTileCard(
+          leading: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              Icons.history,
+              size: 20,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+          ),
+          title: l10n.workoutHistory,
+          onTap: () {},
+        ),
+        ListTileCard(
+          leading: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              Icons.calendar_today_outlined,
+              size: 20,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+          ),
+          title: l10n.myBookings,
+          onTap: () {},
+        ),
+        ListTileCard(
+          leading: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              Icons.help_outline,
+              size: 20,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+          ),
+          title: 'Help & Support',
+          onTap: () {},
+        ),
+        ListTileCard(
+          leading: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              Icons.info_outline,
+              size: 20,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+          ),
+          title: l10n.about,
+          onTap: () {},
+        ),
+      ],
+    );
+  }
+
+  void _showLanguageDialog(BuildContext context) {
+    final localeProvider = context.read<LocaleProvider>();
+    final l10n = context.l10n;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.language),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: LocaleProvider.supportedLocales.map((locale) {
+            final isSelected = localeProvider.locale == locale;
+            return RadioListTile<Locale>(
+              title: Text(localeProvider.getDisplayName(locale)),
+              value: locale,
+              groupValue: localeProvider.locale,
+              activeColor: AppColors.primary,
+              onChanged: (value) {
+                if (value != null) {
+                  localeProvider.setLocale(value);
+                  Navigator.pop(context);
+                }
+              },
+              selected: isSelected,
+            );
+          }).toList(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildSignOutButton(BuildContext context) {
+    final l10n = context.l10n;
+
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton.icon(
         onPressed: () async {
           final confirmed = await showDialog<bool>(
             context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Sign Out'),
-              content: const Text('Are you sure you want to sign out?'),
+            builder: (dialogContext) => AlertDialog(
+              title: Text(l10n.logout),
+              content: Text(l10n.logoutConfirmation),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancel'),
+                  onPressed: () => Navigator.pop(dialogContext, false),
+                  child: Text(l10n.cancel),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: const Text('Sign Out'),
+                  onPressed: () => Navigator.pop(dialogContext, true),
+                  child: Text(l10n.logout),
                 ),
               ],
             ),
@@ -344,8 +476,8 @@ class ProfileScreen extends StatelessWidget {
         },
         icon: const Icon(Icons.logout, color: AppColors.error),
         label: Text(
-          'Sign Out',
-          style: TextStyle(color: AppColors.error),
+          l10n.logout,
+          style: const TextStyle(color: AppColors.error),
         ),
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: AppColors.error),
