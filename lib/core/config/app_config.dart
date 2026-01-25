@@ -5,9 +5,10 @@ class AppConfig {
   AppConfig._();
 
   /// Current environment (set via --dart-define)
+  /// Use --dart-define=ENV=development for local API testing
   static const String environment = String.fromEnvironment(
     'ENV',
-    defaultValue: 'development',
+    defaultValue: 'production',
   );
 
   /// Whether the app is running in development mode.
