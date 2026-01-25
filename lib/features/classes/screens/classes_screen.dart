@@ -348,9 +348,10 @@ class _ClassesScreenState extends State<ClassesScreen> {
     final typeColor = AppColors.getClassTypeColor(classInfo?.type.value ?? 'other');
 
     // Check if user has booked this class
-    final isBooked = classesProvider.bookings.any(
-      (b) => b.classScheduleId == schedule.id && b.isConfirmed,
-    );
+    final userBooking = classesProvider.bookings
+        .where((b) => b.classScheduleId == schedule.id && b.isConfirmed)
+        .firstOrNull;
+    final isBooked = userBooking != null;
 
     return CardContainer(
       margin: const EdgeInsets.only(bottom: 12),
@@ -445,9 +446,9 @@ class _ClassesScreenState extends State<ClassesScreen> {
                 ),
               ),
               const Spacer(),
-              if (isBooked)
+              if (isBooked && userBooking != null)
                 OutlinedButton(
-                  onPressed: () => _cancelBooking(schedule.id),
+                  onPressed: () => _cancelBooking(userBooking.id),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.error,
                     minimumSize: const Size(100, 36),

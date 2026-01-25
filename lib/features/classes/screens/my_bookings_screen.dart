@@ -116,9 +116,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                           trailing: booking.status == BookingStatus.confirmed
                               ? IconButton(
                                   icon: const Icon(Icons.close),
-                                  onPressed: () {
-                                    // TODO: Cancel booking
-                                  },
+                                  onPressed: () => _cancelBooking(context, booking.id),
                                 )
                               : null,
                         ),
@@ -135,5 +133,52 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
 
   String _formatTime(DateTime time) {
     return DateFormat('h:mm a').format(time);
+  }
+
+  Future<void> _cancelBooking(BuildContext context, String bookingId) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Cancel Booking'),
+        content: const Text('Are you sure you want to cancel this booking?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !context.mounted) return;
+
+    final classesProvider = context.read<ClassesProvider>();
+    final authProvider = context.read<AuthProvider>();
+
+    final success = await classesProvider.cancelBooking(bookingId);
+
+    if (!context.mounted) return;
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Booking cancelled successfully')),
+      );
+      // Reload bookings
+      if (authProvider.user != null) {
+        await classesProvider.loadBookings(authProvider.user!.id);
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(classesProvider.error ?? 'Failed to cancel booking'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+      classesProvider.clearError();
+    }
   }
 }
