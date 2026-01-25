@@ -92,7 +92,7 @@ async function handleListSchedules(request: NextRequest) {
 
   let dbQuery = supabaseAdmin
     .from(Tables.classSchedules)
-    .select(`*, gym_class:${Tables.classes}(*)`)
+    .select(`*, classes:${Tables.classes}(*)`)
     .neq('status', 'cancelled')
     .gt('scheduled_at', new Date().toISOString());
 
@@ -135,7 +135,7 @@ async function handleListBookings(request: NextRequest) {
 
   let dbQuery = supabaseAdmin
     .from(Tables.bookings)
-    .select(`*, schedule:${Tables.classSchedules}(*, gym_class:${Tables.classes}(*))`)
+    .select(`*, schedule:${Tables.classSchedules}(*, classes:${Tables.classes}(*))`)
     .eq('user_id', user.id);
 
   if (status) {
@@ -157,7 +157,7 @@ async function handleCreateBooking(request: NextRequest) {
 
   const { data: schedule, error: scheduleError } = await supabaseAdmin
     .from(Tables.classSchedules)
-    .select(`*, gym_class:${Tables.classes}(*)`)
+    .select(`*, classes:${Tables.classes}(*)`)
     .eq('id', body.scheduleId)
     .single();
 
@@ -195,7 +195,7 @@ async function handleCreateBooking(request: NextRequest) {
       status,
       booked_at: new Date().toISOString(),
     })
-    .select(`*, schedule:${Tables.classSchedules}(*, gym_class:${Tables.classes}(*))`)
+    .select(`*, schedule:${Tables.classSchedules}(*, classes:${Tables.classes}(*))`)
     .single();
 
   if (error) throw new DatabaseError('Failed to create booking');
@@ -241,7 +241,7 @@ async function handleCancelBooking(request: NextRequest, bookingId: string) {
       cancelled_at: new Date().toISOString(),
     })
     .eq('id', bookingId)
-    .select(`*, schedule:${Tables.classSchedules}(*, gym_class:${Tables.classes}(*))`)
+    .select(`*, schedule:${Tables.classSchedules}(*, classes:${Tables.classes}(*))`)
     .single();
 
   if (error) throw new DatabaseError('Failed to cancel booking');
