@@ -36,7 +36,7 @@ class AppColors {
   static const Color borderDark = Color(0xFF475569);           // Slate 600
 
   // Neutral Colors - Light Mode
-  static const Color backgroundLight = Color(0xFFF8FAFC);      // Slate 50
+  static const Color backgroundLight = Color(0xFFFFFFFF);      // White
   static const Color surfaceLight = Color(0xFFFFFFFF);         // White
   static const Color surfaceVariantLight = Color(0xFFF1F5F9);  // Slate 100
   static const Color onSurfaceLight = Color(0xFF0F172A);       // Slate 900
