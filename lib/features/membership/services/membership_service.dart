@@ -1,16 +1,22 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/config/api_config.dart';
+import '../../../core/config/supabase_config.dart';
 import '../../../core/exceptions/exceptions.dart';
 import '../../../core/services/api_client.dart';
 import '../../../core/services/logger_service.dart';
 import '../models/check_in_model.dart';
 import '../models/membership_model.dart';
 
-/// Service for membership and check-in operations via API.
+/// Service for membership and check-in operations.
+/// Uses API for most operations, Supabase directly for operations without API endpoints.
 class MembershipService {
   final ApiClient _apiClient;
+  final SupabaseClient _supabase;
 
-  MembershipService({ApiClient? apiClient})
-      : _apiClient = apiClient ?? ApiClient();
+  MembershipService({ApiClient? apiClient, SupabaseClient? supabase})
+      : _apiClient = apiClient ?? ApiClient(),
+        _supabase = supabase ?? SupabaseConfig.client;
 
   /// Get user's active membership.
   Future<MembershipModel?> getActiveMembership(String userId) async {
@@ -67,6 +73,68 @@ class MembershipService {
       if (e is AppException) rethrow;
       throw DatabaseException(
         'Failed to load memberships',
+        originalError: e,
+      );
+    }
+  }
+
+  /// Create a new membership (Supabase direct).
+  Future<MembershipModel> createMembership({
+    required String userId,
+    required String gymId,
+    required MembershipPlanType planType,
+    String? homeGymId,
+    bool accessAllLocations = false,
+  }) async {
+    try {
+      AppLogger.info('Creating membership for user: $userId');
+
+      final now = DateTime.now();
+      final endDate = _calculateEndDate(now, planType);
+
+      final response = await _supabase.from(Tables.memberships).insert({
+        'user_id': userId,
+        'gym_id': gymId,
+        'plan_type': planType.name,
+        'status': 'active',
+        'start_date': now.toIso8601String(),
+        'end_date': endDate.toIso8601String(),
+        'home_gym_id': homeGymId ?? gymId,
+        'access_all_locations': accessAllLocations,
+      }).select().single();
+
+      final membership = MembershipModel.fromJson(response);
+      AppLogger.info('Created membership: ${membership.id}');
+      return membership;
+    } catch (e) {
+      AppLogger.error('Failed to create membership', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException(
+        'Failed to create membership',
+        originalError: e,
+      );
+    }
+  }
+
+  /// Update membership status (Supabase direct).
+  Future<void> updateMembershipStatus(
+    String membershipId,
+    MembershipStatus status,
+  ) async {
+    try {
+      AppLogger.info('Updating membership status: $membershipId to ${status.name}');
+
+      await _supabase
+          .from(Tables.memberships)
+          .update({'status': status.name})
+          .eq('id', membershipId);
+
+      AppLogger.info('Updated membership status');
+    } catch (e) {
+      AppLogger.error('Failed to update membership status', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException(
+        'Failed to update membership',
         originalError: e,
       );
     }
@@ -193,5 +261,27 @@ class MembershipService {
         originalError: e,
       );
     }
+  }
+
+  // Helper to calculate membership end date based on plan type
+  DateTime _calculateEndDate(DateTime startDate, MembershipPlanType planType) {
+    return switch (planType) {
+      MembershipPlanType.dayPass => startDate.add(const Duration(days: 1)),
+      MembershipPlanType.basic => DateTime(
+          startDate.year,
+          startDate.month + 1,
+          startDate.day,
+        ),
+      MembershipPlanType.premium => DateTime(
+          startDate.year,
+          startDate.month + 1,
+          startDate.day,
+        ),
+      MembershipPlanType.vip => DateTime(
+          startDate.year + 1,
+          startDate.month,
+          startDate.day,
+        ),
+    };
   }
 }

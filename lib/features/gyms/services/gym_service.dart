@@ -1,14 +1,21 @@
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../core/config/api_config.dart';
+import '../../../core/config/supabase_config.dart';
 import '../../../core/exceptions/exceptions.dart';
 import '../../../core/services/api_client.dart';
 import '../../../core/services/logger_service.dart';
 import '../models/gym_model.dart';
 
-/// Service for gym-related operations via API.
+/// Service for gym-related operations.
+/// Uses API for most operations, Supabase directly for streaming.
 class GymService {
   final ApiClient _apiClient;
+  final SupabaseClient _supabase;
 
-  GymService({ApiClient? apiClient}) : _apiClient = apiClient ?? ApiClient();
+  GymService({ApiClient? apiClient, SupabaseClient? supabase})
+      : _apiClient = apiClient ?? ApiClient(),
+        _supabase = supabase ?? SupabaseConfig.client;
 
   /// Get all active gyms.
   Future<List<GymModel>> getAllGyms() async {
@@ -113,5 +120,19 @@ class GymService {
         originalError: e,
       );
     }
+  }
+
+  /// Stream gym occupancy updates (Supabase realtime).
+  Stream<GymModel> streamGymOccupancy(String gymId) {
+    return _supabase
+        .from(Tables.gyms)
+        .stream(primaryKey: ['id'])
+        .eq('id', gymId)
+        .map((rows) {
+          if (rows.isEmpty) {
+            throw DatabaseException('Gym not found');
+          }
+          return GymModel.fromJson(rows.first);
+        });
   }
 }

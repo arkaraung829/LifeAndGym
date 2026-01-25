@@ -13,6 +13,7 @@ const workoutSchema = z.object({
   estimatedDuration: z.number().positive(),
   difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
   targetMuscles: z.array(z.string()).optional(),
+  isTemplate: z.boolean().default(false),
   isPublic: z.boolean().default(false),
   exercises: z.array(z.object({
     exerciseId: z.string().uuid(),
@@ -28,6 +29,7 @@ const workoutSchema = z.object({
 
 const sessionSchema = z.object({
   workoutId: z.string().uuid().optional(),
+  notes: z.string().optional(),
 });
 
 const logSetSchema = z.object({
@@ -189,7 +191,7 @@ async function handleCreateWorkout(request: NextRequest) {
       difficulty: body.difficulty,
       target_muscles: body.targetMuscles,
       is_public: body.isPublic,
-      is_template: false,
+      is_template: body.isTemplate,
       created_at: now,
       updated_at: now,
     })
@@ -247,6 +249,7 @@ async function handleStartSession(request: NextRequest) {
     .insert({
       user_id: user.id,
       workout_id: body.workoutId,
+      notes: body.notes,
       started_at: new Date().toISOString(),
       status: 'in_progress',
     })
@@ -359,12 +362,27 @@ async function handleGetWorkoutHistory(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const limit = parseInt(searchParams.get('limit') || '20');
   const offset = parseInt(searchParams.get('offset') || '0');
+  const startDate = searchParams.get('startDate');
+  const endDate = searchParams.get('endDate');
 
-  const { data: sessions, error, count } = await supabaseAdmin
+  let dbQuery = supabaseAdmin
     .from(Tables.workoutSessions)
     .select(`*, workout:${Tables.workouts}(*)`, { count: 'exact' })
     .eq('user_id', user.id)
-    .eq('status', 'completed')
+    .eq('status', 'completed');
+
+  if (startDate) {
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+    dbQuery = dbQuery.gte('completed_at', start.toISOString());
+  }
+  if (endDate) {
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+    dbQuery = dbQuery.lte('completed_at', end.toISOString());
+  }
+
+  const { data: sessions, error, count } = await dbQuery
     .order('completed_at', { ascending: false })
     .range(offset, offset + limit - 1);
 

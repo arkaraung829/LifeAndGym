@@ -42,7 +42,8 @@ class ClassService {
   Future<List<ClassScheduleModel>> getSchedules({
     String? gymId,
     String? classId,
-    DateTime? date,
+    DateTime? startDate,
+    DateTime? endDate,
   }) async {
     try {
       AppLogger.info('Fetching schedules');
@@ -50,7 +51,8 @@ class ClassService {
       final queryParams = <String, dynamic>{};
       if (gymId != null) queryParams['gymId'] = gymId;
       if (classId != null) queryParams['classId'] = classId;
-      if (date != null) queryParams['date'] = date.toIso8601String().split('T').first;
+      if (startDate != null) queryParams['startDate'] = startDate.toIso8601String().split('T').first;
+      if (endDate != null) queryParams['endDate'] = endDate.toIso8601String().split('T').first;
 
       final response = await _apiClient.get<Map<String, dynamic>>(
         ApiConfig.classSchedules,

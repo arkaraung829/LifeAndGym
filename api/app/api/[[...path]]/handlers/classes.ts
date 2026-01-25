@@ -19,6 +19,8 @@ const schedulesQuerySchema = z.object({
   gymId: z.string().uuid().optional(),
   classId: z.string().uuid().optional(),
   date: z.string().optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
 });
 
 function getRoute(subpath: string[]): string {
@@ -106,6 +108,17 @@ async function handleListSchedules(request: NextRequest) {
     const endOfDay = new Date(query.date);
     endOfDay.setHours(23, 59, 59, 999);
     dbQuery = dbQuery.gte('scheduled_at', startOfDay.toISOString()).lte('scheduled_at', endOfDay.toISOString());
+  } else if (query.startDate || query.endDate) {
+    if (query.startDate) {
+      const start = new Date(query.startDate);
+      start.setHours(0, 0, 0, 0);
+      dbQuery = dbQuery.gte('scheduled_at', start.toISOString());
+    }
+    if (query.endDate) {
+      const end = new Date(query.endDate);
+      end.setHours(23, 59, 59, 999);
+      dbQuery = dbQuery.lte('scheduled_at', end.toISOString());
+    }
   }
 
   const { data: schedules, error } = await dbQuery.order('scheduled_at');
