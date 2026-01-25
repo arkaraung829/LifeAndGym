@@ -34,14 +34,18 @@ function getRoute(subpath: string[]): string {
 }
 
 export async function handleGet(request: NextRequest, subpath: string[]) {
-  const route = getRoute(subpath);
+  try {
+    const route = getRoute(subpath);
 
-  switch (route) {
-    case 'me':
-    case 'profile':
-      return handleGetProfile(request);
-    default:
-      return errorResponse(new NotFoundError('Endpoint'), request);
+    switch (route) {
+      case 'me':
+      case 'profile':
+        return await handleGetProfile(request);
+      default:
+        return errorResponse(new NotFoundError('Endpoint'), request);
+    }
+  } catch (error) {
+    return errorResponse(error instanceof Error ? error : new Error('Auth handler failed'), request);
   }
 }
 
