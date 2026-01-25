@@ -17,33 +17,24 @@ const nearbySchema = z.object({
   radius: z.coerce.number().positive().default(10),
 });
 
-function getPath(params: { path?: string[] }): string {
-  return params.path?.join('/') || '';
+function getRoute(subpath: string[]): string {
+  return subpath.join('/');
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ path?: string[] }> }
-) {
-  try {
-    const { path } = await params;
-    const route = getPath({ path });
+export async function handleGet(request: NextRequest, subpath: string[]) {
+  const route = getRoute(subpath);
 
-    // Check for specific routes first
-    if (route === 'search') {
-      return handleSearch(request);
-    }
-    if (route === 'nearby') {
-      return handleNearby(request);
-    }
-    if (route === '') {
-      return handleListGyms(request);
-    }
-    // Assume it's a gym ID
-    return handleGetGym(request, route);
-  } catch (error) {
-    return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
+  if (route === 'search') {
+    return handleSearch(request);
   }
+  if (route === 'nearby') {
+    return handleNearby(request);
+  }
+  if (route === '') {
+    return handleListGyms(request);
+  }
+  // Assume it's a gym ID
+  return handleGetGym(request, route);
 }
 
 async function handleListGyms(request: NextRequest) {

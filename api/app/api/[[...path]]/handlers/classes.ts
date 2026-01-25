@@ -21,54 +21,37 @@ const schedulesQuerySchema = z.object({
   date: z.string().optional(),
 });
 
-function getPath(params: { path?: string[] }): string {
-  return params.path?.join('/') || '';
+function getRoute(subpath: string[]): string {
+  return subpath.join('/');
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ path?: string[] }> }
-) {
-  try {
-    const { path } = await params;
-    const route = getPath({ path });
+export async function handleGet(request: NextRequest, subpath: string[]) {
+  const route = getRoute(subpath);
 
-    if (route === '' || route === 'list') {
-      return handleListClasses(request);
-    }
-    if (route === 'schedules') {
-      return handleListSchedules(request);
-    }
-    if (route === 'bookings') {
-      return handleListBookings(request);
-    }
-
-    return errorResponse(new NotFoundError('Endpoint'), request);
-  } catch (error) {
-    return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
+  if (route === '' || route === 'list') {
+    return handleListClasses(request);
   }
+  if (route === 'schedules') {
+    return handleListSchedules(request);
+  }
+  if (route === 'bookings') {
+    return handleListBookings(request);
+  }
+
+  return errorResponse(new NotFoundError('Endpoint'), request);
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ path?: string[] }> }
-) {
-  try {
-    const { path } = await params;
-    const route = getPath({ path });
+export async function handlePost(request: NextRequest, subpath: string[]) {
+  const route = getRoute(subpath);
 
-    if (route === 'bookings') {
-      return handleCreateBooking(request);
-    }
-    // Handle bookings/[id]/cancel
-    if (path?.length === 3 && path[0] === 'bookings' && path[2] === 'cancel') {
-      return handleCancelBooking(request, path[1]);
-    }
-
-    return errorResponse(new NotFoundError('Endpoint'), request);
-  } catch (error) {
-    return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
+  if (route === 'bookings') {
+    return handleCreateBooking(request);
   }
+  if (subpath.length === 3 && subpath[0] === 'bookings' && subpath[2] === 'cancel') {
+    return handleCancelBooking(request, subpath[1]);
+  }
+
+  return errorResponse(new NotFoundError('Endpoint'), request);
 }
 
 async function handleListClasses(request: NextRequest) {
@@ -151,7 +134,6 @@ async function handleCreateBooking(request: NextRequest) {
   const { user } = await verifyAuth(request);
   const body = await parseBody(request, bookingSchema);
 
-  // Get schedule and check availability
   const { data: schedule, error: scheduleError } = await supabaseAdmin
     .from(Tables.classSchedules)
     .select(`*, gym_class:${Tables.classes}(*)`)
@@ -170,7 +152,6 @@ async function handleCreateBooking(request: NextRequest) {
     throw new ValidationError('This class has already started');
   }
 
-  // Check if user already has a booking
   const { data: existingBooking } = await supabaseAdmin
     .from(Tables.bookings)
     .select('*')
@@ -183,10 +164,8 @@ async function handleCreateBooking(request: NextRequest) {
     throw new ValidationError('You already have a booking for this class');
   }
 
-  // Determine status based on availability
   const status = schedule.spots_remaining > 0 ? 'confirmed' : 'waitlist';
 
-  // Create booking
   const { data: booking, error } = await supabaseAdmin
     .from(Tables.bookings)
     .insert({
@@ -200,7 +179,6 @@ async function handleCreateBooking(request: NextRequest) {
 
   if (error) throw new DatabaseError('Failed to create booking');
 
-  // Update spots if confirmed
   if (status === 'confirmed') {
     await supabaseAdmin
       .from(Tables.classSchedules)
@@ -214,7 +192,6 @@ async function handleCreateBooking(request: NextRequest) {
 async function handleCancelBooking(request: NextRequest, bookingId: string) {
   const { user } = await verifyAuth(request);
 
-  // Get booking
   const { data: booking, error: findError } = await supabaseAdmin
     .from(Tables.bookings)
     .select(`*, schedule:${Tables.classSchedules}(*)`)
@@ -236,7 +213,6 @@ async function handleCancelBooking(request: NextRequest, bookingId: string) {
 
   const wasConfirmed = booking.status === 'confirmed';
 
-  // Update booking
   const { data: updatedBooking, error } = await supabaseAdmin
     .from(Tables.bookings)
     .update({
@@ -249,14 +225,12 @@ async function handleCancelBooking(request: NextRequest, bookingId: string) {
 
   if (error) throw new DatabaseError('Failed to cancel booking');
 
-  // If was confirmed, restore spot and promote from waitlist
   if (wasConfirmed && booking.schedule) {
     await supabaseAdmin
       .from(Tables.classSchedules)
       .update({ spots_remaining: booking.schedule.spots_remaining + 1 })
       .eq('id', booking.class_schedule_id);
 
-    // Promote first person from waitlist
     const { data: waitlistBooking } = await supabaseAdmin
       .from(Tables.bookings)
       .select('*')

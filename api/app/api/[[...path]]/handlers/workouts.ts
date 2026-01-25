@@ -46,74 +46,55 @@ const exerciseSearchSchema = z.object({
   difficulty: z.string().optional(),
 });
 
-function getPath(params: { path?: string[] }): string {
-  return params.path?.join('/') || '';
+function getRoute(subpath: string[]): string {
+  return subpath.join('/');
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ path?: string[] }> }
-) {
-  try {
-    const { path } = await params;
-    const route = getPath({ path });
+export async function handleGet(request: NextRequest, subpath: string[]) {
+  const route = getRoute(subpath);
 
-    if (route === '' || route === 'list') {
-      return handleListWorkouts(request);
-    }
-    if (route === 'exercises') {
-      return handleListExercises(request);
-    }
-    if (route === 'public') {
-      return handleListPublicWorkouts(request);
-    }
-    if (route === 'sessions/active') {
-      return handleGetActiveSession(request);
-    }
-    if (route === 'history') {
-      return handleGetWorkoutHistory(request);
-    }
-    if (route === 'stats') {
-      return handleGetWorkoutStats(request);
-    }
-    // Check for workout by ID
-    if (path?.length === 1 && path[0].match(/^[0-9a-f-]{36}$/i)) {
-      return handleGetWorkout(request, path[0]);
-    }
-
-    return errorResponse(new NotFoundError('Endpoint'), request);
-  } catch (error) {
-    return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
+  if (route === '' || route === 'list') {
+    return handleListWorkouts(request);
   }
+  if (route === 'exercises') {
+    return handleListExercises(request);
+  }
+  if (route === 'public') {
+    return handleListPublicWorkouts(request);
+  }
+  if (route === 'sessions/active') {
+    return handleGetActiveSession(request);
+  }
+  if (route === 'history') {
+    return handleGetWorkoutHistory(request);
+  }
+  if (route === 'stats') {
+    return handleGetWorkoutStats(request);
+  }
+  if (subpath.length === 1 && subpath[0].match(/^[0-9a-f-]{36}$/i)) {
+    return handleGetWorkout(request, subpath[0]);
+  }
+
+  return errorResponse(new NotFoundError('Endpoint'), request);
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ path?: string[] }> }
-) {
-  try {
-    const { path } = await params;
-    const route = getPath({ path });
+export async function handlePost(request: NextRequest, subpath: string[]) {
+  const route = getRoute(subpath);
 
-    if (route === '' || route === 'create') {
-      return handleCreateWorkout(request);
-    }
-    if (route === 'sessions') {
-      return handleStartSession(request);
-    }
-    // Handle sessions/[id]/log
-    if (path?.length === 3 && path[0] === 'sessions' && path[2] === 'log') {
-      return handleLogSet(request, path[1]);
-    }
-    // Handle sessions/[id]/complete
-    if (path?.length === 3 && path[0] === 'sessions' && path[2] === 'complete') {
-      return handleCompleteSession(request, path[1]);
-    }
-
-    return errorResponse(new NotFoundError('Endpoint'), request);
-  } catch (error) {
-    return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
+  if (route === '' || route === 'create') {
+    return handleCreateWorkout(request);
   }
+  if (route === 'sessions') {
+    return handleStartSession(request);
+  }
+  if (subpath.length === 3 && subpath[0] === 'sessions' && subpath[2] === 'log') {
+    return handleLogSet(request, subpath[1]);
+  }
+  if (subpath.length === 3 && subpath[0] === 'sessions' && subpath[2] === 'complete') {
+    return handleCompleteSession(request, subpath[1]);
+  }
+
+  return errorResponse(new NotFoundError('Endpoint'), request);
 }
 
 async function handleListExercises(request: NextRequest) {
@@ -189,7 +170,6 @@ async function handleCreateWorkout(request: NextRequest) {
   const body = await parseBody(request, workoutSchema);
   const now = new Date().toISOString();
 
-  // Create workout
   const { data: workout, error } = await supabaseAdmin
     .from(Tables.workouts)
     .insert({
@@ -210,7 +190,6 @@ async function handleCreateWorkout(request: NextRequest) {
 
   if (error) throw new DatabaseError('Failed to create workout');
 
-  // Add exercises if provided
   if (body.exercises && body.exercises.length > 0) {
     const exerciseData = body.exercises.map((e) => ({
       workout_id: workout.id,
@@ -231,7 +210,6 @@ async function handleCreateWorkout(request: NextRequest) {
     if (exerciseError) throw new DatabaseError('Failed to add exercises to workout');
   }
 
-  // Fetch complete workout with exercises
   const { data: completeWorkout } = await supabaseAdmin
     .from(Tables.workouts)
     .select(`*, exercises:${Tables.workoutExercises}(*, exercise:${Tables.exercises}(*))`)
@@ -245,7 +223,6 @@ async function handleStartSession(request: NextRequest) {
   const { user } = await verifyAuth(request);
   const body = await parseBody(request, sessionSchema);
 
-  // Check for existing active session
   const { data: existingSession } = await supabaseAdmin
     .from(Tables.workoutSessions)
     .select('*')
@@ -296,7 +273,6 @@ async function handleLogSet(request: NextRequest, sessionId: string) {
   const { user } = await verifyAuth(request);
   const body = await parseBody(request, logSetSchema);
 
-  // Verify session belongs to user and is active
   const { data: session, error: sessionError } = await supabaseAdmin
     .from(Tables.workoutSessions)
     .select('*')
@@ -331,7 +307,6 @@ async function handleLogSet(request: NextRequest, sessionId: string) {
 async function handleCompleteSession(request: NextRequest, sessionId: string) {
   const { user } = await verifyAuth(request);
 
-  // Verify session belongs to user and is active
   const { data: session, error: sessionError } = await supabaseAdmin
     .from(Tables.workoutSessions)
     .select(`*, logs:${Tables.workoutLogs}(*)`)
@@ -348,7 +323,6 @@ async function handleCompleteSession(request: NextRequest, sessionId: string) {
   const startedAt = new Date(session.started_at);
   const durationMinutes = Math.round((completedAt.getTime() - startedAt.getTime()) / 60000);
 
-  // Calculate totals from logs
   const logs = session.logs || [];
   const totalSets = logs.length;
   const totalReps = logs.reduce((sum: number, l: { reps?: number }) => sum + (l.reps || 0), 0);
@@ -407,7 +381,6 @@ async function handleGetWorkoutStats(request: NextRequest) {
   const totalReps = sessions?.reduce((sum, s) => sum + (s.total_reps || 0), 0) || 0;
   const totalWeight = sessions?.reduce((sum, s) => sum + (s.total_weight || 0), 0) || 0;
 
-  // Calculate workouts this week
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() - 7);
   const workoutsThisWeek = sessions?.filter(s => s.completed_at && new Date(s.completed_at) >= weekAgo).length || 0;

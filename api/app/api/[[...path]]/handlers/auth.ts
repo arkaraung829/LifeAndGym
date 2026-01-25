@@ -4,9 +4,8 @@ import { supabaseAdmin, Tables } from '@/lib/supabase/client';
 import { verifyAuth } from '@/lib/middleware/auth';
 import { successResponse, errorResponse } from '@/lib/utils/response';
 import { parseBody } from '@/lib/utils/validation';
-import { ValidationError, ConflictError, DatabaseError } from '@/lib/utils/errors';
+import { ValidationError, ConflictError, DatabaseError, NotFoundError } from '@/lib/utils/errors';
 
-// Schemas
 const signupSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
@@ -30,71 +29,46 @@ const onboardingSchema = z.object({
   dateOfBirth: z.string().optional(),
 });
 
-function getPath(params: { path?: string[] }): string {
-  return params.path?.join('/') || '';
+function getRoute(subpath: string[]): string {
+  return subpath.join('/');
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ path?: string[] }> }
-) {
-  try {
-    const { path } = await params;
-    const route = getPath({ path });
+export async function handleGet(request: NextRequest, subpath: string[]) {
+  const route = getRoute(subpath);
 
-    switch (route) {
-      case 'me':
-      case 'profile':
-        return handleGetProfile(request);
-      default:
-        return errorResponse(new Error('Not found'), request);
-    }
-  } catch (error) {
-    return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
+  switch (route) {
+    case 'me':
+    case 'profile':
+      return handleGetProfile(request);
+    default:
+      return errorResponse(new NotFoundError('Endpoint'), request);
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ path?: string[] }> }
-) {
-  try {
-    const { path } = await params;
-    const route = getPath({ path });
+export async function handlePost(request: NextRequest, subpath: string[]) {
+  const route = getRoute(subpath);
 
-    switch (route) {
-      case 'signup':
-        return handleSignup(request);
-      case 'onboarding':
-        return handleOnboarding(request);
-      default:
-        return errorResponse(new Error('Not found'), request);
-    }
-  } catch (error) {
-    return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
+  switch (route) {
+    case 'signup':
+      return handleSignup(request);
+    case 'onboarding':
+      return handleOnboarding(request);
+    default:
+      return errorResponse(new NotFoundError('Endpoint'), request);
   }
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ path?: string[] }> }
-) {
-  try {
-    const { path } = await params;
-    const route = getPath({ path });
+export async function handlePatch(request: NextRequest, subpath: string[]) {
+  const route = getRoute(subpath);
 
-    switch (route) {
-      case 'profile':
-        return handleUpdateProfile(request);
-      default:
-        return errorResponse(new Error('Not found'), request);
-    }
-  } catch (error) {
-    return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
+  switch (route) {
+    case 'profile':
+      return handleUpdateProfile(request);
+    default:
+      return errorResponse(new NotFoundError('Endpoint'), request);
   }
 }
 
-// Handlers
 async function handleSignup(request: NextRequest) {
   const body = await parseBody(request, signupSchema);
 
@@ -150,7 +124,6 @@ async function handleGetProfile(request: NextRequest) {
 
   if (error) {
     if (error.code === 'PGRST116') {
-      // Create OAuth profile
       const { data: authData } = await supabaseAdmin.auth.admin.getUserById(user.id);
       const fullName = authData?.user?.user_metadata?.full_name || authData?.user?.user_metadata?.name || user.email.split('@')[0];
       const avatarUrl = authData?.user?.user_metadata?.avatar_url || authData?.user?.user_metadata?.picture;
