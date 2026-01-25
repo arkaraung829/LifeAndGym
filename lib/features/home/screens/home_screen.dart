@@ -535,7 +535,7 @@ class _HomeScreenState extends State<HomeScreen> {
               final isBooked = bookings.any(
                   (b) => b.classScheduleId == schedule.id && b.isConfirmed);
               final className = schedule.classInfo?.name ?? l10n.classes;
-              final classType = (schedule.classInfo?.type as String?) ?? 'fitness';
+              final classType = schedule.classInfo?.type.value ?? 'fitness';
               final classIcon = _getClassIcon(classType);
               final classColor = _getClassColor(classType);
 
