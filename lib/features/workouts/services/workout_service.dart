@@ -1,166 +1,111 @@
+import '../../../core/config/api_config.dart';
 import '../../../core/exceptions/exceptions.dart';
-import '../../../core/services/base_service.dart';
+import '../../../core/services/api_client.dart';
+import '../../../core/services/logger_service.dart';
 import '../models/exercise_model.dart';
 import '../models/workout_model.dart';
 import '../models/workout_session_model.dart';
 
-/// Service for managing exercises, workouts, and workout sessions.
-class WorkoutService extends BaseService {
+/// Service for managing exercises, workouts, and workout sessions via API.
+class WorkoutService {
+  final ApiClient _apiClient;
+
+  WorkoutService({ApiClient? apiClient}) : _apiClient = apiClient ?? ApiClient();
+
   // ==================== EXERCISES ====================
 
-  /// Get all exercises.
-  Future<List<ExerciseModel>> getAllExercises() async {
+  /// Get all exercises with optional filters.
+  Future<List<ExerciseModel>> getAllExercises({
+    String? query,
+    String? muscleGroup,
+    String? exerciseType,
+    String? difficulty,
+  }) async {
     try {
-      final response = await supabase
-          .from(Tables.exercises)
-          .select()
-          .order('name', ascending: true);
+      AppLogger.info('Fetching exercises');
 
-      return (response as List)
-          .map((json) => ExerciseModel.fromJson(json))
-          .toList();
+      final queryParams = <String, dynamic>{};
+      if (query != null) queryParams['q'] = query;
+      if (muscleGroup != null) queryParams['muscleGroup'] = muscleGroup;
+      if (exerciseType != null) queryParams['exerciseType'] = exerciseType;
+      if (difficulty != null) queryParams['difficulty'] = difficulty;
+
+      final response = await _apiClient.get<Map<String, dynamic>>(
+        ApiConfig.exercises,
+        queryParams: queryParams.isNotEmpty ? queryParams : null,
+      );
+
+      final exercisesList = response.data['exercises'] as List;
+      final exercises =
+          exercisesList.map((json) => ExerciseModel.fromJson(json)).toList();
+
+      AppLogger.info('Fetched ${exercises.length} exercises');
+      return exercises;
     } catch (e) {
-      throw DatabaseException('Failed to fetch exercises: $e');
+      AppLogger.error('Failed to fetch exercises', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException('Failed to fetch exercises', originalError: e);
     }
   }
 
   /// Get exercises by muscle group.
-  Future<List<ExerciseModel>> getExercisesByMuscleGroup(
-      String muscleGroup) async {
-    try {
-      final response = await supabase
-          .from(Tables.exercises)
-          .select()
-          .contains('muscle_groups', [muscleGroup])
-          .order('name', ascending: true);
-
-      return (response as List)
-          .map((json) => ExerciseModel.fromJson(json))
-          .toList();
-    } catch (e) {
-      throw DatabaseException(
-          'Failed to fetch exercises by muscle group: $e');
-    }
+  Future<List<ExerciseModel>> getExercisesByMuscleGroup(String muscleGroup) async {
+    return getAllExercises(muscleGroup: muscleGroup);
   }
 
-  /// Get exercises by type (strength, cardio, etc.).
+  /// Get exercises by type.
   Future<List<ExerciseModel>> getExercisesByType(String exerciseType) async {
-    try {
-      final response = await supabase
-          .from(Tables.exercises)
-          .select()
-          .eq('exercise_type', exerciseType)
-          .order('name', ascending: true);
-
-      return (response as List)
-          .map((json) => ExerciseModel.fromJson(json))
-          .toList();
-    } catch (e) {
-      throw DatabaseException('Failed to fetch exercises by type: $e');
-    }
+    return getAllExercises(exerciseType: exerciseType);
   }
 
   /// Search exercises by name.
   Future<List<ExerciseModel>> searchExercises(String query) async {
-    try {
-      final response = await supabase
-          .from(Tables.exercises)
-          .select()
-          .ilike('name', '%$query%')
-          .order('name', ascending: true);
-
-      return (response as List)
-          .map((json) => ExerciseModel.fromJson(json))
-          .toList();
-    } catch (e) {
-      throw DatabaseException('Failed to search exercises: $e');
-    }
-  }
-
-  /// Get exercise by ID.
-  Future<ExerciseModel?> getExerciseById(String exerciseId) async {
-    try {
-      final response = await supabase
-          .from(Tables.exercises)
-          .select()
-          .eq('id', exerciseId)
-          .maybeSingle();
-
-      if (response == null) return null;
-      return ExerciseModel.fromJson(response);
-    } catch (e) {
-      throw DatabaseException('Failed to fetch exercise: $e');
-    }
+    return getAllExercises(query: query);
   }
 
   // ==================== WORKOUTS ====================
 
-  /// Get user's workouts (templates and custom).
+  /// Get user's workouts.
   Future<List<WorkoutModel>> getUserWorkouts(String userId) async {
     try {
-      final response = await supabase
-          .from(Tables.workouts)
-          .select()
-          .eq('user_id', userId)
-          .order('created_at', ascending: false);
+      AppLogger.info('Fetching user workouts');
 
-      return (response as List)
-          .map((json) => WorkoutModel.fromJson(json))
-          .toList();
+      final response = await _apiClient.get<Map<String, dynamic>>(
+        ApiConfig.workouts,
+      );
+
+      final workoutsList = response.data['workouts'] as List;
+      final workouts =
+          workoutsList.map((json) => WorkoutModel.fromJson(json)).toList();
+
+      AppLogger.info('Fetched ${workouts.length} workouts');
+      return workouts;
     } catch (e) {
-      throw DatabaseException('Failed to fetch user workouts: $e');
+      AppLogger.error('Failed to fetch user workouts', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException('Failed to fetch user workouts', originalError: e);
     }
   }
 
   /// Get public workout templates.
   Future<List<WorkoutModel>> getPublicWorkouts() async {
     try {
-      final response = await supabase
-          .from(Tables.workouts)
-          .select()
-          .eq('is_public', true)
-          .eq('is_template', true)
-          .order('created_at', ascending: false);
+      AppLogger.info('Fetching public workouts');
 
-      return (response as List)
-          .map((json) => WorkoutModel.fromJson(json))
-          .toList();
+      final response = await _apiClient.get<Map<String, dynamic>>(
+        ApiConfig.publicWorkouts,
+      );
+
+      final workoutsList = response.data['workouts'] as List;
+      final workouts =
+          workoutsList.map((json) => WorkoutModel.fromJson(json)).toList();
+
+      AppLogger.info('Fetched ${workouts.length} public workouts');
+      return workouts;
     } catch (e) {
-      throw DatabaseException('Failed to fetch public workouts: $e');
-    }
-  }
-
-  /// Get workout by ID with exercises.
-  Future<WorkoutModel?> getWorkoutById(String workoutId) async {
-    try {
-      final response = await supabase
-          .from(Tables.workouts)
-          .select()
-          .eq('id', workoutId)
-          .maybeSingle();
-
-      if (response == null) return null;
-      return WorkoutModel.fromJson(response);
-    } catch (e) {
-      throw DatabaseException('Failed to fetch workout: $e');
-    }
-  }
-
-  /// Get workout exercises for a workout.
-  Future<List<WorkoutExerciseModel>> getWorkoutExercises(
-      String workoutId) async {
-    try {
-      final response = await supabase
-          .from(Tables.workoutExercises)
-          .select('*, exercises(*)')
-          .eq('workout_id', workoutId)
-          .order('order_index', ascending: true);
-
-      return (response as List)
-          .map((json) => WorkoutExerciseModel.fromJson(json))
-          .toList();
-    } catch (e) {
-      throw DatabaseException('Failed to fetch workout exercises: $e');
+      AppLogger.error('Failed to fetch public workouts', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException('Failed to fetch public workouts', originalError: e);
     }
   }
 
@@ -173,124 +118,33 @@ class WorkoutService extends BaseService {
     required int estimatedDuration,
     required String difficulty,
     List<String>? targetMuscles,
-    bool isTemplate = false,
     bool isPublic = false,
+    List<Map<String, dynamic>>? exercises,
   }) async {
     try {
-      final response = await supabase
-          .from(Tables.workouts)
-          .insert({
-            'user_id': userId,
-            'name': name,
-            'description': description,
-            'category': category,
-            'estimated_duration': estimatedDuration,
-            'difficulty': difficulty,
-            'target_muscles': targetMuscles,
-            'is_template': isTemplate,
-            'is_public': isPublic,
-          })
-          .select()
-          .single();
+      AppLogger.info('Creating workout: $name');
 
-      return WorkoutModel.fromJson(response);
+      final response = await _apiClient.post<Map<String, dynamic>>(
+        ApiConfig.workouts,
+        body: {
+          'name': name,
+          'description': description,
+          'category': category,
+          'estimatedDuration': estimatedDuration,
+          'difficulty': difficulty,
+          'targetMuscles': targetMuscles,
+          'isPublic': isPublic,
+          'exercises': exercises,
+        },
+      );
+
+      final workout = WorkoutModel.fromJson(response.data['workout']);
+      AppLogger.info('Created workout: ${workout.id}');
+      return workout;
     } catch (e) {
-      throw DatabaseException('Failed to create workout: $e');
-    }
-  }
-
-  /// Add exercise to workout.
-  Future<WorkoutExerciseModel> addExerciseToWorkout({
-    required String workoutId,
-    required String exerciseId,
-    required int orderIndex,
-    int sets = 3,
-    int? reps,
-    int? duration,
-    double? weight,
-    int? restSeconds,
-    String? notes,
-  }) async {
-    try {
-      final response = await supabase
-          .from(Tables.workoutExercises)
-          .insert({
-            'workout_id': workoutId,
-            'exercise_id': exerciseId,
-            'order_index': orderIndex,
-            'sets': sets,
-            'reps': reps,
-            'duration': duration,
-            'weight': weight,
-            'rest_seconds': restSeconds,
-            'notes': notes,
-          })
-          .select('*, exercises(*)')
-          .single();
-
-      return WorkoutExerciseModel.fromJson(response);
-    } catch (e) {
-      throw DatabaseException('Failed to add exercise to workout: $e');
-    }
-  }
-
-  /// Update workout exercise.
-  Future<WorkoutExerciseModel> updateWorkoutExercise({
-    required String workoutExerciseId,
-    int? sets,
-    int? reps,
-    int? duration,
-    double? weight,
-    int? restSeconds,
-    String? notes,
-  }) async {
-    try {
-      final updateData = <String, dynamic>{};
-      if (sets != null) updateData['sets'] = sets;
-      if (reps != null) updateData['reps'] = reps;
-      if (duration != null) updateData['duration'] = duration;
-      if (weight != null) updateData['weight'] = weight;
-      if (restSeconds != null) updateData['rest_seconds'] = restSeconds;
-      if (notes != null) updateData['notes'] = notes;
-
-      final response = await supabase
-          .from(Tables.workoutExercises)
-          .update(updateData)
-          .eq('id', workoutExerciseId)
-          .select('*, exercises(*)')
-          .single();
-
-      return WorkoutExerciseModel.fromJson(response);
-    } catch (e) {
-      throw DatabaseException('Failed to update workout exercise: $e');
-    }
-  }
-
-  /// Remove exercise from workout.
-  Future<void> removeExerciseFromWorkout(String workoutExerciseId) async {
-    try {
-      await supabase
-          .from(Tables.workoutExercises)
-          .delete()
-          .eq('id', workoutExerciseId);
-    } catch (e) {
-      throw DatabaseException('Failed to remove exercise from workout: $e');
-    }
-  }
-
-  /// Delete workout.
-  Future<void> deleteWorkout(String workoutId) async {
-    try {
-      // First delete all workout exercises
-      await supabase
-          .from(Tables.workoutExercises)
-          .delete()
-          .eq('workout_id', workoutId);
-
-      // Then delete the workout
-      await supabase.from(Tables.workouts).delete().eq('id', workoutId);
-    } catch (e) {
-      throw DatabaseException('Failed to delete workout: $e');
+      AppLogger.error('Failed to create workout', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException('Failed to create workout', originalError: e);
     }
   }
 
@@ -300,51 +154,44 @@ class WorkoutService extends BaseService {
   Future<WorkoutSessionModel> startWorkoutSession({
     required String userId,
     String? workoutId,
-    String? notes,
   }) async {
     try {
-      // Check if user has an active session
-      final activeSession = await getActiveWorkoutSession(userId);
-      if (activeSession != null) {
-        throw ValidationException(
-          'You already have an active workout session',
-          code: 'ACTIVE_SESSION_EXISTS',
-        );
+      AppLogger.info('Starting workout session');
+
+      final response = await _apiClient.post<Map<String, dynamic>>(
+        ApiConfig.workoutSessions,
+        body: workoutId != null ? {'workoutId': workoutId} : {},
+      );
+
+      final session = WorkoutSessionModel.fromJson(response.data['session']);
+      AppLogger.info('Started session: ${session.id}');
+      return session;
+    } on ApiException catch (e) {
+      if (e.code == 'VALIDATION_ERROR') {
+        throw ValidationException(e.message, code: e.code);
       }
-
-      final response = await supabase
-          .from(Tables.workoutSessions)
-          .insert({
-            'user_id': userId,
-            'workout_id': workoutId,
-            'started_at': DateTime.now().toIso8601String(),
-            'status': 'in_progress',
-            'notes': notes,
-          })
-          .select('*, workouts(*)')
-          .single();
-
-      return WorkoutSessionModel.fromJson(response);
+      rethrow;
     } catch (e) {
-      if (e is ValidationException) rethrow;
-      throw DatabaseException('Failed to start workout session: $e');
+      AppLogger.error('Failed to start workout session', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException('Failed to start workout session', originalError: e);
     }
   }
 
   /// Get active workout session for user.
   Future<WorkoutSessionModel?> getActiveWorkoutSession(String userId) async {
     try {
-      final response = await supabase
-          .from(Tables.workoutSessions)
-          .select('*, workouts(*)')
-          .eq('user_id', userId)
-          .eq('status', 'in_progress')
-          .maybeSingle();
+      final response = await _apiClient.get<Map<String, dynamic>>(
+        ApiConfig.activeWorkoutSession,
+      );
 
-      if (response == null) return null;
-      return WorkoutSessionModel.fromJson(response);
+      final sessionData = response.data['session'];
+      if (sessionData == null) return null;
+
+      return WorkoutSessionModel.fromJson(sessionData);
     } catch (e) {
-      throw DatabaseException('Failed to fetch active workout session: $e');
+      AppLogger.error('Failed to fetch active workout session', error: e);
+      return null;
     }
   }
 
@@ -359,41 +206,27 @@ class WorkoutService extends BaseService {
     String? notes,
   }) async {
     try {
-      final response = await supabase
-          .from(Tables.workoutLogs)
-          .insert({
-            'session_id': sessionId,
-            'exercise_id': exerciseId,
-            'set_number': setNumber,
-            'reps': reps,
-            'weight': weight,
-            'duration': duration,
-            'notes': notes,
-            'completed_at': DateTime.now().toIso8601String(),
-          })
-          .select()
-          .single();
+      AppLogger.info('Logging set for session: $sessionId');
 
-      return WorkoutLogModel.fromJson(response);
+      final response = await _apiClient.post<Map<String, dynamic>>(
+        ApiConfig.workoutSessionLog(sessionId),
+        body: {
+          'exerciseId': exerciseId,
+          'setNumber': setNumber,
+          'reps': reps,
+          'weight': weight,
+          'duration': duration,
+          'notes': notes,
+        },
+      );
+
+      final log = WorkoutLogModel.fromJson(response.data['log']);
+      AppLogger.info('Logged set successfully');
+      return log;
     } catch (e) {
-      throw DatabaseException('Failed to log workout set: $e');
-    }
-  }
-
-  /// Get workout logs for a session.
-  Future<List<WorkoutLogModel>> getSessionLogs(String sessionId) async {
-    try {
-      final response = await supabase
-          .from(Tables.workoutLogs)
-          .select()
-          .eq('session_id', sessionId)
-          .order('completed_at', ascending: true);
-
-      return (response as List)
-          .map((json) => WorkoutLogModel.fromJson(json))
-          .toList();
-    } catch (e) {
-      throw DatabaseException('Failed to fetch session logs: $e');
+      AppLogger.error('Failed to log workout set', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException('Failed to log workout set', originalError: e);
     }
   }
 
@@ -403,232 +236,65 @@ class WorkoutService extends BaseService {
     String? notes,
   }) async {
     try {
-      // Get all logs for this session to calculate stats
-      final logs = await getSessionLogs(sessionId);
+      AppLogger.info('Completing workout session: $sessionId');
 
-      // Calculate stats
-      final totalSets = logs.length;
-      final totalReps = logs
-          .where((log) => log.reps != null)
-          .fold(0, (sum, log) => sum + log.reps!);
-      final totalWeight = logs
-          .where((log) => log.weight != null && log.reps != null)
-          .fold(0.0, (sum, log) => sum + (log.weight! * log.reps!));
+      final response = await _apiClient.post<Map<String, dynamic>>(
+        ApiConfig.workoutSessionComplete(sessionId),
+      );
 
-      // Get session start time to calculate duration
-      final session = await supabase
-          .from(Tables.workoutSessions)
-          .select()
-          .eq('id', sessionId)
-          .single();
-
-      final startedAt = DateTime.parse(session['started_at']);
-      final duration = DateTime.now().difference(startedAt).inMinutes;
-
-      // Update session
-      final response = await supabase
-          .from(Tables.workoutSessions)
-          .update({
-            'completed_at': DateTime.now().toIso8601String(),
-            'duration_minutes': duration,
-            'total_sets': totalSets,
-            'total_reps': totalReps,
-            'total_weight': totalWeight,
-            'status': 'completed',
-            'notes': notes ?? session['notes'],
-          })
-          .eq('id', sessionId)
-          .select('*, workouts(*)')
-          .single();
-
-      return WorkoutSessionModel.fromJson(response);
+      final session = WorkoutSessionModel.fromJson(response.data['session']);
+      AppLogger.info('Completed session successfully');
+      return session;
     } catch (e) {
-      throw DatabaseException('Failed to complete workout session: $e');
-    }
-  }
-
-  /// Cancel workout session.
-  Future<void> cancelWorkoutSession(String sessionId) async {
-    try {
-      await supabase
-          .from(Tables.workoutSessions)
-          .update({'status': 'cancelled'})
-          .eq('id', sessionId);
-    } catch (e) {
-      throw DatabaseException('Failed to cancel workout session: $e');
+      AppLogger.error('Failed to complete workout session', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException('Failed to complete workout session', originalError: e);
     }
   }
 
   /// Get workout session history for user.
   Future<List<WorkoutSessionModel>> getWorkoutHistory({
     required String userId,
-    int? limit,
-    DateTime? startDate,
-    DateTime? endDate,
+    int limit = 20,
+    int offset = 0,
   }) async {
     try {
-      var filterQuery = supabase
-          .from(Tables.workoutSessions)
-          .select('*, workouts(*)')
-          .eq('user_id', userId);
+      AppLogger.info('Fetching workout history');
 
-      if (startDate != null) {
-        filterQuery = filterQuery.gte('started_at', startDate.toIso8601String());
-      }
+      final response = await _apiClient.get<Map<String, dynamic>>(
+        ApiConfig.workoutHistory,
+        queryParams: {'limit': limit, 'offset': offset},
+      );
 
-      if (endDate != null) {
-        filterQuery = filterQuery.lte('started_at', endDate.toIso8601String());
-      }
+      final sessionsList = response.data['sessions'] as List;
+      final sessions =
+          sessionsList.map((json) => WorkoutSessionModel.fromJson(json)).toList();
 
-      var transformQuery = filterQuery.order('started_at', ascending: false);
-
-      if (limit != null) {
-        transformQuery = transformQuery.limit(limit);
-      }
-
-      final response = await transformQuery;
-
-      return (response as List)
-          .map((json) => WorkoutSessionModel.fromJson(json))
-          .toList();
+      AppLogger.info('Fetched ${sessions.length} sessions');
+      return sessions;
     } catch (e) {
-      throw DatabaseException('Failed to fetch workout history: $e');
+      AppLogger.error('Failed to fetch workout history', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException('Failed to fetch workout history', originalError: e);
     }
   }
 
   /// Get workout statistics for user.
   Future<Map<String, dynamic>> getWorkoutStats(String userId) async {
     try {
-      final allSessions = await getWorkoutHistory(userId: userId);
+      AppLogger.info('Fetching workout stats');
 
-      final completedSessions =
-          allSessions.where((s) => s.isCompleted).toList();
-
-      // Calculate stats
-      final totalWorkouts = completedSessions.length;
-      final totalMinutes = completedSessions.fold(
-          0, (sum, session) => sum + (session.durationMinutes ?? 0));
-      final totalSets =
-          completedSessions.fold(0, (sum, session) => sum + (session.totalSets ?? 0));
-      final totalReps =
-          completedSessions.fold(0, (sum, session) => sum + (session.totalReps ?? 0));
-      final totalWeight = completedSessions.fold(
-          0.0, (sum, session) => sum + (session.totalWeight ?? 0));
-
-      // This week stats
-      final thisWeekStart =
-          DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1));
-      final thisWeekSessions = completedSessions
-          .where((s) => s.startedAt.isAfter(thisWeekStart))
-          .toList();
-      final thisWeekWorkouts = thisWeekSessions.length;
-      final thisWeekMinutes = thisWeekSessions.fold(
-          0, (sum, session) => sum + (session.durationMinutes ?? 0));
-
-      // This month stats
-      final thisMonthStart =
-          DateTime(DateTime.now().year, DateTime.now().month, 1);
-      final thisMonthSessions = completedSessions
-          .where((s) => s.startedAt.isAfter(thisMonthStart))
-          .toList();
-      final thisMonthWorkouts = thisMonthSessions.length;
-
-      return {
-        'total_workouts': totalWorkouts,
-        'total_minutes': totalMinutes,
-        'total_sets': totalSets,
-        'total_reps': totalReps,
-        'total_weight': totalWeight,
-        'this_week_workouts': thisWeekWorkouts,
-        'this_week_minutes': thisWeekMinutes,
-        'this_month_workouts': thisMonthWorkouts,
-        'average_duration':
-            totalWorkouts > 0 ? (totalMinutes / totalWorkouts).round() : 0,
-      };
-    } catch (e) {
-      throw DatabaseException('Failed to calculate workout stats: $e');
-    }
-  }
-
-  /// Get exercise history for a specific exercise.
-  Future<List<WorkoutLogModel>> getExerciseHistory({
-    required String userId,
-    required String exerciseId,
-    int? limit,
-  }) async {
-    try {
-      // First get user's completed sessions
-      final sessions = await supabase
-          .from(Tables.workoutSessions)
-          .select('id')
-          .eq('user_id', userId)
-          .eq('status', 'completed');
-
-      final sessionIds = (sessions as List).map((s) => s['id']).toList();
-
-      if (sessionIds.isEmpty) return [];
-
-      // Get logs for this exercise from those sessions
-      var query = supabase
-          .from(Tables.workoutLogs)
-          .select()
-          .eq('exercise_id', exerciseId)
-          .inFilter('session_id', sessionIds)
-          .order('completed_at', ascending: false);
-
-      if (limit != null) {
-        query = query.limit(limit);
-      }
-
-      final response = await query;
-
-      return (response as List)
-          .map((json) => WorkoutLogModel.fromJson(json))
-          .toList();
-    } catch (e) {
-      throw DatabaseException('Failed to fetch exercise history: $e');
-    }
-  }
-
-  /// Get personal record for an exercise (max weight).
-  Future<WorkoutLogModel?> getExercisePersonalRecord({
-    required String userId,
-    required String exerciseId,
-  }) async {
-    try {
-      final history = await getExerciseHistory(
-        userId: userId,
-        exerciseId: exerciseId,
+      final response = await _apiClient.get<Map<String, dynamic>>(
+        ApiConfig.workoutStats,
       );
 
-      if (history.isEmpty) return null;
-
-      // Find max weight * reps
-      WorkoutLogModel? maxLog;
-      double maxVolume = 0;
-
-      for (final log in history) {
-        if (log.weight != null && log.reps != null) {
-          final volume = log.weight! * log.reps!;
-          if (volume > maxVolume) {
-            maxVolume = volume;
-            maxLog = log;
-          }
-        }
-      }
-
-      return maxLog;
+      final stats = response.data['stats'] as Map<String, dynamic>;
+      AppLogger.info('Fetched workout stats');
+      return stats;
     } catch (e) {
-      throw DatabaseException('Failed to fetch personal record: $e');
+      AppLogger.error('Failed to fetch workout stats', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException('Failed to calculate workout stats', originalError: e);
     }
   }
-}
-
-/// Table names for database queries.
-class Tables {
-  static const String exercises = 'exercises';
-  static const String workouts = 'workouts';
-  static const String workoutExercises = 'workout_exercises';
-  static const String workoutSessions = 'workout_sessions';
-  static const String workoutLogs = 'workout_logs';
 }
