@@ -358,7 +358,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return CardContainer(
       onTap: () {
-        gymProvider.selectGym(gym);
+        _showGymSelectorDialog(context);
       },
       child: Row(
         children: [
@@ -721,6 +721,101 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showGymSelectorDialog(BuildContext context) {
+    final gymProvider = context.read<GymProvider>();
+    final gyms = gymProvider.gyms;
+    final selectedGym = gymProvider.selectedGym ?? (gyms.isNotEmpty ? gyms.first : null);
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Select Gym',
+              style: AppTypography.heading3,
+            ),
+            AppSpacing.vGapMd,
+            ...gyms.map((gym) {
+              final isSelected = selectedGym?.id == gym.id;
+              final occupancyColor = gym.currentOccupancy < 30
+                  ? AppColors.success
+                  : gym.currentOccupancy < 70
+                      ? AppColors.warning
+                      : AppColors.error;
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: CardContainer(
+                  onTap: () {
+                    gymProvider.selectGym(gym);
+                    Navigator.pop(context);
+
+                    // Reload schedules for the new gym
+                    final now = DateTime.now();
+                    final endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
+                    context.read<ClassesProvider>().loadSchedules(
+                      gymId: gym.id,
+                      startDate: now,
+                      endDate: endOfDay,
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: occupancyColor.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.location_on,
+                          color: occupancyColor,
+                        ),
+                      ),
+                      AppSpacing.hGapMd,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              gym.name,
+                              style: AppTypography.bodyLarge.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              '${gym.currentOccupancy}% occupancy',
+                              style: AppTypography.bodySmall.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurface
+                                    .withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (isSelected)
+                        const Icon(
+                          Icons.check_circle,
+                          color: AppColors.primary,
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ],
+        ),
       ),
     );
   }
