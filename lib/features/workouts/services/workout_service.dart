@@ -441,15 +441,22 @@ class WorkoutService {
     }
   }
 
-  /// Cancel workout session (Supabase direct).
+  /// Cancel workout session via API.
   Future<void> cancelWorkoutSession(String sessionId) async {
     try {
       AppLogger.info('Cancelling workout session: $sessionId');
 
-      await _supabase
-          .from(Tables.workoutSessions)
-          .update({'status': 'cancelled', 'ended_at': DateTime.now().toIso8601String()})
-          .eq('id', sessionId);
+      final response = await _apiClient.post(
+        'workouts/sessions/$sessionId/cancel',
+        requiresAuth: true,
+      );
+
+      if (!response.success) {
+        throw ApiException(
+          response.error ?? 'Failed to cancel workout session',
+          code: response.errorCode ?? 'CANCEL_FAILED',
+        );
+      }
 
       AppLogger.info('Cancelled workout session');
     } catch (e) {

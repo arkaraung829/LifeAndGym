@@ -100,6 +100,9 @@ export async function handlePost(request: NextRequest, subpath: string[]) {
     if (subpath.length === 3 && subpath[0] === 'sessions' && subpath[2] === 'complete') {
       return await handleCompleteSession(request, subpath[1]);
     }
+    if (subpath.length === 3 && subpath[0] === 'sessions' && subpath[2] === 'cancel') {
+      return await handleCancelSession(request, subpath[1]);
+    }
 
     return errorResponse(new NotFoundError('Endpoint'), request);
   } catch (error) {
@@ -322,6 +325,7 @@ async function handleCompleteSession(request: NextRequest, sessionId: string) {
       total_sets: totalSets,
       total_reps: totalReps,
       total_volume: totalVolume,
+      status: 'completed',
     })
     .eq('id', sessionId)
     .select(`*, workout:${Tables.workouts}(*)`)
@@ -329,6 +333,35 @@ async function handleCompleteSession(request: NextRequest, sessionId: string) {
 
   if (error) throw new DatabaseError('Failed to complete session');
   return successResponse({ session: updatedSession }, request);
+}
+
+async function handleCancelSession(request: NextRequest, sessionId: string) {
+  const { user } = await verifyAuth(request);
+
+  const { data: session, error: sessionError } = await supabaseAdmin
+    .from(Tables.workoutSessions)
+    .select('*')
+    .eq('id', sessionId)
+    .eq('user_id', user.id)
+    .is('completed_at', null)
+    .single();
+
+  if (sessionError || !session) {
+    throw new NotFoundError('Active session');
+  }
+
+  const { data: cancelledSession, error } = await supabaseAdmin
+    .from(Tables.workoutSessions)
+    .update({
+      status: 'cancelled',
+      completed_at: new Date().toISOString(),
+    })
+    .eq('id', sessionId)
+    .select()
+    .single();
+
+  if (error) throw new DatabaseError('Failed to cancel session');
+  return successResponse({ session: cancelledSession, message: 'Session cancelled successfully' }, request);
 }
 
 async function handleGetWorkoutHistory(request: NextRequest) {

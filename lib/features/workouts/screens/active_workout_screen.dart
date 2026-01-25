@@ -241,8 +241,18 @@ class _ActiveWorkoutScreenState extends State<ActiveWorkoutScreen> {
 
     if (confirmed == true && mounted) {
       final success = await provider.cancelWorkoutSession();
-      if (success && mounted) {
+
+      if (!mounted) return;
+
+      if (success) {
         Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(provider.errorMessage ?? 'Failed to cancel workout'),
+            backgroundColor: AppColors.error,
+          ),
+        );
       }
     }
   }
