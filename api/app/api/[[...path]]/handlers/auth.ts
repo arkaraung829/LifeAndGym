@@ -50,26 +50,34 @@ export async function handleGet(request: NextRequest, subpath: string[]) {
 }
 
 export async function handlePost(request: NextRequest, subpath: string[]) {
-  const route = getRoute(subpath);
+  try {
+    const route = getRoute(subpath);
 
-  switch (route) {
-    case 'signup':
-      return handleSignup(request);
-    case 'onboarding':
-      return handleOnboarding(request);
-    default:
-      return errorResponse(new NotFoundError('Endpoint'), request);
+    switch (route) {
+      case 'signup':
+        return await handleSignup(request);
+      case 'onboarding':
+        return await handleOnboarding(request);
+      default:
+        return errorResponse(new NotFoundError('Endpoint'), request);
+    }
+  } catch (error) {
+    return errorResponse(error instanceof Error ? error : new Error('Handler failed'), request);
   }
 }
 
 export async function handlePatch(request: NextRequest, subpath: string[]) {
-  const route = getRoute(subpath);
+  try {
+    const route = getRoute(subpath);
 
-  switch (route) {
-    case 'profile':
-      return handleUpdateProfile(request);
-    default:
-      return errorResponse(new NotFoundError('Endpoint'), request);
+    switch (route) {
+      case 'profile':
+        return await handleUpdateProfile(request);
+      default:
+        return errorResponse(new NotFoundError('Endpoint'), request);
+    }
+  } catch (error) {
+    return errorResponse(error instanceof Error ? error : new Error('Handler failed'), request);
   }
 }
 

@@ -26,32 +26,40 @@ function getRoute(subpath: string[]): string {
 }
 
 export async function handleGet(request: NextRequest, subpath: string[]) {
-  const route = getRoute(subpath);
+  try {
+    const route = getRoute(subpath);
 
-  if (route === '' || route === 'list') {
-    return handleListClasses(request);
-  }
-  if (route === 'schedules') {
-    return handleListSchedules(request);
-  }
-  if (route === 'bookings') {
-    return handleListBookings(request);
-  }
+    if (route === '' || route === 'list') {
+      return await handleListClasses(request);
+    }
+    if (route === 'schedules') {
+      return await handleListSchedules(request);
+    }
+    if (route === 'bookings') {
+      return await handleListBookings(request);
+    }
 
-  return errorResponse(new NotFoundError('Endpoint'), request);
+    return errorResponse(new NotFoundError('Endpoint'), request);
+  } catch (error) {
+    return errorResponse(error instanceof Error ? error : new Error('Handler failed'), request);
+  }
 }
 
 export async function handlePost(request: NextRequest, subpath: string[]) {
-  const route = getRoute(subpath);
+  try {
+    const route = getRoute(subpath);
 
-  if (route === 'bookings') {
-    return handleCreateBooking(request);
-  }
-  if (subpath.length === 3 && subpath[0] === 'bookings' && subpath[2] === 'cancel') {
-    return handleCancelBooking(request, subpath[1]);
-  }
+    if (route === 'bookings') {
+      return await handleCreateBooking(request);
+    }
+    if (subpath.length === 3 && subpath[0] === 'bookings' && subpath[2] === 'cancel') {
+      return await handleCancelBooking(request, subpath[1]);
+    }
 
-  return errorResponse(new NotFoundError('Endpoint'), request);
+    return errorResponse(new NotFoundError('Endpoint'), request);
+  } catch (error) {
+    return errorResponse(error instanceof Error ? error : new Error('Handler failed'), request);
+  }
 }
 
 async function handleListClasses(request: NextRequest) {

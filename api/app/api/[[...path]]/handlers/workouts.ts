@@ -51,50 +51,58 @@ function getRoute(subpath: string[]): string {
 }
 
 export async function handleGet(request: NextRequest, subpath: string[]) {
-  const route = getRoute(subpath);
+  try {
+    const route = getRoute(subpath);
 
-  if (route === '' || route === 'list') {
-    return handleListWorkouts(request);
-  }
-  if (route === 'exercises') {
-    return handleListExercises(request);
-  }
-  if (route === 'public') {
-    return handleListPublicWorkouts(request);
-  }
-  if (route === 'sessions/active') {
-    return handleGetActiveSession(request);
-  }
-  if (route === 'history') {
-    return handleGetWorkoutHistory(request);
-  }
-  if (route === 'stats') {
-    return handleGetWorkoutStats(request);
-  }
-  if (subpath.length === 1 && subpath[0].match(/^[0-9a-f-]{36}$/i)) {
-    return handleGetWorkout(request, subpath[0]);
-  }
+    if (route === '' || route === 'list') {
+      return await handleListWorkouts(request);
+    }
+    if (route === 'exercises') {
+      return await handleListExercises(request);
+    }
+    if (route === 'public') {
+      return await handleListPublicWorkouts(request);
+    }
+    if (route === 'sessions/active') {
+      return await handleGetActiveSession(request);
+    }
+    if (route === 'history') {
+      return await handleGetWorkoutHistory(request);
+    }
+    if (route === 'stats') {
+      return await handleGetWorkoutStats(request);
+    }
+    if (subpath.length === 1 && subpath[0].match(/^[0-9a-f-]{36}$/i)) {
+      return await handleGetWorkout(request, subpath[0]);
+    }
 
-  return errorResponse(new NotFoundError('Endpoint'), request);
+    return errorResponse(new NotFoundError('Endpoint'), request);
+  } catch (error) {
+    return errorResponse(error instanceof Error ? error : new Error('Handler failed'), request);
+  }
 }
 
 export async function handlePost(request: NextRequest, subpath: string[]) {
-  const route = getRoute(subpath);
+  try {
+    const route = getRoute(subpath);
 
-  if (route === '' || route === 'create') {
-    return handleCreateWorkout(request);
-  }
-  if (route === 'sessions') {
-    return handleStartSession(request);
-  }
-  if (subpath.length === 3 && subpath[0] === 'sessions' && subpath[2] === 'log') {
-    return handleLogSet(request, subpath[1]);
-  }
-  if (subpath.length === 3 && subpath[0] === 'sessions' && subpath[2] === 'complete') {
-    return handleCompleteSession(request, subpath[1]);
-  }
+    if (route === '' || route === 'create') {
+      return await handleCreateWorkout(request);
+    }
+    if (route === 'sessions') {
+      return await handleStartSession(request);
+    }
+    if (subpath.length === 3 && subpath[0] === 'sessions' && subpath[2] === 'log') {
+      return await handleLogSet(request, subpath[1]);
+    }
+    if (subpath.length === 3 && subpath[0] === 'sessions' && subpath[2] === 'complete') {
+      return await handleCompleteSession(request, subpath[1]);
+    }
 
-  return errorResponse(new NotFoundError('Endpoint'), request);
+    return errorResponse(new NotFoundError('Endpoint'), request);
+  } catch (error) {
+    return errorResponse(error instanceof Error ? error : new Error('Handler failed'), request);
+  }
 }
 
 async function handleListExercises(request: NextRequest) {

@@ -15,34 +15,42 @@ function getRoute(subpath: string[]): string {
 }
 
 export async function handleGet(request: NextRequest, subpath: string[]) {
-  const route = getRoute(subpath);
+  try {
+    const route = getRoute(subpath);
 
-  switch (route) {
-    case '':
-      return handleListMemberships(request);
-    case 'active':
-      return handleGetActiveMembership(request);
-    case 'current-check-in':
-      return handleGetCurrentCheckIn(request);
-    case 'check-in-history':
-      return handleGetCheckInHistory(request);
-    case 'check-in-stats':
-      return handleGetCheckInStats(request);
-    default:
-      return errorResponse(new NotFoundError('Endpoint'), request);
+    switch (route) {
+      case '':
+        return await handleListMemberships(request);
+      case 'active':
+        return await handleGetActiveMembership(request);
+      case 'current-check-in':
+        return await handleGetCurrentCheckIn(request);
+      case 'check-in-history':
+        return await handleGetCheckInHistory(request);
+      case 'check-in-stats':
+        return await handleGetCheckInStats(request);
+      default:
+        return errorResponse(new NotFoundError('Endpoint'), request);
+    }
+  } catch (error) {
+    return errorResponse(error instanceof Error ? error : new Error('Handler failed'), request);
   }
 }
 
 export async function handlePost(request: NextRequest, subpath: string[]) {
-  const route = getRoute(subpath);
+  try {
+    const route = getRoute(subpath);
 
-  switch (route) {
-    case 'check-in':
-      return handleCheckIn(request);
-    case 'check-out':
-      return handleCheckOut(request);
-    default:
-      return errorResponse(new NotFoundError('Endpoint'), request);
+    switch (route) {
+      case 'check-in':
+        return await handleCheckIn(request);
+      case 'check-out':
+        return await handleCheckOut(request);
+      default:
+        return errorResponse(new NotFoundError('Endpoint'), request);
+    }
+  } catch (error) {
+    return errorResponse(error instanceof Error ? error : new Error('Handler failed'), request);
   }
 }
 

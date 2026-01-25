@@ -22,19 +22,23 @@ function getRoute(subpath: string[]): string {
 }
 
 export async function handleGet(request: NextRequest, subpath: string[]) {
-  const route = getRoute(subpath);
+  try {
+    const route = getRoute(subpath);
 
-  if (route === 'search') {
-    return handleSearch(request);
+    if (route === 'search') {
+      return await handleSearch(request);
+    }
+    if (route === 'nearby') {
+      return await handleNearby(request);
+    }
+    if (route === '') {
+      return await handleListGyms(request);
+    }
+    // Assume it's a gym ID
+    return await handleGetGym(request, route);
+  } catch (error) {
+    return errorResponse(error instanceof Error ? error : new Error('Handler failed'), request);
   }
-  if (route === 'nearby') {
-    return handleNearby(request);
-  }
-  if (route === '') {
-    return handleListGyms(request);
-  }
-  // Assume it's a gym ID
-  return handleGetGym(request, route);
 }
 
 async function handleListGyms(request: NextRequest) {
