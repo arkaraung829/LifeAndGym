@@ -34,7 +34,8 @@ class ApiClient {
     T Function(Map<String, dynamic>)? fromJson,
   }) async {
     final uri = _buildUri(endpoint, queryParams);
-    AppLogger.api('GET $uri');
+    final hasAuth = _accessToken != null;
+    AppLogger.api('GET $uri (auth: $hasAuth)');
 
     try {
       final response = await _httpClient.get(uri, headers: _headers);
@@ -52,7 +53,8 @@ class ApiClient {
     T Function(Map<String, dynamic>)? fromJson,
   }) async {
     final uri = _buildUri(endpoint);
-    AppLogger.api('POST $uri');
+    final hasAuth = _accessToken != null;
+    AppLogger.api('POST $uri (auth: $hasAuth)');
 
     try {
       final response = await _httpClient.post(
@@ -120,16 +122,36 @@ class ApiClient {
     http.Response response,
     T Function(Map<String, dynamic>)? fromJson,
   ) {
-    final json = jsonDecode(response.body) as Map<String, dynamic>;
+    Map<String, dynamic> json;
+    try {
+      json = jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (e) {
+      AppLogger.error('Failed to parse API response: ${response.body}', tag: 'API');
+      throw ApiException(
+        'Invalid response from server',
+        statusCode: response.statusCode,
+        endpoint: response.request?.url.path,
+        code: 'PARSE_ERROR',
+      );
+    }
+
     final success = json['success'] as bool? ?? false;
 
     if (!success) {
       final error = json['error'] as Map<String, dynamic>?;
+      final errorCode = error?['code'] as String? ?? 'UNKNOWN_ERROR';
+      final errorMessage = error?['message'] as String? ?? 'An error occurred';
+
+      AppLogger.error(
+        'API Error: $errorCode - $errorMessage (${response.statusCode})',
+        tag: 'API',
+      );
+
       throw ApiException(
-        error?['message'] as String? ?? 'An error occurred',
+        errorMessage,
         statusCode: response.statusCode,
         endpoint: response.request?.url.path,
-        code: error?['code'] as String? ?? 'UNKNOWN_ERROR',
+        code: errorCode,
       );
     }
 

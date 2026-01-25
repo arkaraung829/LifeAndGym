@@ -48,14 +48,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final userId = authProvider.user!.id;
 
-    // Load data in parallel
-    await Future.wait([
-      context.read<MembershipProvider>().initializeMembershipData(userId),
-      context.read<GymProvider>().loadGyms(),
-      context.read<WorkoutProvider>().loadWorkoutStats(userId),
-      context.read<WorkoutProvider>().loadWorkoutHistory(userId: userId, limit: 7),
-      _loadClassSchedules(),
-    ]);
+    // Load data in parallel - each method handles its own errors
+    try {
+      await Future.wait([
+        context.read<MembershipProvider>().initializeMembershipData(userId),
+        context.read<GymProvider>().loadGyms(),
+        context.read<WorkoutProvider>().loadWorkoutStats(userId),
+        context.read<WorkoutProvider>().loadWorkoutHistory(userId: userId, limit: 7),
+        _loadClassSchedules(),
+      ]);
+    } catch (e) {
+      // Log any uncaught errors but continue - UI should still render
+      debugPrint('Error loading home data: $e');
+    }
 
     if (mounted) {
       setState(() => _isInitialized = true);
@@ -63,30 +68,35 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadClassSchedules() async {
-    final gymProvider = context.read<GymProvider>();
-    final classesProvider = context.read<ClassesProvider>();
-    final authProvider = context.read<AuthProvider>();
+    try {
+      final gymProvider = context.read<GymProvider>();
+      final classesProvider = context.read<ClassesProvider>();
+      final authProvider = context.read<AuthProvider>();
 
-    // Load gyms first if not loaded
-    if (gymProvider.gyms.isEmpty) {
-      await gymProvider.loadGyms();
-    }
-
-    // Load schedules for first gym (user's home gym or first available)
-    if (gymProvider.gyms.isNotEmpty) {
-      final gymId = gymProvider.gyms.first.id;
-      final now = DateTime.now();
-      final endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
-
-      await classesProvider.loadSchedules(
-        gymId: gymId,
-        startDate: now,
-        endDate: endOfDay,
-      );
-
-      if (authProvider.user != null) {
-        await classesProvider.loadBookings(authProvider.user!.id);
+      // Load gyms first if not loaded
+      if (gymProvider.gyms.isEmpty) {
+        await gymProvider.loadGyms();
       }
+
+      // Load schedules for first gym (user's home gym or first available)
+      if (gymProvider.gyms.isNotEmpty) {
+        final gymId = gymProvider.gyms.first.id;
+        final now = DateTime.now();
+        final endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+        await classesProvider.loadSchedules(
+          gymId: gymId,
+          startDate: now,
+          endDate: endOfDay,
+        );
+
+        if (authProvider.user != null) {
+          await classesProvider.loadBookings(authProvider.user!.id);
+        }
+      }
+    } catch (e) {
+      // Silently catch errors - classes are non-critical for home screen
+      debugPrint('Error loading class schedules: $e');
     }
   }
 

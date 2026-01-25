@@ -645,12 +645,9 @@ class WorkoutProvider extends ChangeNotifier with SafeChangeNotifierMixin {
     try {
       _workoutStats = await _workoutService.getWorkoutStats(userId);
       safeNotifyListeners();
-    } on DatabaseException catch (e) {
-      _errorMessage = e.message;
-    } on ValidationException catch (e) {
-      _errorMessage = e.message;
     } catch (e) {
       _errorMessage = e.toString();
+      // Don't set error state for stats - it's non-critical
       safeNotifyListeners();
     }
   }
@@ -663,25 +660,16 @@ class WorkoutProvider extends ChangeNotifier with SafeChangeNotifierMixin {
     DateTime? endDate,
   }) async {
     try {
-      _state = WorkoutState.loading;
-      safeNotifyListeners();
-
       _workoutHistory = await _workoutService.getWorkoutHistory(
         userId: userId,
         limit: limit,
         startDate: startDate,
         endDate: endDate,
       );
-
-      _state = WorkoutState.loaded;
       safeNotifyListeners();
-    } on DatabaseException catch (e) {
-      _errorMessage = e.message;
-    } on ValidationException catch (e) {
-      _errorMessage = e.message;
     } catch (e) {
       _errorMessage = e.toString();
-      _state = WorkoutState.error;
+      // Keep existing history on error, just log it
       safeNotifyListeners();
     }
   }

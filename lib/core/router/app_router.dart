@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/about/screens/about_screen.dart';
 import '../../features/auth/screens/splash_screen.dart';
 import '../../features/auth/screens/welcome_screen.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/forgot_password_screen.dart';
+import '../../features/body_metrics/screens/body_metrics_screen.dart';
+import '../../features/classes/screens/my_bookings_screen.dart';
+import '../../features/goals/screens/goals_screen.dart';
+import '../../features/notifications/screens/notifications_screen.dart';
 import '../../features/onboarding/screens/onboarding_screen.dart';
 import '../../features/home/screens/home_screen.dart';
+import '../../features/settings/screens/settings_screen.dart';
+import '../../features/support/screens/help_support_screen.dart';
 import '../../features/workouts/screens/workouts_screen.dart';
 import '../../features/classes/screens/classes_screen.dart';
 import '../../features/progress/screens/progress_screen.dart';
@@ -117,12 +124,53 @@ class AppRouter {
         name: RouteNames.editProfile,
         builder: (context, state) => const EditProfileScreen(),
       ),
+      GoRoute(
+        path: RoutePaths.settings,
+        name: RouteNames.settings,
+        builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: RoutePaths.notifications,
+        name: RouteNames.notifications,
+        builder: (context, state) => const NotificationsScreen(),
+      ),
 
       // Workout routes
       GoRoute(
         path: RoutePaths.activeWorkout,
         name: RouteNames.activeWorkout,
         builder: (context, state) => const ActiveWorkoutScreen(),
+      ),
+
+      // Progress routes
+      GoRoute(
+        path: RoutePaths.goals,
+        name: RouteNames.goals,
+        builder: (context, state) => const GoalsScreen(),
+      ),
+      GoRoute(
+        path: RoutePaths.bodyMetrics,
+        name: RouteNames.bodyMetrics,
+        builder: (context, state) => const BodyMetricsScreen(),
+      ),
+
+      // Classes routes
+      GoRoute(
+        path: RoutePaths.myBookings,
+        name: RouteNames.myBookings,
+        builder: (context, state) => const MyBookingsScreen(),
+      ),
+
+      // Other routes
+      GoRoute(
+        path: '/help-support',
+        name: 'help-support',
+        builder: (context, state) => const HelpSupportScreen(),
+      ),
+      GoRoute(
+        path: '/about',
+        name: 'about',
+        builder: (context, state) => const AboutScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

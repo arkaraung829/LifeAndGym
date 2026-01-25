@@ -30,9 +30,7 @@ class ProfileScreen extends StatelessWidget {
           if (!authProvider.isGuest)
             IconButton(
               icon: const Icon(Icons.settings),
-              onPressed: () {
-                // TODO: Navigate to settings
-              },
+              onPressed: () => context.push(RoutePaths.settings),
             ),
         ],
       ),
@@ -274,7 +272,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           title: l10n.notifications,
-          onTap: () {},
+          onTap: () => context.push(RoutePaths.notifications),
         ),
         ListTileCard(
           leading: Container(
@@ -314,7 +312,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           title: 'Goals',
-          onTap: () {},
+          onTap: () => context.push(RoutePaths.goals),
         ),
         ListTileCard(
           leading: Container(
@@ -331,7 +329,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           title: 'Body Metrics',
-          onTap: () {},
+          onTap: () => context.push(RoutePaths.bodyMetrics),
         ),
         ListTileCard(
           leading: Container(
@@ -348,7 +346,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           title: l10n.workoutHistory,
-          onTap: () {},
+          onTap: () => context.go(RoutePaths.workouts),
         ),
         ListTileCard(
           leading: Container(
@@ -365,7 +363,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           title: l10n.myBookings,
-          onTap: () {},
+          onTap: () => context.push(RoutePaths.myBookings),
         ),
         ListTileCard(
           leading: Container(
@@ -382,7 +380,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           title: 'Help & Support',
-          onTap: () {},
+          onTap: () => context.push('/help-support'),
         ),
         ListTileCard(
           leading: Container(
@@ -399,7 +397,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           title: l10n.about,
-          onTap: () {},
+          onTap: () => context.push('/about'),
         ),
       ],
     );
