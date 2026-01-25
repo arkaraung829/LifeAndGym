@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 /// Extension methods on BuildContext for convenient access to common properties.
 extension ContextExtensions on BuildContext {
+  // Localization
+  AppLocalizations get l10n => AppLocalizations.of(this);
+
   // Theme
   ThemeData get theme => Theme.of(this);
   ColorScheme get colorScheme => theme.colorScheme;
@@ -31,32 +36,8 @@ extension ContextExtensions on BuildContext {
   bool get isPortrait => orientation == Orientation.portrait;
   bool get isLandscape => orientation == Orientation.landscape;
 
-  // Navigation
+  // Navigation (go_router provides pop, push, etc.)
   NavigatorState get navigator => Navigator.of(this);
-  bool get canPop => Navigator.of(this).canPop();
-
-  void pop<T>([T? result]) => Navigator.of(this).pop(result);
-
-  Future<T?> push<T>(Route<T> route) => Navigator.of(this).push(route);
-
-  Future<T?> pushNamed<T>(String routeName, {Object? arguments}) {
-    return Navigator.of(this).pushNamed<T>(routeName, arguments: arguments);
-  }
-
-  Future<T?> pushReplacement<T, TO>(Route<T> route) {
-    return Navigator.of(this).pushReplacement(route);
-  }
-
-  Future<T?> pushReplacementNamed<T, TO>(String routeName, {Object? arguments}) {
-    return Navigator.of(this).pushReplacementNamed<T, TO>(
-      routeName,
-      arguments: arguments,
-    );
-  }
-
-  void popUntil(RoutePredicate predicate) {
-    Navigator.of(this).popUntil(predicate);
-  }
 
   // Focus
   void unfocus() => FocusScope.of(this).unfocus();

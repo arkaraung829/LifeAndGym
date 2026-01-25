@@ -1,0 +1,768 @@
+{
+  "@@locale": "en",
+  "@@last_modified": "2026-01-25",
+
+  "appName": "Life & Gym",
+  "@appName": {
+    "description": "The app name"
+  },
+
+  "welcomeBack": "Welcome back",
+  "@welcomeBack": {
+    "description": "Login screen header"
+  },
+
+  "signInToContinue": "Sign in to continue your fitness journey",
+  "@signInToContinue": {
+    "description": "Login screen subtitle"
+  },
+
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+
+  "enterYourEmail": "Enter your email",
+  "@enterYourEmail": {
+    "description": "Email field hint"
+  },
+
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+
+  "enterYourPassword": "Enter your password",
+  "@enterYourPassword": {
+    "description": "Password field hint"
+  },
+
+  "forgotPassword": "Forgot password?",
+  "@forgotPassword": {
+    "description": "Forgot password link"
+  },
+
+  "signIn": "Sign In",
+  "@signIn": {
+    "description": "Sign in button"
+  },
+
+  "signUp": "Sign Up",
+  "@signUp": {
+    "description": "Sign up button"
+  },
+
+  "or": "or",
+  "@or": {
+    "description": "Divider text between login options"
+  },
+
+  "continueWithGoogle": "Continue with Google",
+  "@continueWithGoogle": {
+    "description": "Google sign in button"
+  },
+
+  "continueWithApple": "Continue with Apple",
+  "@continueWithApple": {
+    "description": "Apple sign in button"
+  },
+
+  "dontHaveAccount": "Don't have an account? ",
+  "@dontHaveAccount": {
+    "description": "Sign up prompt"
+  },
+
+  "alreadyHaveAccount": "Already have an account? ",
+  "@alreadyHaveAccount": {
+    "description": "Sign in prompt"
+  },
+
+  "loginFailed": "Login failed",
+  "@loginFailed": {
+    "description": "Login error message"
+  },
+
+  "redirectingToGoogle": "Redirecting to Google sign in...",
+  "@redirectingToGoogle": {
+    "description": "Google sign in loading message"
+  },
+
+  "googleSignInFailed": "Google sign in failed",
+  "@googleSignInFailed": {
+    "description": "Google sign in error"
+  },
+
+  "appleSignInComingSoon": "Apple sign in coming soon",
+  "@appleSignInComingSoon": {
+    "description": "Apple sign in not available message"
+  },
+
+  "goodMorning": "Good morning",
+  "@goodMorning": {
+    "description": "Morning greeting"
+  },
+
+  "goodAfternoon": "Good afternoon",
+  "@goodAfternoon": {
+    "description": "Afternoon greeting"
+  },
+
+  "goodEvening": "Good evening",
+  "@goodEvening": {
+    "description": "Evening greeting"
+  },
+
+  "guest": "Guest",
+  "@guest": {
+    "description": "Guest user label"
+  },
+
+  "member": "Member",
+  "@member": {
+    "description": "Member label"
+  },
+
+  "checkedIn": "CHECKED IN",
+  "@checkedIn": {
+    "description": "Checked in status"
+  },
+
+  "tapToCheckIn": "TAP TO CHECK IN",
+  "@tapToCheckIn": {
+    "description": "Check in prompt"
+  },
+
+  "scanToCheckIn": "Scan to Check In",
+  "@scanToCheckIn": {
+    "description": "QR dialog title"
+  },
+
+  "close": "Close",
+  "@close": {
+    "description": "Close button"
+  },
+
+  "noActiveMembership": "No active membership",
+  "@noActiveMembership": {
+    "description": "No membership status"
+  },
+
+  "memberType": "{type} Member",
+  "@memberType": {
+    "description": "Member type display",
+    "placeholders": {
+      "type": {
+        "type": "String",
+        "example": "Premium"
+      }
+    }
+  },
+
+  "noGymAvailable": "No gym available",
+  "@noGymAvailable": {
+    "description": "No gym status"
+  },
+
+  "notBusy": "Not Busy",
+  "@notBusy": {
+    "description": "Low occupancy status"
+  },
+
+  "moderate": "Moderate",
+  "@moderate": {
+    "description": "Medium occupancy status"
+  },
+
+  "busy": "Busy",
+  "@busy": {
+    "description": "High occupancy status"
+  },
+
+  "occupancyStatus": "{status} • {current}/{capacity} people",
+  "@occupancyStatus": {
+    "description": "Gym occupancy display",
+    "placeholders": {
+      "status": {
+        "type": "String",
+        "example": "Moderate"
+      },
+      "current": {
+        "type": "int",
+        "example": "45"
+      },
+      "capacity": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+
+  "workoutInProgress": "Workout in Progress",
+  "@workoutInProgress": {
+    "description": "Active workout status"
+  },
+
+  "todaysWorkout": "Today's Workout",
+  "@todaysWorkout": {
+    "description": "Workout section title"
+  },
+
+  "continueYourSession": "Continue your session",
+  "@continueYourSession": {
+    "description": "Resume workout prompt"
+  },
+
+  "startQuickWorkout": "Start a Quick Workout",
+  "@startQuickWorkout": {
+    "description": "Quick workout button"
+  },
+
+  "tapToResume": "Tap to resume",
+  "@tapToResume": {
+    "description": "Resume hint"
+  },
+
+  "noPlannedWorkouts": "No planned workouts",
+  "@noPlannedWorkouts": {
+    "description": "Empty workout state"
+  },
+
+  "resumeWorkout": "Resume Workout",
+  "@resumeWorkout": {
+    "description": "Resume workout button"
+  },
+
+  "startWorkout": "Start Workout",
+  "@startWorkout": {
+    "description": "Start workout button"
+  },
+
+  "estimatedMinutes": "~{minutes} min",
+  "@estimatedMinutes": {
+    "description": "Estimated duration",
+    "placeholders": {
+      "minutes": {
+        "type": "int",
+        "example": "45"
+      }
+    }
+  },
+
+  "upcomingClasses": "Upcoming Classes",
+  "@upcomingClasses": {
+    "description": "Classes section title"
+  },
+
+  "seeAll": "See All",
+  "@seeAll": {
+    "description": "See all link"
+  },
+
+  "noClassesScheduledToday": "No classes scheduled today",
+  "@noClassesScheduledToday": {
+    "description": "Empty classes state"
+  },
+
+  "booked": "BOOKED",
+  "@booked": {
+    "description": "Booked status"
+  },
+
+  "spotsRemaining": "{count} spots",
+  "@spotsRemaining": {
+    "description": "Available spots",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "thisWeek": "This Week",
+  "@thisWeek": {
+    "description": "Weekly progress title"
+  },
+
+  "dayStreak": "{count} day streak",
+  "@dayStreak": {
+    "description": "Streak count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+
+  "workoutsCompleted": "{completed}/{total} workouts completed",
+  "@workoutsCompleted": {
+    "description": "Weekly progress",
+    "placeholders": {
+      "completed": {
+        "type": "int",
+        "example": "3"
+      },
+      "total": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "home": "Home",
+  "@home": {
+    "description": "Home tab"
+  },
+
+  "workouts": "Workouts",
+  "@workouts": {
+    "description": "Workouts tab"
+  },
+
+  "classes": "Classes",
+  "@classes": {
+    "description": "Classes tab"
+  },
+
+  "progress": "Progress",
+  "@progress": {
+    "description": "Progress tab"
+  },
+
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile tab"
+  },
+
+  "createAccount": "Create account",
+  "@createAccount": {
+    "description": "Register screen header"
+  },
+
+  "startYourFitnessJourney": "Start your fitness journey today",
+  "@startYourFitnessJourney": {
+    "description": "Register screen subtitle"
+  },
+
+  "fullName": "Full Name",
+  "@fullName": {
+    "description": "Name field label"
+  },
+
+  "enterYourFullName": "Enter your full name",
+  "@enterYourFullName": {
+    "description": "Name field hint"
+  },
+
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+
+  "reEnterYourPassword": "Re-enter your password",
+  "@reEnterYourPassword": {
+    "description": "Confirm password field hint"
+  },
+
+  "bySigningUp": "By signing up, you agree to our ",
+  "@bySigningUp": {
+    "description": "Terms agreement prefix"
+  },
+
+  "termsOfService": "Terms of Service",
+  "@termsOfService": {
+    "description": "Terms link"
+  },
+
+  "and": " and ",
+  "@and": {
+    "description": "Conjunction"
+  },
+
+  "privacyPolicy": "Privacy Policy",
+  "@privacyPolicy": {
+    "description": "Privacy link"
+  },
+
+  "registrationFailed": "Registration failed",
+  "@registrationFailed": {
+    "description": "Registration error"
+  },
+
+  "resetPassword": "Reset Password",
+  "@resetPassword": {
+    "description": "Reset password screen header"
+  },
+
+  "enterEmailForReset": "Enter your email address and we'll send you instructions to reset your password.",
+  "@enterEmailForReset": {
+    "description": "Reset password instructions"
+  },
+
+  "sendResetLink": "Send Reset Link",
+  "@sendResetLink": {
+    "description": "Reset button"
+  },
+
+  "backToLogin": "Back to Login",
+  "@backToLogin": {
+    "description": "Back to login link"
+  },
+
+  "resetEmailSent": "Password reset email sent. Please check your inbox.",
+  "@resetEmailSent": {
+    "description": "Reset success message"
+  },
+
+  "exercises": "Exercises",
+  "@exercises": {
+    "description": "Exercises section"
+  },
+
+  "exerciseLibrary": "Exercise Library",
+  "@exerciseLibrary": {
+    "description": "Exercise library title"
+  },
+
+  "searchExercises": "Search exercises...",
+  "@searchExercises": {
+    "description": "Exercise search hint"
+  },
+
+  "allExercises": "All Exercises",
+  "@allExercises": {
+    "description": "All exercises filter"
+  },
+
+  "myWorkouts": "My Workouts",
+  "@myWorkouts": {
+    "description": "User workouts section"
+  },
+
+  "templates": "Templates",
+  "@templates": {
+    "description": "Workout templates"
+  },
+
+  "history": "History",
+  "@history": {
+    "description": "History section"
+  },
+
+  "workoutHistory": "Workout History",
+  "@workoutHistory": {
+    "description": "Workout history title"
+  },
+
+  "noWorkoutsYet": "No workouts yet",
+  "@noWorkoutsYet": {
+    "description": "Empty workout history"
+  },
+
+  "startYourFirstWorkout": "Start your first workout to see your history here.",
+  "@startYourFirstWorkout": {
+    "description": "Empty workout history message"
+  },
+
+  "activeWorkout": "Active Workout",
+  "@activeWorkout": {
+    "description": "Active workout title"
+  },
+
+  "duration": "Duration",
+  "@duration": {
+    "description": "Duration label"
+  },
+
+  "sets": "Sets",
+  "@sets": {
+    "description": "Sets label"
+  },
+
+  "reps": "Reps",
+  "@reps": {
+    "description": "Reps label"
+  },
+
+  "weight": "Weight",
+  "@weight": {
+    "description": "Weight label"
+  },
+
+  "addExercise": "Add Exercise",
+  "@addExercise": {
+    "description": "Add exercise button"
+  },
+
+  "finishWorkout": "Finish Workout",
+  "@finishWorkout": {
+    "description": "Finish workout button"
+  },
+
+  "cancelWorkout": "Cancel Workout",
+  "@cancelWorkout": {
+    "description": "Cancel workout button"
+  },
+
+  "schedules": "Schedules",
+  "@schedules": {
+    "description": "Schedules section"
+  },
+
+  "myBookings": "My Bookings",
+  "@myBookings": {
+    "description": "User bookings"
+  },
+
+  "bookClass": "Book Class",
+  "@bookClass": {
+    "description": "Book class button"
+  },
+
+  "cancelBooking": "Cancel Booking",
+  "@cancelBooking": {
+    "description": "Cancel booking button"
+  },
+
+  "classDetails": "Class Details",
+  "@classDetails": {
+    "description": "Class details title"
+  },
+
+  "instructor": "Instructor",
+  "@instructor": {
+    "description": "Instructor label"
+  },
+
+  "level": "Level",
+  "@level": {
+    "description": "Level label"
+  },
+
+  "statistics": "Statistics",
+  "@statistics": {
+    "description": "Statistics section"
+  },
+
+  "totalWorkouts": "Total Workouts",
+  "@totalWorkouts": {
+    "description": "Total workouts stat"
+  },
+
+  "totalMinutes": "Total Minutes",
+  "@totalMinutes": {
+    "description": "Total minutes stat"
+  },
+
+  "totalWeight": "Total Weight",
+  "@totalWeight": {
+    "description": "Total weight stat"
+  },
+
+  "currentStreak": "Current Streak",
+  "@currentStreak": {
+    "description": "Current streak stat"
+  },
+
+  "editProfile": "Edit Profile",
+  "@editProfile": {
+    "description": "Edit profile title"
+  },
+
+  "save": "Save",
+  "@save": {
+    "description": "Save button"
+  },
+
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings title"
+  },
+
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Notifications setting"
+  },
+
+  "darkMode": "Dark Mode",
+  "@darkMode": {
+    "description": "Dark mode setting"
+  },
+
+  "language": "Language",
+  "@language": {
+    "description": "Language setting"
+  },
+
+  "about": "About",
+  "@about": {
+    "description": "About section"
+  },
+
+  "version": "Version",
+  "@version": {
+    "description": "Version label"
+  },
+
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button"
+  },
+
+  "logoutConfirmation": "Are you sure you want to logout?",
+  "@logoutConfirmation": {
+    "description": "Logout confirmation"
+  },
+
+  "yes": "Yes",
+  "@yes": {
+    "description": "Yes button"
+  },
+
+  "no": "No",
+  "@no": {
+    "description": "No button"
+  },
+
+  "error": "Error",
+  "@error": {
+    "description": "Error title"
+  },
+
+  "tryAgain": "Try Again",
+  "@tryAgain": {
+    "description": "Try again button"
+  },
+
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading text"
+  },
+
+  "noInternetConnection": "No internet connection",
+  "@noInternetConnection": {
+    "description": "No internet error"
+  },
+
+  "somethingWentWrong": "Something went wrong",
+  "@somethingWentWrong": {
+    "description": "Generic error"
+  },
+
+  "guestMode": "Guest Mode",
+  "@guestMode": {
+    "description": "Guest mode label"
+  },
+
+  "guestModeMessage": "Sign in to access all features",
+  "@guestModeMessage": {
+    "description": "Guest mode banner message"
+  },
+
+  "signInNow": "Sign In Now",
+  "@signInNow": {
+    "description": "Sign in prompt button"
+  },
+
+  "getStarted": "Get Started",
+  "@getStarted": {
+    "description": "Get started button"
+  },
+
+  "skip": "Skip",
+  "@skip": {
+    "description": "Skip button"
+  },
+
+  "next": "Next",
+  "@next": {
+    "description": "Next button"
+  },
+
+  "done": "Done",
+  "@done": {
+    "description": "Done button"
+  },
+
+  "welcomeToLifeAndGym": "Welcome to Life & Gym",
+  "@welcomeToLifeAndGym": {
+    "description": "Welcome screen title"
+  },
+
+  "fitnessJourneyStarts": "Your fitness journey starts here",
+  "@fitnessJourneyStarts": {
+    "description": "Welcome screen subtitle"
+  },
+
+  "exploreAsGuest": "Explore as Guest",
+  "@exploreAsGuest": {
+    "description": "Guest mode button"
+  },
+
+  "kg": "kg",
+  "@kg": {
+    "description": "Kilogram unit"
+  },
+
+  "lbs": "lbs",
+  "@lbs": {
+    "description": "Pounds unit"
+  },
+
+  "min": "min",
+  "@min": {
+    "description": "Minutes abbreviation"
+  },
+
+  "sec": "sec",
+  "@sec": {
+    "description": "Seconds abbreviation"
+  },
+
+  "validationEmailRequired": "Email is required",
+  "@validationEmailRequired": {
+    "description": "Email validation"
+  },
+
+  "validationEmailInvalid": "Please enter a valid email",
+  "@validationEmailInvalid": {
+    "description": "Invalid email validation"
+  },
+
+  "validationPasswordRequired": "Password is required",
+  "@validationPasswordRequired": {
+    "description": "Password validation"
+  },
+
+  "validationPasswordTooShort": "Password must be at least 6 characters",
+  "@validationPasswordTooShort": {
+    "description": "Password length validation"
+  },
+
+  "validationPasswordsDoNotMatch": "Passwords do not match",
+  "@validationPasswordsDoNotMatch": {
+    "description": "Password match validation"
+  },
+
+  "validationNameRequired": "Name is required",
+  "@validationNameRequired": {
+    "description": "Name validation"
+  },
+
+  "validationFieldRequired": "{field} is required",
+  "@validationFieldRequired": {
+    "description": "Generic required field validation",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "Email"
+      }
+    }
+  }
+}

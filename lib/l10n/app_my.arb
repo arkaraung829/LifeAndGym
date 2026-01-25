@@ -1,0 +1,287 @@
+{
+  "@@locale": "my",
+
+  "appName": "Life & Gym",
+
+  "welcomeBack": "ပြန်လည်ကြိုဆိုပါတယ်",
+
+  "signInToContinue": "သင့်ကျန်းမာရေးခရီးကို ဆက်လက်လုပ်ဆောင်ရန် ဝင်ရောက်ပါ",
+
+  "email": "အီးမေးလ်",
+
+  "enterYourEmail": "သင့်အီးမေးလ်ကို ထည့်သွင်းပါ",
+
+  "password": "စကားဝှက်",
+
+  "enterYourPassword": "သင့်စကားဝှက်ကို ထည့်သွင်းပါ",
+
+  "forgotPassword": "စကားဝှက်မေ့သွားပါသလား?",
+
+  "signIn": "ဝင်ရောက်ရန်",
+
+  "signUp": "အကောင့်ဖွင့်ရန်",
+
+  "or": "သို့မဟုတ်",
+
+  "continueWithGoogle": "Google ဖြင့်ဆက်လက်လုပ်ဆောင်ပါ",
+
+  "continueWithApple": "Apple ဖြင့်ဆက်လက်လုပ်ဆောင်ပါ",
+
+  "dontHaveAccount": "အကောင့်မရှိသေးဘူးလား? ",
+
+  "alreadyHaveAccount": "အကောင့်ရှိပြီးသားလား? ",
+
+  "loginFailed": "ဝင်ရောက်မှုမအောင်မြင်ပါ",
+
+  "redirectingToGoogle": "Google သို့ ပြောင်းလဲနေသည်...",
+
+  "googleSignInFailed": "Google ဝင်ရောက်မှု မအောင်မြင်ပါ",
+
+  "appleSignInComingSoon": "Apple ဝင်ရောက်မှု မကြာမီလာပါမည်",
+
+  "goodMorning": "မင်္ဂလာနံနက်ခင်းပါ",
+
+  "goodAfternoon": "မင်္ဂလာနေ့လည်ခင်းပါ",
+
+  "goodEvening": "မင်္ဂလာညနေခင်းပါ",
+
+  "guest": "ဧည့်သည်",
+
+  "member": "အသင်းဝင်",
+
+  "checkedIn": "ဝင်ရောက်ပြီး",
+
+  "tapToCheckIn": "ဝင်ရောက်ရန် နှိပ်ပါ",
+
+  "scanToCheckIn": "ဝင်ရောက်ရန် စကင်ဖတ်ပါ",
+
+  "close": "ပိတ်ရန်",
+
+  "noActiveMembership": "အသင်းဝင်မှုမရှိပါ",
+
+  "memberType": "{type} အသင်းဝင်",
+
+  "noGymAvailable": "ဂျင်မရှိပါ",
+
+  "notBusy": "လူနည်း",
+
+  "moderate": "အသင့်အတင့်",
+
+  "busy": "လူများ",
+
+  "occupancyStatus": "{status} • {current}/{capacity} ဦး",
+
+  "workoutInProgress": "လေ့ကျင့်နေဆဲ",
+
+  "todaysWorkout": "ယနေ့လေ့ကျင့်မှု",
+
+  "continueYourSession": "သင့်လေ့ကျင့်မှုကို ဆက်လက်လုပ်ဆောင်ပါ",
+
+  "startQuickWorkout": "အမြန်လေ့ကျင့်မှု စတင်ပါ",
+
+  "tapToResume": "ဆက်လက်လုပ်ဆောင်ရန် နှိပ်ပါ",
+
+  "noPlannedWorkouts": "စီစဉ်ထားသော လေ့ကျင့်မှုမရှိပါ",
+
+  "resumeWorkout": "လေ့ကျင့်မှု ဆက်လုပ်ရန်",
+
+  "startWorkout": "လေ့ကျင့်မှု စတင်ရန်",
+
+  "estimatedMinutes": "~{minutes} မိနစ်",
+
+  "upcomingClasses": "လာမည့်အတန်းများ",
+
+  "seeAll": "အားလုံးကြည့်ရန်",
+
+  "noClassesScheduledToday": "ယနေ့အတန်းမရှိပါ",
+
+  "booked": "ကြိုတင်မှာထားပြီး",
+
+  "spotsRemaining": "နေရာ {count} ခု",
+
+  "thisWeek": "ဤအပတ်",
+
+  "dayStreak": "{count} ရက်ဆက်တိုက်",
+
+  "workoutsCompleted": "{completed}/{total} လေ့ကျင့်မှု ပြီးစီးပြီ",
+
+  "home": "ပင်မ",
+
+  "workouts": "လေ့ကျင့်မှုများ",
+
+  "classes": "အတန်းများ",
+
+  "progress": "တိုးတက်မှု",
+
+  "profile": "ကိုယ်ရေးအချက်အလက်",
+
+  "createAccount": "အကောင့်ဖန်တီးရန်",
+
+  "startYourFitnessJourney": "သင့်ကျန်းမာရေးခရီးကို ယနေ့စတင်ပါ",
+
+  "fullName": "အမည်အပြည့်အစုံ",
+
+  "enterYourFullName": "သင့်အမည်အပြည့်အစုံကို ထည့်သွင်းပါ",
+
+  "confirmPassword": "စကားဝှက် အတည်ပြုပါ",
+
+  "reEnterYourPassword": "သင့်စကားဝှက်ကို ပြန်ထည့်ပါ",
+
+  "bySigningUp": "အကောင့်ဖွင့်ခြင်းဖြင့် ",
+
+  "termsOfService": "ဝန်ဆောင်မှုစည်းမျဉ်းများ",
+
+  "and": " နှင့် ",
+
+  "privacyPolicy": "ကိုယ်ရေးအချက်အလက်မူဝါဒ",
+
+  "registrationFailed": "အကောင့်ဖွင့်မှု မအောင်မြင်ပါ",
+
+  "resetPassword": "စကားဝှက် ပြန်လည်သတ်မှတ်ရန်",
+
+  "enterEmailForReset": "သင့်အီးမေးလ်လိပ်စာကို ထည့်သွင်းပါ။ စကားဝှက်ပြန်လည်သတ်မှတ်ရန် လမ်းညွှန်ချက်များ ပေးပို့ပါမည်။",
+
+  "sendResetLink": "ပြန်လည်သတ်မှတ်ရန် လင့်ခ် ပေးပို့ပါ",
+
+  "backToLogin": "ဝင်ရောက်မှုသို့ ပြန်သွားရန်",
+
+  "resetEmailSent": "စကားဝှက်ပြန်လည်သတ်မှတ်ရန် အီးမေးလ် ပေးပို့ပြီးပါပြီ။ သင့် inbox ကို စစ်ဆေးပါ။",
+
+  "exercises": "လေ့ကျင့်ခန်းများ",
+
+  "exerciseLibrary": "လေ့ကျင့်ခန်း စာကြည့်တိုက်",
+
+  "searchExercises": "လေ့ကျင့်ခန်းများ ရှာဖွေရန်...",
+
+  "allExercises": "လေ့ကျင့်ခန်းအားလုံး",
+
+  "myWorkouts": "ကျွန်ုပ်၏ လေ့ကျင့်မှုများ",
+
+  "templates": "ပုံစံများ",
+
+  "history": "မှတ်တမ်း",
+
+  "workoutHistory": "လေ့ကျင့်မှု မှတ်တမ်း",
+
+  "noWorkoutsYet": "လေ့ကျင့်မှု မရှိသေးပါ",
+
+  "startYourFirstWorkout": "သင့်ပထမဆုံးလေ့ကျင့်မှုကို စတင်ပါ၊ မှတ်တမ်းကို ဤနေရာတွင် မြင်တွေ့ရပါမည်။",
+
+  "activeWorkout": "လက်ရှိလေ့ကျင့်မှု",
+
+  "duration": "ကြာချိန်",
+
+  "sets": "အကြိမ်",
+
+  "reps": "ပြန်လုပ်",
+
+  "weight": "အလေးချိန်",
+
+  "addExercise": "လေ့ကျင့်ခန်း ထည့်ရန်",
+
+  "finishWorkout": "လေ့ကျင့်မှု အဆုံးသတ်ရန်",
+
+  "cancelWorkout": "လေ့ကျင့်မှု ပယ်ဖျက်ရန်",
+
+  "schedules": "အချိန်ဇယားများ",
+
+  "myBookings": "ကျွန်ုပ်၏ ကြိုတင်မှာယူမှုများ",
+
+  "bookClass": "အတန်း ကြိုတင်မှာယူရန်",
+
+  "cancelBooking": "ကြိုတင်မှာယူမှု ပယ်ဖျက်ရန်",
+
+  "classDetails": "အတန်း အသေးစိတ်",
+
+  "instructor": "နည်းပြ",
+
+  "level": "အဆင့်",
+
+  "statistics": "စာရင်းအင်း",
+
+  "totalWorkouts": "စုစုပေါင်း လေ့ကျင့်မှု",
+
+  "totalMinutes": "စုစုပေါင်း မိနစ်",
+
+  "totalWeight": "စုစုပေါင်း အလေးချိန်",
+
+  "currentStreak": "လက်ရှိ ဆက်တိုက်",
+
+  "editProfile": "ကိုယ်ရေးအချက်အလက် တည်းဖြတ်ရန်",
+
+  "save": "သိမ်းဆည်းရန်",
+
+  "cancel": "ပယ်ဖျက်ရန်",
+
+  "settings": "ဆက်တင်များ",
+
+  "notifications": "အသိပေးချက်များ",
+
+  "darkMode": "အမှောင်မုဒ်",
+
+  "language": "ဘာသာစကား",
+
+  "about": "အကြောင်း",
+
+  "version": "ဗားရှင်း",
+
+  "logout": "ထွက်ရန်",
+
+  "logoutConfirmation": "ထွက်လိုသည်မှာ သေချာပါသလား?",
+
+  "yes": "ဟုတ်ကဲ့",
+
+  "no": "မဟုတ်ပါ",
+
+  "error": "အမှား",
+
+  "tryAgain": "ထပ်ကြိုးစားပါ",
+
+  "loading": "ဖွင့်နေသည်...",
+
+  "noInternetConnection": "အင်တာနက်ချိတ်ဆက်မှု မရှိပါ",
+
+  "somethingWentWrong": "တစ်ခုခုမှားသွားပါသည်",
+
+  "guestMode": "ဧည့်သည်မုဒ်",
+
+  "guestModeMessage": "အင်္ဂါရပ်များအားလုံးကို ဝင်ရောက်ရန် ဝင်ရောက်ပါ",
+
+  "signInNow": "ယခု ဝင်ရောက်ပါ",
+
+  "getStarted": "စတင်ရန်",
+
+  "skip": "ကျော်ရန်",
+
+  "next": "ရှေ့သို့",
+
+  "done": "ပြီးပါပြီ",
+
+  "welcomeToLifeAndGym": "Life & Gym မှ ကြိုဆိုပါတယ်",
+
+  "fitnessJourneyStarts": "သင့်ကျန်းမာရေးခရီး ဤနေရာမှ စတင်သည်",
+
+  "exploreAsGuest": "ဧည့်သည်အဖြစ် လေ့လာရန်",
+
+  "kg": "ကီလို",
+
+  "lbs": "ပေါင်",
+
+  "min": "မိနစ်",
+
+  "sec": "စက္ကန့်",
+
+  "validationEmailRequired": "အီးမေးလ် လိုအပ်ပါသည်",
+
+  "validationEmailInvalid": "မှန်ကန်သော အီးမေးလ် ထည့်သွင်းပါ",
+
+  "validationPasswordRequired": "စကားဝှက် လိုအပ်ပါသည်",
+
+  "validationPasswordTooShort": "စကားဝှက်သည် အနည်းဆုံး စာလုံး ၆ လုံး ရှိရမည်",
+
+  "validationPasswordsDoNotMatch": "စကားဝှက်များ မတူညီပါ",
+
+  "validationNameRequired": "အမည် လိုအပ်ပါသည်",
+
+  "validationFieldRequired": "{field} လိုအပ်ပါသည်"
+}

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/extensions/context_extensions.dart';
 import '../../../core/router/route_names.dart';
 import '../../../core/services/error_handler_service.dart';
 import '../../../core/utils/validation.dart';
@@ -58,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       ErrorHandlerService().showErrorSnackBar(
         context,
-        authProvider.error ?? 'Login failed',
+        authProvider.error ?? context.l10n.loginFailed,
       );
       authProvider.clearError();
     }
@@ -77,15 +78,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Redirecting to Google sign in...'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(context.l10n.redirectingToGoogle),
+            duration: const Duration(seconds: 2),
           ),
         );
       } else {
         ErrorHandlerService().showErrorSnackBar(
           context,
-          authProvider.error ?? 'Google sign in failed',
+          authProvider.error ?? context.l10n.googleSignInFailed,
         );
         authProvider.clearError();
       }
@@ -93,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
       ErrorHandlerService().showErrorSnackBar(
         context,
-        'Error: ${e.toString()}',
+        '${context.l10n.error}: ${e.toString()}',
       );
     } finally {
       if (mounted) {
@@ -106,6 +107,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -125,12 +128,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 // Header
                 Text(
-                  'Welcome back',
+                  l10n.welcomeBack,
                   style: AppTypography.heading1,
                 ),
                 AppSpacing.vGapXs,
                 Text(
-                  'Sign in to continue your fitness journey',
+                  l10n.signInToContinue,
                   style: AppTypography.body.copyWith(
                     color: Theme.of(context)
                         .colorScheme
@@ -144,8 +147,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Email field
                 EmailField(
                   controller: _emailController,
-                  label: 'Email',
-                  hint: 'Enter your email',
+                  label: l10n.email,
+                  hint: l10n.enterYourEmail,
                   focusNode: _emailFocusNode,
                   textInputAction: TextInputAction.next,
                   validator: ValidationUtils.validateEmail,
@@ -159,13 +162,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Password field
                 PasswordField(
                   controller: _passwordController,
-                  label: 'Password',
-                  hint: 'Enter your password',
+                  label: l10n.password,
+                  hint: l10n.enterYourPassword,
                   focusNode: _passwordFocusNode,
                   textInputAction: TextInputAction.done,
                   validator: (value) => ValidationUtils.validateRequired(
                     value,
-                    fieldName: 'Password',
+                    fieldName: l10n.password,
                   ),
                   onSubmitted: (_) => _handleLogin(),
                 ),
@@ -177,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () => context.push(RoutePaths.forgotPassword),
-                    child: const Text('Forgot password?'),
+                    child: Text(l10n.forgotPassword),
                   ),
                 ),
 
@@ -187,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Consumer<AuthProvider>(
                   builder: (context, auth, _) {
                     return PrimaryButton(
-                      text: 'Sign In',
+                      text: l10n.signIn,
                       onPressed: _handleLogin,
                       isLoading: auth.isLoading,
                     );
@@ -203,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: AppSpacing.paddingHorizontalMd,
                       child: Text(
-                        'or',
+                        l10n.or,
                         style: AppTypography.bodySmall.copyWith(
                           color: Theme.of(context)
                               .colorScheme
@@ -218,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 AppSpacing.vGapLg,
 
-                // Social login buttons (placeholder)
+                // Social login buttons
                 _buildSocialButtons(context),
 
                 AppSpacing.vGapXxl,
@@ -228,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account? ",
+                      l10n.dontHaveAccount,
                       style: AppTypography.body.copyWith(
                         color: Theme.of(context)
                             .colorScheme
@@ -238,7 +241,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                       onPressed: () => context.pushReplacement(RoutePaths.register),
-                      child: const Text('Sign Up'),
+                      child: Text(l10n.signUp),
                     ),
                   ],
                 ),
@@ -251,22 +254,23 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildSocialButtons(BuildContext context) {
+    final l10n = context.l10n;
+
     return Column(
       children: [
         SecondaryButton(
-          text: 'Continue with Google',
+          text: l10n.continueWithGoogle,
           icon: Icons.g_mobiledata,
           isLoading: _isGoogleLoading,
           onPressed: _isGoogleLoading ? null : _handleGoogleSignIn,
         ),
         AppSpacing.vGapMd,
         SecondaryButton(
-          text: 'Continue with Apple',
+          text: l10n.continueWithApple,
           icon: Icons.apple,
           onPressed: () {
-            // TODO: Implement Apple sign in
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Apple sign in coming soon')),
+              SnackBar(content: Text(l10n.appleSignInComingSoon)),
             );
           },
         ),

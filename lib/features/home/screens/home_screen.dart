@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/extensions/context_extensions.dart';
 import '../../../core/router/route_names.dart';
 import '../../../shared/widgets/card_container.dart';
 import '../../../shared/widgets/guest_mode_banner.dart';
@@ -94,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final authProvider = context.watch<AuthProvider>();
     final user = authProvider.user;
     final isGuest = authProvider.isGuest;
-    final greeting = _getGreeting();
+    final greeting = _getGreeting(context);
+    final l10n = context.l10n;
 
     return Scaffold(
       body: SafeArea(
@@ -128,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          isGuest ? 'Guest' : (user?.fullName ?? 'Member'),
+                          isGuest ? l10n.guest : (user?.fullName ?? l10n.member),
                           style: AppTypography.heading2,
                         ),
                       ],
@@ -187,14 +189,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  String _getGreeting() {
+  String _getGreeting(BuildContext context) {
+    final l10n = context.l10n;
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning';
-    if (hour < 17) return 'Good afternoon';
-    return 'Good evening';
+    if (hour < 12) return l10n.goodMorning;
+    if (hour < 17) return l10n.goodAfternoon;
+    return l10n.goodEvening;
   }
 
   Widget _buildQRCheckInCard(BuildContext context) {
+    final l10n = context.l10n;
     final membershipProvider = context.watch<MembershipProvider>();
     final membership = membershipProvider.activeMembership;
     final isCheckedIn = membershipProvider.isCheckedIn;
@@ -216,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               AppSpacing.hGapSm,
               Text(
-                isCheckedIn ? 'CHECKED IN' : 'TAP TO CHECK IN',
+                isCheckedIn ? l10n.checkedIn : l10n.tapToCheckIn,
                 style: AppTypography.labelLarge.copyWith(
                   color: Colors.white,
                   letterSpacing: 1,
@@ -242,8 +246,8 @@ class _HomeScreenState extends State<HomeScreen> {
           AppSpacing.vGapMd,
           Text(
             membership != null
-                ? '${membership.planType.name} Member'
-                : 'No active membership',
+                ? l10n.memberType(membership.planType.name)
+                : l10n.noActiveMembership,
             style: AppTypography.bodySmall.copyWith(
               color: Colors.white.withValues(alpha: 0.9),
             ),
@@ -254,6 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showQRDialog(BuildContext context) {
+    final l10n = context.l10n;
     final membershipProvider = context.read<MembershipProvider>();
     final membership = membershipProvider.activeMembership;
 
@@ -266,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Scan to Check In',
+                l10n.scanToCheckIn,
                 style: AppTypography.heading3,
               ),
               AppSpacing.vGapLg,
@@ -287,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
               AppSpacing.vGapLg,
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Close'),
+                child: Text(l10n.close),
               ),
             ],
           ),
@@ -297,6 +302,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildGymStatusCard(BuildContext context) {
+    final l10n = context.l10n;
     final gymProvider = context.watch<GymProvider>();
     final gym = gymProvider.selectedGym ??
         (gymProvider.gyms.isNotEmpty ? gymProvider.gyms.first : null);
@@ -321,8 +327,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Icon(Icons.location_off),
             ),
             AppSpacing.hGapMd,
-            const Expanded(
-              child: Text('No gym available'),
+            Expanded(
+              child: Text(l10n.noGymAvailable),
             ),
           ],
         ),
@@ -335,15 +341,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ? AppColors.warning
             : AppColors.error;
     final occupancyText = gym.currentOccupancy < 30
-        ? 'Not Busy'
+        ? l10n.notBusy
         : gym.currentOccupancy < 70
-            ? 'Moderate'
-            : 'Busy';
+            ? l10n.moderate
+            : l10n.busy;
 
     return CardContainer(
       onTap: () {
         gymProvider.selectGym(gym);
-        // Navigate to gym detail when implemented
       },
       child: Row(
         children: [
@@ -382,7 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      '$occupancyText • ${gym.currentOccupancy}/${gym.capacity} people',
+                      l10n.occupancyStatus(occupancyText, gym.currentOccupancy, gym.capacity),
                       style: AppTypography.bodySmall.copyWith(
                         color: Theme.of(context)
                             .colorScheme
@@ -402,6 +407,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildTodaysWorkoutCard(BuildContext context) {
+    final l10n = context.l10n;
     final workoutProvider = context.watch<WorkoutProvider>();
     final hasActiveSession = workoutProvider.hasActiveSession;
     final userWorkouts = workoutProvider.userWorkouts;
@@ -423,7 +429,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               AppSpacing.hGapSm,
               Text(
-                hasActiveSession ? 'Workout in Progress' : "Today's Workout",
+                hasActiveSession ? l10n.workoutInProgress : l10n.todaysWorkout,
                 style: AppTypography.labelLarge,
               ),
             ],
@@ -431,19 +437,19 @@ class _HomeScreenState extends State<HomeScreen> {
           AppSpacing.vGapMd,
           Text(
             hasActiveSession
-                ? 'Continue your session'
+                ? l10n.continueYourSession
                 : userWorkouts.isNotEmpty
                     ? userWorkouts.first.name
-                    : 'Start a Quick Workout',
+                    : l10n.startQuickWorkout,
             style: AppTypography.heading3,
           ),
           AppSpacing.vGapXs,
           Text(
             hasActiveSession
-                ? 'Tap to resume'
+                ? l10n.tapToResume
                 : userWorkouts.isNotEmpty
-                    ? '~${userWorkouts.first.estimatedDuration} min'
-                    : 'No planned workouts',
+                    ? l10n.estimatedMinutes(userWorkouts.first.estimatedDuration)
+                    : l10n.noPlannedWorkouts,
             style: AppTypography.bodySmall.copyWith(
               color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
             ),
@@ -462,7 +468,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: hasActiveSession ? AppColors.success : null,
               ),
-              child: Text(hasActiveSession ? 'Resume Workout' : 'Start Workout'),
+              child: Text(hasActiveSession ? l10n.resumeWorkout : l10n.startWorkout),
             ),
           ),
         ],
@@ -488,6 +494,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildUpcomingClassesSection(BuildContext context) {
+    final l10n = context.l10n;
     final classesProvider = context.watch<ClassesProvider>();
     final schedules = classesProvider.upcomingSchedules.take(3).toList();
     final bookings = classesProvider.bookings;
@@ -499,14 +506,14 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Upcoming Classes',
+              l10n.upcomingClasses,
               style: AppTypography.heading4,
             ),
             TextButton(
               onPressed: () {
                 // Navigate to classes tab
               },
-              child: const Text('See All'),
+              child: Text(l10n.seeAll),
             ),
           ],
         ),
@@ -516,8 +523,8 @@ class _HomeScreenState extends State<HomeScreen> {
         else if (schedules.isEmpty)
           CardContainer(
             padding: AppSpacing.cardPaddingSmall,
-            child: const Center(
-              child: Text('No classes scheduled today'),
+            child: Center(
+              child: Text(l10n.noClassesScheduledToday),
             ),
           )
         else
@@ -538,7 +545,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       children: [
                         Text(
-                          schedule.classInfo?.name ?? 'Class',
+                          schedule.classInfo?.name ?? l10n.classes,
                           style: AppTypography.labelLarge,
                           textAlign: TextAlign.center,
                           maxLines: 1,
@@ -568,8 +575,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: Text(
                             isBooked
-                                ? 'BOOKED'
-                                : '${schedule.spotsRemaining} spots',
+                                ? l10n.booked
+                                : l10n.spotsRemaining(schedule.spotsRemaining),
                             style: AppTypography.labelSmall.copyWith(
                               color:
                                   isBooked ? AppColors.success : AppColors.primary,
@@ -596,6 +603,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildWeeklyProgressCard(BuildContext context) {
+    final l10n = context.l10n;
     final workoutProvider = context.watch<WorkoutProvider>();
     final stats = workoutProvider.workoutStats;
     final history = workoutProvider.workoutHistory;
@@ -625,7 +633,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'This Week',
+                l10n.thisWeek,
                 style: AppTypography.heading4,
               ),
               if (streak > 0)
@@ -635,7 +643,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: AppColors.warning, size: 20),
                     const SizedBox(width: 4),
                     Text(
-                      '$streak day streak',
+                      l10n.dayStreak(streak),
                       style: AppTypography.labelLarge.copyWith(
                         color: AppColors.warning,
                       ),
@@ -701,7 +709,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           AppSpacing.vGapSm,
           Text(
-            '$completedCount/$weeklyGoal workouts completed',
+            l10n.workoutsCompleted(completedCount, weeklyGoal),
             style: AppTypography.bodySmall.copyWith(
               color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
             ),

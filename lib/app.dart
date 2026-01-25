@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'core/config/theme_config.dart';
+import 'core/providers/locale_provider.dart';
 import 'core/router/app_router.dart';
 import 'features/auth/providers/auth_provider.dart';
 import 'features/classes/providers/classes_provider.dart';
@@ -17,24 +20,38 @@ class LifeAndGymApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => LocaleProvider()..initialize()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => GymProvider()),
         ChangeNotifierProvider(create: (_) => MembershipProvider()),
         ChangeNotifierProvider(create: (_) => ClassesProvider()),
         ChangeNotifierProvider(create: (_) => WorkoutProvider()),
-        // Add more providers here as needed
       ],
-      child: MaterialApp.router(
-        title: 'LifeAndGym',
-        debugShowCheckedModeBanner: false,
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, _) {
+          return MaterialApp.router(
+            title: 'LifeAndGym',
+            debugShowCheckedModeBanner: false,
 
-        // Theme
-        theme: ThemeConfig.lightTheme,
-        darkTheme: ThemeConfig.darkTheme,
-        themeMode: ThemeMode.dark, // Default to dark mode
+            // Localization
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: localeProvider.locale,
 
-        // Router
-        routerConfig: AppRouter.router,
+            // Theme
+            theme: ThemeConfig.lightTheme,
+            darkTheme: ThemeConfig.darkTheme,
+            themeMode: ThemeMode.dark,
+
+            // Router
+            routerConfig: AppRouter.router,
+          );
+        },
       ),
     );
   }
