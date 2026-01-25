@@ -423,64 +423,62 @@ class _HomeScreenState extends State<HomeScreen> {
     final userWorkouts = workoutProvider.userWorkouts;
 
     return CardContainer(
+      padding: AppSpacing.cardPaddingSmall,
       onTap: () {
         if (hasActiveSession) {
           context.push(RoutePaths.activeWorkout);
+        } else {
+          _startQuickWorkout(context);
         }
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Icon(
-                hasActiveSession ? Icons.play_circle : Icons.fitness_center,
-                color: hasActiveSession ? AppColors.success : AppColors.primary,
-              ),
-              AppSpacing.hGapSm,
-              Text(
-                hasActiveSession ? l10n.workoutInProgress : l10n.todaysWorkout,
-                style: AppTypography.labelLarge,
-              ),
-            ],
-          ),
-          AppSpacing.vGapMd,
-          Text(
-            hasActiveSession
-                ? l10n.continueYourSession
-                : userWorkouts.isNotEmpty
-                    ? userWorkouts.first.name
-                    : l10n.startQuickWorkout,
-            style: AppTypography.heading3,
-          ),
-          AppSpacing.vGapXs,
-          Text(
-            hasActiveSession
-                ? l10n.tapToResume
-                : userWorkouts.isNotEmpty
-                    ? l10n.estimatedMinutes(userWorkouts.first.estimatedDuration)
-                    : l10n.noPlannedWorkouts,
-            style: AppTypography.bodySmall.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: hasActiveSession
+                  ? AppColors.success.withValues(alpha: 0.15)
+                  : AppColors.primary.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              hasActiveSession ? Icons.play_circle : Icons.fitness_center,
+              color: hasActiveSession ? AppColors.success : AppColors.primary,
+              size: 24,
             ),
           ),
-          AppSpacing.vGapMd,
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                if (hasActiveSession) {
-                  context.push(RoutePaths.activeWorkout);
-                } else {
-                  _startQuickWorkout(context);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: hasActiveSession ? AppColors.success : null,
-              ),
-              child: Text(hasActiveSession ? l10n.resumeWorkout : l10n.startWorkout),
+          AppSpacing.hGapMd,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  hasActiveSession
+                      ? l10n.continueYourSession
+                      : userWorkouts.isNotEmpty
+                          ? userWorkouts.first.name
+                          : l10n.startQuickWorkout,
+                  style: AppTypography.bodyLarge.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  hasActiveSession
+                      ? l10n.tapToResume
+                      : userWorkouts.isNotEmpty
+                          ? l10n.estimatedMinutes(userWorkouts.first.estimatedDuration)
+                          : l10n.noPlannedWorkouts,
+                  style: AppTypography.bodySmall.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
+                ),
+              ],
             ),
           ),
+          const Icon(Icons.chevron_right),
         ],
       ),
     );
@@ -536,65 +534,114 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           )
         else
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: schedules.map((schedule) {
-                final isBooked = bookings.any(
-                    (b) => b.classScheduleId == schedule.id && b.isConfirmed);
-                return Container(
-                  width: 100,
-                  margin: const EdgeInsets.only(right: 12),
-                  child: CardContainer(
-                    padding: AppSpacing.cardPaddingSmall,
-                    onTap: () => context.go(RoutePaths.book),
-                    child: Column(
-                      children: [
-                        Text(
-                          schedule.classInfo?.name ?? l10n.classes,
-                          style: AppTypography.labelLarge,
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+          Column(
+            children: schedules.map((schedule) {
+              final isBooked = bookings.any(
+                  (b) => b.classScheduleId == schedule.id && b.isConfirmed);
+              final className = schedule.classInfo?.name ?? l10n.classes;
+              final classType = schedule.classInfo?.type ?? 'fitness';
+              final classIcon = _getClassIcon(classType);
+              final classColor = _getClassColor(classType);
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: CardContainer(
+                  padding: const EdgeInsets.all(12),
+                  onTap: () => context.go(RoutePaths.book),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: classColor.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        AppSpacing.vGapXs,
-                        Text(
-                          _formatTime(schedule.scheduledAt),
-                          style: AppTypography.bodySmall.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.6),
-                          ),
+                        child: Icon(
+                          classIcon,
+                          color: classColor,
+                          size: 24,
                         ),
-                        AppSpacing.vGapSm,
+                      ),
+                      AppSpacing.hGapMd,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              className,
+                              style: AppTypography.bodyLarge.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time,
+                                  size: 14,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.6),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  _formatTime(schedule.scheduledAt),
+                                  style: AppTypography.bodySmall.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.6),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Icon(
+                                  Icons.people_outline,
+                                  size: 14,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.6),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${schedule.spotsRemaining}/${schedule.capacity}',
+                                  style: AppTypography.bodySmall.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.6),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (isBooked)
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8,
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: isBooked
-                                ? AppColors.success.withValues(alpha: 0.15)
-                                : AppColors.primary.withValues(alpha: 0.15),
+                            color: AppColors.success.withValues(alpha: 0.15),
                             borderRadius: AppSpacing.borderRadiusFull,
                           ),
                           child: Text(
-                            isBooked
-                                ? l10n.booked
-                                : l10n.spotsRemaining(schedule.spotsRemaining),
+                            l10n.booked,
                             style: AppTypography.labelSmall.copyWith(
-                              color:
-                                  isBooked ? AppColors.success : AppColors.primary,
+                              color: AppColors.success,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                    ],
                   ),
-                );
-              }).toList(),
-            ),
+                ),
+              );
+            }).toList(),
           ),
       ],
     );
@@ -606,6 +653,52 @@ class _HomeScreenState extends State<HomeScreen> {
     final period = hour >= 12 ? 'PM' : 'AM';
     final displayHour = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
     return '$displayHour:$minute $period';
+  }
+
+  IconData _getClassIcon(String classType) {
+    switch (classType.toLowerCase()) {
+      case 'yoga':
+        return Icons.self_improvement;
+      case 'hiit':
+        return Icons.flash_on;
+      case 'spin':
+        return Icons.directions_bike;
+      case 'strength':
+        return Icons.fitness_center;
+      case 'boxing':
+        return Icons.sports_mma;
+      case 'cardio':
+        return Icons.favorite;
+      case 'pilates':
+        return Icons.accessibility_new;
+      case 'crossfit':
+        return Icons.sports_gymnastics;
+      default:
+        return Icons.sports_gymnastics;
+    }
+  }
+
+  Color _getClassColor(String classType) {
+    switch (classType.toLowerCase()) {
+      case 'yoga':
+        return const Color(0xFF9C27B0); // Purple
+      case 'hiit':
+        return const Color(0xFFFF5722); // Deep Orange
+      case 'spin':
+        return const Color(0xFF2196F3); // Blue
+      case 'strength':
+        return const Color(0xFF4CAF50); // Green
+      case 'boxing':
+        return const Color(0xFFF44336); // Red
+      case 'cardio':
+        return const Color(0xFFE91E63); // Pink
+      case 'pilates':
+        return const Color(0xFF00BCD4); // Cyan
+      case 'crossfit':
+        return const Color(0xFFFF9800); // Orange
+      default:
+        return AppColors.primary;
+    }
   }
 
   Widget _buildWeeklyProgressCard(BuildContext context) {
