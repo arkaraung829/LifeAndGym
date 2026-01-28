@@ -467,16 +467,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             );
           }).toList(),
         ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
-          ),
-        ],
       ),
-    );
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(l10n.cancel),
+        ),
+      ],
+    ),
+  );
   }
 
   Widget _buildSignOutButton(BuildContext context) {

@@ -808,35 +808,34 @@ class _GoalsScreenState extends State<GoalsScreen> {
             ],
           ),
         ),
-          ),
-        ),
-        actions: [
-          if (goal.status == GoalStatus.active)
-            TextButton.icon(
-              onPressed: () async {
-                final goalsProvider = context.read<GoalsProvider>();
-                await goalsProvider.updateStatus(goal.id, GoalStatus.completed);
-
-                if (!context.mounted) return;
-                Navigator.of(context).pop();
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Goal marked as completed!'),
-                    backgroundColor: AppColors.success,
-                  ),
-                );
-              },
-              icon: const Icon(Icons.check_circle),
-              label: const Text('Mark Complete'),
-            ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-        ],
       ),
-    );
+      actions: [
+        if (goal.status == GoalStatus.active)
+          TextButton.icon(
+            onPressed: () async {
+              final goalsProvider = context.read<GoalsProvider>();
+              await goalsProvider.updateStatus(goal.id, GoalStatus.completed);
+
+              if (!context.mounted) return;
+              Navigator.of(context).pop();
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Goal marked as completed!'),
+                  backgroundColor: AppColors.success,
+                ),
+              );
+            },
+            icon: const Icon(Icons.check_circle),
+            label: const Text('Mark Complete'),
+          ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Close'),
+        ),
+      ],
+    ),
+  );
   }
 
   Widget _buildDetailRow(String label, String value) {

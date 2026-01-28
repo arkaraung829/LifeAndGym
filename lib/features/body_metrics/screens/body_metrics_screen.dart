@@ -1110,10 +1110,9 @@ class _MetricsEntryDialogState extends State<_MetricsEntryDialog> {
             ],
           ),
         ),
-          ),
-        ),
       ),
-      actions: [
+    ),
+    actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
           child: const Text('Cancel'),

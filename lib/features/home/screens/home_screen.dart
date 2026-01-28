@@ -1101,7 +1101,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               // Profile header
               Row(
-              children: [
+                children: [
                 CircleAvatar(
                   radius: 32,
                   backgroundColor: AppColors.primary,
@@ -1203,8 +1203,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-        ),
-      ),
-    );
-  }
+    ),
+  );
+}
 }

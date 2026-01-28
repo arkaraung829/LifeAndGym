@@ -210,36 +210,35 @@ class _GymListScreenState extends State<GymListScreen> {
               ],
             ),
           ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _selectedAmenities.clear();
-                  _showOpenOnly = false;
-                });
-                Navigator.of(context).pop();
-              },
-              child: const Text('Clear'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {});
-                Navigator.of(context).pop();
-              },
-              child: const Text('Apply'),
-            ),
-          ],
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _selectedAmenities.clear();
+                _showOpenOnly = false;
+              });
+              Navigator.of(context).pop();
+            },
+            child: const Text('Clear'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {});
+              Navigator.of(context).pop();
+            },
+            child: const Text('Apply'),
+          ),
+        ],
       ),
-    );
+    ),
+  );
   }
 
   void _showGymDetails(GymModel gym) {
