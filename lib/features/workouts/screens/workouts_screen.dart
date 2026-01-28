@@ -7,12 +7,14 @@ import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/router/route_names.dart';
+import '../../../core/services/notification_service.dart';
 import '../../../shared/widgets/card_container.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/loading_indicator.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../providers/workout_provider.dart';
 import '../models/workout_session_model.dart';
+import '../models/workout_model.dart';
 
 /// Workouts screen with tabs for user workouts, templates, and history.
 class WorkoutsScreen extends StatefulWidget {
@@ -145,6 +147,11 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
                       ),
                     ],
                   ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.notifications_outlined),
+                  tooltip: 'Set reminder',
+                  onPressed: () => _showSetReminderDialog(context, workout),
                 ),
                 IconButton(
                   icon: const Icon(Icons.play_circle_outline),
@@ -367,9 +374,109 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
   }
 
   void _showCreateWorkoutDialog(BuildContext context) {
+    context.push(RoutePaths.createWorkout);
+  }
+
+  Future<void> _showSetReminderDialog(BuildContext context, WorkoutModel workout) async {
+    DateTime selectedDate = DateTime.now();
+    TimeOfDay selectedTime = TimeOfDay.now();
+
+    final result = await showDialog<Map<String, dynamic>>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: const Text('Set Workout Reminder'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Get reminded to do: ${workout.name}',
+                style: AppTypography.bodyLarge,
+              ),
+              AppSpacing.vGapLg,
+              ListTile(
+                leading: const Icon(Icons.calendar_today),
+                title: const Text('Date'),
+                subtitle: Text(
+                  DateFormat('MMM d, yyyy').format(selectedDate),
+                ),
+                onTap: () async {
+                  final date = await showDatePicker(
+                    context: context,
+                    initialDate: selectedDate,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.now().add(const Duration(days: 365)),
+                  );
+                  if (date != null) {
+                    setState(() => selectedDate = date);
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.access_time),
+                title: const Text('Time'),
+                subtitle: Text(
+                  selectedTime.format(context),
+                ),
+                onTap: () async {
+                  final time = await showTimePicker(
+                    context: context,
+                    initialTime: selectedTime,
+                  );
+                  if (time != null) {
+                    setState(() => selectedTime = time);
+                  }
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, {
+                'date': selectedDate,
+                'time': selectedTime,
+              }),
+              child: const Text('Set Reminder'),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (result == null || !mounted) return;
+
+    final date = result['date'] as DateTime;
+    final time = result['time'] as TimeOfDay;
+
+    // Combine date and time
+    final reminderDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+
+    // Schedule the reminder
+    await NotificationService.instance.scheduleWorkoutReminder(
+      workout.id,
+      workout.name,
+      reminderDateTime,
+    );
+
+    if (!mounted) return;
+
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Workout creation coming soon'),
+      SnackBar(
+        content: Text(
+          'Reminder set for ${DateFormat('MMM d, yyyy').format(date)} at ${time.format(context)}',
+        ),
+        backgroundColor: AppColors.success,
       ),
     );
   }

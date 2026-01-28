@@ -5,6 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/services/error_handler_service.dart';
+import '../../../core/services/notification_service.dart';
 import '../../../shared/widgets/card_container.dart';
 import '../../../shared/widgets/loading_indicator.dart';
 import '../../auth/providers/auth_provider.dart';
@@ -569,6 +570,60 @@ class _ClassesScreenState extends State<ClassesScreen> {
 
     if (authProvider.user == null) return;
 
+    // Find the schedule to get class details
+    final schedule = classesProvider.schedules.firstWhere(
+      (s) => s.id == scheduleId,
+      orElse: () => throw Exception('Schedule not found'),
+    );
+
+    // Show booking dialog with reminder option
+    final shouldSetReminder = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Book Class'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            Text(
+              'Book ${schedule.classInfo?.name ?? 'this class'}?',
+              style: AppTypography.bodyLarge,
+            ),
+            AppSpacing.vGapMd,
+            Row(
+              children: [
+                const Icon(Icons.notifications_active, size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'You\'ll receive a reminder 30 minutes before class',
+                    style: AppTypography.bodySmall.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Book'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldSetReminder != true) return;
+
     final success = await classesProvider.bookClass(
       userId: authProvider.user!.id,
       classScheduleId: scheduleId,
@@ -577,9 +632,16 @@ class _ClassesScreenState extends State<ClassesScreen> {
     if (!mounted) return;
 
     if (success) {
+      // Schedule reminder notification
+      await NotificationService.instance.scheduleClassReminder(
+        scheduleId,
+        schedule.classInfo?.name ?? 'Your class',
+        schedule.scheduledAt,
+      );
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Class booked successfully!'),
+          content: Text('Class booked! You\'ll receive a reminder 30 minutes before.'),
           backgroundColor: AppColors.success,
         ),
       );
@@ -596,6 +658,12 @@ class _ClassesScreenState extends State<ClassesScreen> {
 
   Future<void> _cancelBooking(String bookingId) async {
     final classesProvider = context.read<ClassesProvider>();
+
+    // Find the booking to get schedule ID
+    final booking = classesProvider.bookings.firstWhere(
+      (b) => b.id == bookingId,
+      orElse: () => throw Exception('Booking not found'),
+    );
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -623,6 +691,9 @@ class _ClassesScreenState extends State<ClassesScreen> {
     if (!mounted) return;
 
     if (success) {
+      // Cancel the reminder notification
+      await NotificationService.instance.cancelClassReminder(booking.classScheduleId);
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Booking cancelled'),

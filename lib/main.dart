@@ -6,6 +6,7 @@ import 'core/config/supabase_config.dart';
 import 'core/services/cache_service.dart';
 import 'core/services/connectivity_service.dart';
 import 'core/services/logger_service.dart';
+import 'core/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,6 +48,10 @@ Future<void> _initializeServices() async {
     // Initialize connectivity service
     ConnectivityService().init();
     AppLogger.info('Connectivity service initialized');
+
+    // Initialize notification service
+    await NotificationService.instance.initialize();
+    AppLogger.info('Notification service initialized');
 
     AppLogger.info('All services initialized successfully');
   } catch (e, stackTrace) {

@@ -764,5 +764,495 @@
         "example": "Email"
       }
     }
+  },
+
+  "goals_title": "Goals",
+  "@goals_title": {
+    "description": "Goals screen title"
+  },
+
+  "goals_empty": "No goals yet - Set your first goal!",
+  "@goals_empty": {
+    "description": "Empty goals state message"
+  },
+
+  "create_goal": "Create Goal",
+  "@create_goal": {
+    "description": "Create goal button"
+  },
+
+  "goal_name": "Goal Name",
+  "@goal_name": {
+    "description": "Goal name field label"
+  },
+
+  "goal_description": "Description",
+  "@goal_description": {
+    "description": "Goal description field label"
+  },
+
+  "goal_type": "Goal Type",
+  "@goal_type": {
+    "description": "Goal type field label"
+  },
+
+  "target_value": "Target Value",
+  "@target_value": {
+    "description": "Target value field label"
+  },
+
+  "current_value": "Current Value",
+  "@current_value": {
+    "description": "Current value field label"
+  },
+
+  "target_date": "Target Date",
+  "@target_date": {
+    "description": "Target date field label"
+  },
+
+  "days_remaining": "days remaining",
+  "@days_remaining": {
+    "description": "Days remaining label"
+  },
+
+  "overdue": "Overdue",
+  "@overdue": {
+    "description": "Overdue status"
+  },
+
+  "update_progress": "Update Progress",
+  "@update_progress": {
+    "description": "Update progress button"
+  },
+
+  "mark_complete": "Mark as Complete",
+  "@mark_complete": {
+    "description": "Mark complete button"
+  },
+
+  "weight_loss": "Weight Loss",
+  "@weight_loss": {
+    "description": "Weight loss goal type"
+  },
+
+  "muscle_gain": "Muscle Gain",
+  "@muscle_gain": {
+    "description": "Muscle gain goal type"
+  },
+
+  "strength": "Strength",
+  "@strength": {
+    "description": "Strength goal type"
+  },
+
+  "endurance": "Endurance",
+  "@endurance": {
+    "description": "Endurance goal type"
+  },
+
+  "flexibility": "Flexibility",
+  "@flexibility": {
+    "description": "Flexibility goal type"
+  },
+
+  "body_fat": "Body Fat",
+  "@body_fat": {
+    "description": "Body fat goal type/metric"
+  },
+
+  "consistency": "Consistency",
+  "@consistency": {
+    "description": "Consistency goal type"
+  },
+
+  "filter_all": "All",
+  "@filter_all": {
+    "description": "All filter option"
+  },
+
+  "filter_active": "Active",
+  "@filter_active": {
+    "description": "Active filter option"
+  },
+
+  "filter_completed": "Completed",
+  "@filter_completed": {
+    "description": "Completed filter option"
+  },
+
+  "body_metrics": "Body Metrics",
+  "@body_metrics": {
+    "description": "Body metrics screen title"
+  },
+
+  "body_metrics_empty": "No metrics yet - Track your first measurement!",
+  "@body_metrics_empty": {
+    "description": "Empty body metrics state message"
+  },
+
+  "add_entry": "Add Entry",
+  "@add_entry": {
+    "description": "Add entry button"
+  },
+
+  "latest_metrics": "Latest Metrics",
+  "@latest_metrics": {
+    "description": "Latest metrics section title"
+  },
+
+  "bmi": "BMI",
+  "@bmi": {
+    "description": "BMI (Body Mass Index) label"
+  },
+
+  "muscle_mass": "Muscle Mass",
+  "@muscle_mass": {
+    "description": "Muscle mass label"
+  },
+
+  "measurements": "Measurements",
+  "@measurements": {
+    "description": "Measurements section title"
+  },
+
+  "chest": "Chest",
+  "@chest": {
+    "description": "Chest measurement label"
+  },
+
+  "waist": "Waist",
+  "@waist": {
+    "description": "Waist measurement label"
+  },
+
+  "hips": "Hips",
+  "@hips": {
+    "description": "Hips measurement label"
+  },
+
+  "arms": "Arms",
+  "@arms": {
+    "description": "Arms measurement label"
+  },
+
+  "thighs": "Thighs",
+  "@thighs": {
+    "description": "Thighs measurement label"
+  },
+
+  "trends": "Trends",
+  "@trends": {
+    "description": "Trends section title"
+  },
+
+  "overview": "Overview",
+  "@overview": {
+    "description": "Overview section title"
+  },
+
+  "total_entries": "Total Entries",
+  "@total_entries": {
+    "description": "Total entries stat label"
+  },
+
+  "days_tracked": "Days Tracked",
+  "@days_tracked": {
+    "description": "Days tracked stat label"
+  },
+
+  "recorded_at": "Recorded At",
+  "@recorded_at": {
+    "description": "Recorded at label"
+  },
+
+  "bmi_underweight": "Underweight",
+  "@bmi_underweight": {
+    "description": "BMI category: Underweight"
+  },
+
+  "bmi_normal": "Normal",
+  "@bmi_normal": {
+    "description": "BMI category: Normal"
+  },
+
+  "bmi_overweight": "Overweight",
+  "@bmi_overweight": {
+    "description": "BMI category: Overweight"
+  },
+
+  "bmi_obese": "Obese",
+  "@bmi_obese": {
+    "description": "BMI category: Obese"
+  },
+
+  "find_gyms": "Find Gyms",
+  "@find_gyms": {
+    "description": "Find gyms screen title"
+  },
+
+  "search_gyms": "Search gyms...",
+  "@search_gyms": {
+    "description": "Search gyms hint text"
+  },
+
+  "no_gyms_found": "No gyms found",
+  "@no_gyms_found": {
+    "description": "No gyms found message"
+  },
+
+  "open_now": "Open Now",
+  "@open_now": {
+    "description": "Open now status"
+  },
+
+  "closed": "Closed",
+  "@closed": {
+    "description": "Closed status"
+  },
+
+  "capacity": "capacity",
+  "@capacity": {
+    "description": "Capacity label"
+  },
+
+  "amenities": "Amenities",
+  "@amenities": {
+    "description": "Amenities section title"
+  },
+
+  "operating_hours": "Operating Hours",
+  "@operating_hours": {
+    "description": "Operating hours section title"
+  },
+
+  "open_in_maps": "Open in Maps",
+  "@open_in_maps": {
+    "description": "Open in maps button"
+  },
+
+  "apply_filters": "Apply Filters",
+  "@apply_filters": {
+    "description": "Apply filters button"
+  },
+
+  "clear_filters": "Clear Filters",
+  "@clear_filters": {
+    "description": "Clear filters button"
+  },
+
+  "create_workout": "Create Workout",
+  "@create_workout": {
+    "description": "Create workout title"
+  },
+
+  "basic_info": "Basic Info",
+  "@basic_info": {
+    "description": "Basic info section title"
+  },
+
+  "exercise_selection": "Exercise Selection",
+  "@exercise_selection": {
+    "description": "Exercise selection section title"
+  },
+
+  "exercise_configuration": "Configuration",
+  "@exercise_configuration": {
+    "description": "Exercise configuration section title"
+  },
+
+  "review": "Review & Save",
+  "@review": {
+    "description": "Review and save section title"
+  },
+
+  "workout_name": "Workout Name",
+  "@workout_name": {
+    "description": "Workout name field label"
+  },
+
+  "category": "Category",
+  "@category": {
+    "description": "Category field label"
+  },
+
+  "estimated_duration": "Estimated Duration",
+  "@estimated_duration": {
+    "description": "Estimated duration field label"
+  },
+
+  "difficulty": "Difficulty",
+  "@difficulty": {
+    "description": "Difficulty field label"
+  },
+
+  "select_exercises": "Select Exercises",
+  "@select_exercises": {
+    "description": "Select exercises title"
+  },
+
+  "selected_exercises": "Selected Exercises",
+  "@selected_exercises": {
+    "description": "Selected exercises label"
+  },
+
+  "rest_time": "Rest Time",
+  "@rest_time": {
+    "description": "Rest time field label"
+  },
+
+  "beginner": "Beginner",
+  "@beginner": {
+    "description": "Beginner difficulty level"
+  },
+
+  "intermediate": "Intermediate",
+  "@intermediate": {
+    "description": "Intermediate difficulty level"
+  },
+
+  "advanced": "Advanced",
+  "@advanced": {
+    "description": "Advanced difficulty level"
+  },
+
+  "chest_muscle": "Chest",
+  "@chest_muscle": {
+    "description": "Chest muscle group"
+  },
+
+  "back": "Back",
+  "@back": {
+    "description": "Back muscle group"
+  },
+
+  "shoulders": "Shoulders",
+  "@shoulders": {
+    "description": "Shoulders muscle group"
+  },
+
+  "arms_muscle": "Arms",
+  "@arms_muscle": {
+    "description": "Arms muscle group"
+  },
+
+  "legs": "Legs",
+  "@legs": {
+    "description": "Legs muscle group"
+  },
+
+  "core": "Core",
+  "@core": {
+    "description": "Core muscle group"
+  },
+
+  "glutes": "Glutes",
+  "@glutes": {
+    "description": "Glutes muscle group"
+  },
+
+  "cardio": "Cardio",
+  "@cardio": {
+    "description": "Cardio muscle group"
+  },
+
+  "membership_plans": "Membership Plans",
+  "@membership_plans": {
+    "description": "Membership plans screen title"
+  },
+
+  "current_plan": "CURRENT",
+  "@current_plan": {
+    "description": "Current plan badge"
+  },
+
+  "upgrade": "Upgrade",
+  "@upgrade": {
+    "description": "Upgrade button"
+  },
+
+  "downgrade": "Downgrade",
+  "@downgrade": {
+    "description": "Downgrade button"
+  },
+
+  "confirm_upgrade": "Confirm Upgrade",
+  "@confirm_upgrade": {
+    "description": "Confirm upgrade title"
+  },
+
+  "pricing_breakdown": "Pricing Breakdown",
+  "@pricing_breakdown": {
+    "description": "Pricing breakdown section title"
+  },
+
+  "prorated_adjustment": "Prorated Adjustment",
+  "@prorated_adjustment": {
+    "description": "Prorated adjustment label"
+  },
+
+  "total_due_today": "Total Due Today",
+  "@total_due_today": {
+    "description": "Total due today label"
+  },
+
+  "next_billing_date": "Next Billing Date",
+  "@next_billing_date": {
+    "description": "Next billing date label"
+  },
+
+  "payment_method": "Payment Method",
+  "@payment_method": {
+    "description": "Payment method label"
+  },
+
+  "change_payment_method": "Change Payment Method",
+  "@change_payment_method": {
+    "description": "Change payment method button"
+  },
+
+  "agree_to_terms": "I agree to the terms and conditions",
+  "@agree_to_terms": {
+    "description": "Agree to terms checkbox label"
+  },
+
+  "plan_features": "Plan Features",
+  "@plan_features": {
+    "description": "Plan features section title"
+  },
+
+  "enable_notifications": "Enable Notifications",
+  "@enable_notifications": {
+    "description": "Enable notifications setting"
+  },
+
+  "notification_permission_denied": "Notification Permission Denied",
+  "@notification_permission_denied": {
+    "description": "Notification permission denied title"
+  },
+
+  "notification_permission_message": "Please enable notifications in your device settings to receive workout reminders and updates.",
+  "@notification_permission_message": {
+    "description": "Notification permission denied message"
+  },
+
+  "open_settings": "Open Settings",
+  "@open_settings": {
+    "description": "Open settings button"
+  },
+
+  "email_support": "Email Support",
+  "@email_support": {
+    "description": "Email support label"
+  },
+
+  "phone_support": "Phone Support",
+  "@phone_support": {
+    "description": "Phone support label"
+  },
+
+  "live_chat": "Live Chat",
+  "@live_chat": {
+    "description": "Live chat label"
   }
 }

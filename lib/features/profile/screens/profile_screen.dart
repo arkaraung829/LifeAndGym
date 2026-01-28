@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_colors.dart';
@@ -8,14 +9,25 @@ import '../../../core/constants/app_typography.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/providers/locale_provider.dart';
 import '../../../core/router/route_names.dart';
+import '../../../core/services/error_handler_service.dart';
+import '../../../core/services/image_upload_service.dart';
 import '../../../shared/widgets/card_container.dart';
 import '../../../shared/widgets/guest_mode_banner.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../membership/providers/membership_provider.dart';
+import '../../membership/screens/membership_plans_screen.dart';
 
 /// Profile screen placeholder.
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final _imageUploadService = ImageUploadService();
+  bool _isUploadingImage = false;
 
   @override
   Widget build(BuildContext context) {
@@ -79,13 +91,29 @@ class ProfileScreen extends StatelessWidget {
             CircleAvatar(
               radius: 48,
               backgroundColor: AppColors.primary,
-              child: Text(
-                user?.initials ?? 'U',
-                style: AppTypography.heading1.copyWith(
-                  color: Colors.white,
+              backgroundImage: user?.avatarUrl != null
+                  ? NetworkImage(user!.avatarUrl!)
+                  : null,
+              child: user?.avatarUrl == null
+                  ? Text(
+                      user?.initials ?? 'U',
+                      style: AppTypography.heading1.copyWith(
+                        color: Colors.white,
+                      ),
+                    )
+                  : null,
+            ),
+            if (_isUploadingImage)
+              Positioned.fill(
+                child: CircleAvatar(
+                  radius: 48,
+                  backgroundColor: Colors.black.withValues(alpha: 0.5),
+                  child: const CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 3,
+                  ),
                 ),
               ),
-            ),
             Positioned(
               bottom: 0,
               right: 0,
@@ -103,9 +131,7 @@ class ProfileScreen extends StatelessWidget {
                 child: IconButton(
                   padding: EdgeInsets.zero,
                   icon: const Icon(Icons.camera_alt, size: 16),
-                  onPressed: () {
-                    // TODO: Change avatar
-                  },
+                  onPressed: _isUploadingImage ? null : _handleAvatarTap,
                 ),
               ),
             ),
@@ -155,6 +181,11 @@ class ProfileScreen extends StatelessWidget {
         ),
         onTap: () {
           // Navigate to membership options
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const MembershipPlansScreen(),
+            ),
+          );
         },
         child: Row(
           children: [
@@ -203,7 +234,12 @@ class ProfileScreen extends StatelessWidget {
     return GradientCard(
       gradient: AppColors.primaryGradient,
       onTap: () {
-        // Navigate to membership details
+        // Navigate to membership plans
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const MembershipPlansScreen(),
+          ),
+        );
       },
       child: Row(
         children: [
@@ -411,9 +447,10 @@ class ProfileScreen extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.language),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: LocaleProvider.supportedLocales.map((locale) {
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: LocaleProvider.supportedLocales.map((locale) {
             final isSelected = localeProvider.locale == locale;
             return RadioListTile<Locale>(
               title: Text(localeProvider.getDisplayName(locale)),
@@ -429,6 +466,8 @@ class ProfileScreen extends StatelessWidget {
               selected: isSelected,
             );
           }).toList(),
+        ),
+          ),
         ),
         actions: [
           TextButton(
@@ -482,5 +521,235 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleAvatarTap() {
+    final authProvider = context.read<AuthProvider>();
+    final hasAvatar = authProvider.user?.avatarUrl != null;
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: AppSpacing.paddingMd,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Take Photo'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _handleCameraPhoto();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose from Gallery'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _handleGalleryPhoto();
+                },
+              ),
+              if (hasAvatar)
+                ListTile(
+                  leading: const Icon(Icons.delete, color: AppColors.error),
+                  title: const Text('Remove Photo', style: TextStyle(color: AppColors.error)),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _handleRemovePhoto();
+                  },
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleCameraPhoto() async {
+    setState(() => _isUploadingImage = true);
+
+    try {
+      final authProvider = context.read<AuthProvider>();
+      final userId = authProvider.user?.id;
+
+      if (userId == null) {
+        throw Exception('User not found');
+      }
+
+      // Pick image from camera
+      final image = await _imageUploadService.pickImage(ImageSource.camera);
+      if (image == null) {
+        // User cancelled
+        setState(() => _isUploadingImage = false);
+        return;
+      }
+
+      // Upload to Supabase
+      final imageUrl = await _imageUploadService.uploadToSupabase(image, userId);
+
+      // Delete old avatar if exists
+      if (authProvider.user?.avatarUrl != null) {
+        await _imageUploadService.deleteFromSupabase(authProvider.user!.avatarUrl!);
+      }
+
+      // Update user profile with new avatar URL
+      final success = await authProvider.updateProfile({'avatar_url': imageUrl});
+
+      if (!mounted) return;
+
+      if (success) {
+        ErrorHandlerService().showSuccessSnackBar(
+          context,
+          'Profile photo updated successfully',
+        );
+      } else {
+        ErrorHandlerService().showErrorSnackBar(
+          context,
+          authProvider.error ?? 'Failed to update profile photo',
+        );
+        authProvider.clearError();
+      }
+    } catch (e) {
+      if (mounted) {
+        ErrorHandlerService().showErrorSnackBar(
+          context,
+          e,
+          fallback: 'Failed to upload photo',
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isUploadingImage = false);
+      }
+    }
+  }
+
+  Future<void> _handleGalleryPhoto() async {
+    setState(() => _isUploadingImage = true);
+
+    try {
+      final authProvider = context.read<AuthProvider>();
+      final userId = authProvider.user?.id;
+
+      if (userId == null) {
+        throw Exception('User not found');
+      }
+
+      // Pick image from gallery
+      final image = await _imageUploadService.pickImage(ImageSource.gallery);
+      if (image == null) {
+        // User cancelled
+        setState(() => _isUploadingImage = false);
+        return;
+      }
+
+      // Upload to Supabase
+      final imageUrl = await _imageUploadService.uploadToSupabase(image, userId);
+
+      // Delete old avatar if exists
+      if (authProvider.user?.avatarUrl != null) {
+        await _imageUploadService.deleteFromSupabase(authProvider.user!.avatarUrl!);
+      }
+
+      // Update user profile with new avatar URL
+      final success = await authProvider.updateProfile({'avatar_url': imageUrl});
+
+      if (!mounted) return;
+
+      if (success) {
+        ErrorHandlerService().showSuccessSnackBar(
+          context,
+          'Profile photo updated successfully',
+        );
+      } else {
+        ErrorHandlerService().showErrorSnackBar(
+          context,
+          authProvider.error ?? 'Failed to update profile photo',
+        );
+        authProvider.clearError();
+      }
+    } catch (e) {
+      if (mounted) {
+        ErrorHandlerService().showErrorSnackBar(
+          context,
+          e,
+          fallback: 'Failed to upload photo',
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isUploadingImage = false);
+      }
+    }
+  }
+
+  Future<void> _handleRemovePhoto() async {
+    // Show confirmation dialog
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Remove Photo'),
+        content: const Text('Are you sure you want to remove your profile photo?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Remove', style: TextStyle(color: AppColors.error)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _isUploadingImage = true);
+
+    try {
+      final authProvider = context.read<AuthProvider>();
+      final avatarUrl = authProvider.user?.avatarUrl;
+
+      if (avatarUrl == null) {
+        setState(() => _isUploadingImage = false);
+        return;
+      }
+
+      // Delete from storage
+      await _imageUploadService.deleteFromSupabase(avatarUrl);
+
+      // Update user profile to remove avatar URL
+      final success = await authProvider.updateProfile({'avatar_url': null});
+
+      if (!mounted) return;
+
+      if (success) {
+        ErrorHandlerService().showSuccessSnackBar(
+          context,
+          'Profile photo removed successfully',
+        );
+      } else {
+        ErrorHandlerService().showErrorSnackBar(
+          context,
+          authProvider.error ?? 'Failed to remove profile photo',
+        );
+        authProvider.clearError();
+      }
+    } catch (e) {
+      if (mounted) {
+        ErrorHandlerService().showErrorSnackBar(
+          context,
+          e,
+          fallback: 'Failed to remove photo',
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isUploadingImage = false);
+      }
+    }
   }
 }

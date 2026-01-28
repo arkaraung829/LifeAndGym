@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_spacing.dart';
+import '../../../core/utils/url_launcher_helper.dart';
 import '../../../shared/widgets/card_container.dart';
 
 /// Help and Support screen.
@@ -24,7 +25,7 @@ class HelpSupportScreen extends StatelessWidget {
               title: 'Email Support',
               subtitle: 'support@lifeandgym.com',
               onTap: () {
-                // TODO: Open email client
+                URLLauncherHelper.launchEmail('support@lifeandgym.com');
               },
             ),
 
@@ -35,7 +36,7 @@ class HelpSupportScreen extends StatelessWidget {
               title: 'Call Us',
               subtitle: '+95 9 123 456 789',
               onTap: () {
-                // TODO: Make phone call
+                URLLauncherHelper.launchPhone('+959123456789');
               },
             ),
 
@@ -46,7 +47,7 @@ class HelpSupportScreen extends StatelessWidget {
               title: 'Live Chat',
               subtitle: 'Available 9 AM - 5 PM',
               onTap: () {
-                // TODO: Open live chat
+                URLLauncherHelper.launchURL('https://chat.lifeandgym.com');
               },
             ),
 

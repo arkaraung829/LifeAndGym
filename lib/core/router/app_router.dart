@@ -10,6 +10,7 @@ import '../../features/auth/screens/forgot_password_screen.dart';
 import '../../features/body_metrics/screens/body_metrics_screen.dart';
 import '../../features/classes/screens/my_bookings_screen.dart';
 import '../../features/goals/screens/goals_screen.dart';
+import '../../features/gyms/screens/gym_list_screen.dart';
 import '../../features/notifications/screens/notifications_screen.dart';
 import '../../features/onboarding/screens/onboarding_screen.dart';
 import '../../features/home/screens/home_screen.dart';
@@ -21,6 +22,8 @@ import '../../features/progress/screens/progress_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
 import '../../features/profile/screens/edit_profile_screen.dart';
 import '../../features/workouts/screens/active_workout_screen.dart';
+import '../../features/workouts/screens/create_workout_screen.dart';
+import '../../features/membership/screens/membership_plans_screen.dart';
 import '../../shared/widgets/main_shell.dart';
 import '../config/supabase_config.dart';
 import 'route_names.dart';
@@ -141,6 +144,11 @@ class AppRouter {
         name: RouteNames.activeWorkout,
         builder: (context, state) => const ActiveWorkoutScreen(),
       ),
+      GoRoute(
+        path: RoutePaths.createWorkout,
+        name: RouteNames.createWorkout,
+        builder: (context, state) => const CreateWorkoutScreen(),
+      ),
 
       // Progress routes
       GoRoute(
@@ -159,6 +167,20 @@ class AppRouter {
         path: RoutePaths.myBookings,
         name: RouteNames.myBookings,
         builder: (context, state) => const MyBookingsScreen(),
+      ),
+
+      // Gym routes
+      GoRoute(
+        path: RoutePaths.gymFinder,
+        name: RouteNames.gymFinder,
+        builder: (context, state) => const GymListScreen(),
+      ),
+
+      // Membership routes
+      GoRoute(
+        path: RoutePaths.membershipPlans,
+        name: RouteNames.membershipPlans,
+        builder: (context, state) => const MembershipPlansScreen(),
       ),
 
       // Other routes

@@ -446,17 +446,9 @@ class WorkoutService {
     try {
       AppLogger.info('Cancelling workout session: $sessionId');
 
-      final response = await _apiClient.post(
+      await _apiClient.post(
         'workouts/sessions/$sessionId/cancel',
-        requiresAuth: true,
       );
-
-      if (!response.success) {
-        throw ApiException(
-          response.error ?? 'Failed to cancel workout session',
-          code: response.errorCode ?? 'CANCEL_FAILED',
-        );
-      }
 
       AppLogger.info('Cancelled workout session');
     } catch (e) {

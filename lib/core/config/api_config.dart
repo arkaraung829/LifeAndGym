@@ -48,6 +48,7 @@ class ApiConfig {
   static String get currentCheckIn => '$membershipPrefix/current-check-in';
   static String get checkInHistory => '$membershipPrefix/check-in-history';
   static String get checkInStats => '$membershipPrefix/check-in-stats';
+  static String get upgradeMembership => '$membershipPrefix/upgrade';
 
   // ==========================================
   // WORKOUT ENDPOINTS
@@ -74,6 +75,21 @@ class ApiConfig {
   static String get bookings => '$classPrefix/bookings';
   static String cancelBooking(String bookingId) =>
       '$classPrefix/bookings/$bookingId/cancel';
+
+  // ==========================================
+  // GOALS ENDPOINTS
+  // ==========================================
+  static const String _apiBase = '';
+  static String get goalsBase => '$_apiBase/goals';
+  static String goals() => goalsBase;
+  static String goalProgress(String goalId) => '$goalsBase/$goalId/progress';
+
+  // ==========================================
+  // BODY METRICS ENDPOINTS
+  // ==========================================
+  static String get metricsBase => '$_apiBase/metrics';
+  static String metrics() => metricsBase;
+  static String metricsTrends() => '$metricsBase/trends';
 
   // ==========================================
   // NETWORK CONFIGURATION

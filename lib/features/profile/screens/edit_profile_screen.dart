@@ -1,10 +1,13 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/services/error_handler_service.dart';
+import '../../../core/services/image_upload_service.dart';
 import '../../../shared/widgets/input_field.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../../auth/providers/auth_provider.dart';
@@ -22,9 +25,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController _nameController;
   late TextEditingController _heightController;
   late TextEditingController _ageController;
+  final _imageUploadService = ImageUploadService();
 
   bool _isLoading = false;
   bool _hasChanges = false;
+  bool _isUploadingImage = false;
 
   @override
   void initState() {
@@ -241,6 +246,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     )
                   : null,
             ),
+            if (_isUploadingImage)
+              Positioned.fill(
+                child: CircleAvatar(
+                  radius: 56,
+                  backgroundColor: Colors.black.withValues(alpha: 0.5),
+                  child: const CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 3,
+                  ),
+                ),
+              ),
             Positioned(
               bottom: 0,
               right: 0,
@@ -258,7 +274,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: IconButton(
                   padding: EdgeInsets.zero,
                   icon: const Icon(Icons.camera_alt, size: 18, color: Colors.white),
-                  onPressed: _showImagePicker,
+                  onPressed: _isUploadingImage ? null : _showImagePicker,
                 ),
               ),
             ),
@@ -266,8 +282,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ),
         AppSpacing.vGapMd,
         TextButton(
-          onPressed: _showImagePicker,
-          child: const Text('Change Photo'),
+          onPressed: _isUploadingImage ? null : _showImagePicker,
+          child: Text(_isUploadingImage ? 'Uploading...' : 'Change Photo'),
         ),
       ],
     );
@@ -287,10 +303,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 title: const Text('Take Photo'),
                 onTap: () {
                   Navigator.pop(context);
-                  // TODO: Implement camera capture
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Camera feature coming soon')),
-                  );
+                  _handleCameraPhoto();
                 },
               ),
               ListTile(
@@ -298,10 +311,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 title: const Text('Choose from Gallery'),
                 onTap: () {
                   Navigator.pop(context);
-                  // TODO: Implement gallery picker
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Gallery feature coming soon')),
-                  );
+                  _handleGalleryPhoto();
                 },
               ),
               if (context.read<AuthProvider>().user?.avatarUrl != null)
@@ -310,15 +320,262 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   title: const Text('Remove Photo', style: TextStyle(color: AppColors.error)),
                   onTap: () {
                     Navigator.pop(context);
-                    // TODO: Implement remove avatar
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Remove photo feature coming soon')),
-                    );
+                    _handleRemovePhoto();
                   },
                 ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> _handleCameraPhoto() async {
+    setState(() => _isUploadingImage = true);
+
+    try {
+      final authProvider = context.read<AuthProvider>();
+      final userId = authProvider.user?.id;
+
+      if (userId == null) {
+        throw Exception('User not found');
+      }
+
+      // Pick image from camera
+      final image = await _imageUploadService.pickImage(ImageSource.camera);
+      if (image == null) {
+        // User cancelled or permission denied
+        setState(() => _isUploadingImage = false);
+        return;
+      }
+
+      // Upload to Supabase
+      final imageUrl = await _imageUploadService.uploadToSupabase(image, userId);
+
+      // Delete old avatar if exists
+      if (authProvider.user?.avatarUrl != null) {
+        await _imageUploadService.deleteFromSupabase(authProvider.user!.avatarUrl!);
+      }
+
+      // Update user profile with new avatar URL
+      final success = await authProvider.updateProfile({'avatar_url': imageUrl});
+
+      if (!mounted) return;
+
+      if (success) {
+        ErrorHandlerService().showSuccessSnackBar(
+          context,
+          'Profile photo updated successfully',
+        );
+      } else {
+        ErrorHandlerService().showErrorSnackBar(
+          context,
+          authProvider.error ?? 'Failed to update profile photo',
+        );
+        authProvider.clearError();
+      }
+    } catch (e) {
+      if (mounted) {
+        // Check if it's a permission error
+        if (e.toString().contains('permission') ||
+            e.toString().contains('Permission') ||
+            e.toString().contains('denied')) {
+          _showCameraPermissionDialog();
+        } else {
+          ErrorHandlerService().showErrorSnackBar(
+            context,
+            e,
+            fallback: 'Failed to upload photo',
+          );
+        }
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isUploadingImage = false);
+      }
+    }
+  }
+
+  Future<void> _handleGalleryPhoto() async {
+    setState(() => _isUploadingImage = true);
+
+    try {
+      final authProvider = context.read<AuthProvider>();
+      final userId = authProvider.user?.id;
+
+      if (userId == null) {
+        throw Exception('User not found');
+      }
+
+      // Pick image from gallery
+      final image = await _imageUploadService.pickImage(ImageSource.gallery);
+      if (image == null) {
+        // User cancelled or permission denied
+        setState(() => _isUploadingImage = false);
+        return;
+      }
+
+      // Upload to Supabase
+      final imageUrl = await _imageUploadService.uploadToSupabase(image, userId);
+
+      // Delete old avatar if exists
+      if (authProvider.user?.avatarUrl != null) {
+        await _imageUploadService.deleteFromSupabase(authProvider.user!.avatarUrl!);
+      }
+
+      // Update user profile with new avatar URL
+      final success = await authProvider.updateProfile({'avatar_url': imageUrl});
+
+      if (!mounted) return;
+
+      if (success) {
+        ErrorHandlerService().showSuccessSnackBar(
+          context,
+          'Profile photo updated successfully',
+        );
+      } else {
+        ErrorHandlerService().showErrorSnackBar(
+          context,
+          authProvider.error ?? 'Failed to update profile photo',
+        );
+        authProvider.clearError();
+      }
+    } catch (e) {
+      if (mounted) {
+        // Check if it's a permission error
+        if (e.toString().contains('permission') ||
+            e.toString().contains('Permission') ||
+            e.toString().contains('denied')) {
+          _showPhotoPermissionDialog();
+        } else {
+          ErrorHandlerService().showErrorSnackBar(
+            context,
+            e,
+            fallback: 'Failed to upload photo',
+          );
+        }
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isUploadingImage = false);
+      }
+    }
+  }
+
+  Future<void> _handleRemovePhoto() async {
+    // Show confirmation dialog
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Remove Photo'),
+        content: const Text('Are you sure you want to remove your profile photo?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Remove', style: TextStyle(color: AppColors.error)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _isUploadingImage = true);
+
+    try {
+      final authProvider = context.read<AuthProvider>();
+      final avatarUrl = authProvider.user?.avatarUrl;
+
+      if (avatarUrl == null) {
+        setState(() => _isUploadingImage = false);
+        return;
+      }
+
+      // Delete from storage
+      await _imageUploadService.deleteFromSupabase(avatarUrl);
+
+      // Update user profile to remove avatar URL
+      final success = await authProvider.updateProfile({'avatar_url': null});
+
+      if (!mounted) return;
+
+      if (success) {
+        ErrorHandlerService().showSuccessSnackBar(
+          context,
+          'Profile photo removed successfully',
+        );
+      } else {
+        ErrorHandlerService().showErrorSnackBar(
+          context,
+          authProvider.error ?? 'Failed to remove profile photo',
+        );
+        authProvider.clearError();
+      }
+    } catch (e) {
+      if (mounted) {
+        ErrorHandlerService().showErrorSnackBar(
+          context,
+          e,
+          fallback: 'Failed to remove photo',
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isUploadingImage = false);
+      }
+    }
+  }
+
+  void _showCameraPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Camera Permission Required'),
+        content: const Text(
+          'Camera access is disabled in your device settings. To take photos, please enable camera permission in your device settings.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await AppSettings.openAppSettings();
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showPhotoPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Photo Library Permission Required'),
+        content: const Text(
+          'Photo library access is disabled in your device settings. To choose photos, please enable photo library permission in your device settings.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await AppSettings.openAppSettings();
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
       ),
     );
   }

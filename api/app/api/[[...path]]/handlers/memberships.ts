@@ -10,6 +10,12 @@ const checkInSchema = z.object({
   gymId: z.string().uuid('Invalid gym ID'),
 });
 
+const upgradeMembershipSchema = z.object({
+  newPlanType: z.enum(['basic', 'premium', 'vip'], {
+    errorMap: () => ({ message: 'Plan type must be basic, premium, or vip' }),
+  }),
+});
+
 function getRoute(subpath: string[]): string {
   return subpath.join('/');
 }
@@ -46,6 +52,8 @@ export async function handlePost(request: NextRequest, subpath: string[]) {
         return await handleCheckIn(request);
       case 'check-out':
         return await handleCheckOut(request);
+      case 'upgrade':
+        return await handleUpgradeMembership(request);
       default:
         return errorResponse(new NotFoundError('Endpoint'), request);
     }
@@ -232,6 +240,77 @@ async function handleGetCheckInStats(request: NextRequest) {
       averageDurationMinutes: avgDuration,
       visitsThisWeek,
       visitsThisMonth,
+    },
+  }, request);
+}
+
+async function handleUpgradeMembership(request: NextRequest) {
+  const { user } = await verifyAuth(request);
+  const body = await parseBody(request, upgradeMembershipSchema);
+
+  // Get user's active membership
+  const { data: membership, error: membershipError } = await supabaseAdmin
+    .from(Tables.memberships)
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('status', 'active')
+    .single();
+
+  if (membershipError || !membership) {
+    throw new ValidationError('No active membership found');
+  }
+
+  // Validate plan change
+  if (membership.plan_type === body.newPlanType) {
+    throw new ValidationError('You are already on this plan');
+  }
+
+  // Calculate pricing and proration
+  const planPrices: Record<string, number> = {
+    basic: 29,
+    premium: 49,
+    vip: 99,
+  };
+
+  const currentPrice = planPrices[membership.plan_type] || 0;
+  const newPrice = planPrices[body.newPlanType] || 0;
+
+  // Calculate prorated amount
+  const endDate = new Date(membership.end_date);
+  const now = new Date();
+  const daysRemaining = Math.max(0, Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+  const totalDaysInCycle = 30;
+
+  const currentPlanCredit = (currentPrice * daysRemaining) / totalDaysInCycle;
+  const newPlanCharge = (newPrice * daysRemaining) / totalDaysInCycle;
+  const proratedAmount = newPlanCharge - currentPlanCredit;
+
+  // Update membership
+  const { data: updatedMembership, error: updateError } = await supabaseAdmin
+    .from(Tables.memberships)
+    .update({
+      plan_type: body.newPlanType,
+      monthly_fee: newPrice,
+      updated_at: now.toISOString(),
+    })
+    .eq('id', membership.id)
+    .select(`*, gym:${Tables.gyms}(*)`)
+    .single();
+
+  if (updateError) throw new DatabaseError('Failed to upgrade membership');
+
+  console.log(`Membership upgraded for user ${user.id} from ${membership.plan_type} to ${body.newPlanType}`);
+  console.log(`Prorated amount: $${proratedAmount.toFixed(2)}`);
+  console.log(`Next billing date: ${endDate.toISOString()}`);
+
+  return successResponse({
+    membership: updatedMembership,
+    proration: {
+      currentPlanCredit: parseFloat(currentPlanCredit.toFixed(2)),
+      newPlanCharge: parseFloat(newPlanCharge.toFixed(2)),
+      netAmount: parseFloat(proratedAmount.toFixed(2)),
+      daysRemaining,
+      nextBillingDate: endDate.toISOString(),
     },
   }, request);
 }

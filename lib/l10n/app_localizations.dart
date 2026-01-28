@@ -949,6 +949,594 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{field} is required'**
   String validationFieldRequired(String field);
+
+  /// Goals screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Goals'**
+  String get goals_title;
+
+  /// Empty goals state message
+  ///
+  /// In en, this message translates to:
+  /// **'No goals yet - Set your first goal!'**
+  String get goals_empty;
+
+  /// Create goal button
+  ///
+  /// In en, this message translates to:
+  /// **'Create Goal'**
+  String get create_goal;
+
+  /// Goal name field label
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Name'**
+  String get goal_name;
+
+  /// Goal description field label
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get goal_description;
+
+  /// Goal type field label
+  ///
+  /// In en, this message translates to:
+  /// **'Goal Type'**
+  String get goal_type;
+
+  /// Target value field label
+  ///
+  /// In en, this message translates to:
+  /// **'Target Value'**
+  String get target_value;
+
+  /// Current value field label
+  ///
+  /// In en, this message translates to:
+  /// **'Current Value'**
+  String get current_value;
+
+  /// Target date field label
+  ///
+  /// In en, this message translates to:
+  /// **'Target Date'**
+  String get target_date;
+
+  /// Days remaining label
+  ///
+  /// In en, this message translates to:
+  /// **'days remaining'**
+  String get days_remaining;
+
+  /// Overdue status
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get overdue;
+
+  /// Update progress button
+  ///
+  /// In en, this message translates to:
+  /// **'Update Progress'**
+  String get update_progress;
+
+  /// Mark complete button
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Complete'**
+  String get mark_complete;
+
+  /// Weight loss goal type
+  ///
+  /// In en, this message translates to:
+  /// **'Weight Loss'**
+  String get weight_loss;
+
+  /// Muscle gain goal type
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle Gain'**
+  String get muscle_gain;
+
+  /// Strength goal type
+  ///
+  /// In en, this message translates to:
+  /// **'Strength'**
+  String get strength;
+
+  /// Endurance goal type
+  ///
+  /// In en, this message translates to:
+  /// **'Endurance'**
+  String get endurance;
+
+  /// Flexibility goal type
+  ///
+  /// In en, this message translates to:
+  /// **'Flexibility'**
+  String get flexibility;
+
+  /// Body fat goal type/metric
+  ///
+  /// In en, this message translates to:
+  /// **'Body Fat'**
+  String get body_fat;
+
+  /// Consistency goal type
+  ///
+  /// In en, this message translates to:
+  /// **'Consistency'**
+  String get consistency;
+
+  /// All filter option
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filter_all;
+
+  /// Active filter option
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get filter_active;
+
+  /// Completed filter option
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get filter_completed;
+
+  /// Body metrics screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Body Metrics'**
+  String get body_metrics;
+
+  /// Empty body metrics state message
+  ///
+  /// In en, this message translates to:
+  /// **'No metrics yet - Track your first measurement!'**
+  String get body_metrics_empty;
+
+  /// Add entry button
+  ///
+  /// In en, this message translates to:
+  /// **'Add Entry'**
+  String get add_entry;
+
+  /// Latest metrics section title
+  ///
+  /// In en, this message translates to:
+  /// **'Latest Metrics'**
+  String get latest_metrics;
+
+  /// BMI (Body Mass Index) label
+  ///
+  /// In en, this message translates to:
+  /// **'BMI'**
+  String get bmi;
+
+  /// Muscle mass label
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle Mass'**
+  String get muscle_mass;
+
+  /// Measurements section title
+  ///
+  /// In en, this message translates to:
+  /// **'Measurements'**
+  String get measurements;
+
+  /// Chest measurement label
+  ///
+  /// In en, this message translates to:
+  /// **'Chest'**
+  String get chest;
+
+  /// Waist measurement label
+  ///
+  /// In en, this message translates to:
+  /// **'Waist'**
+  String get waist;
+
+  /// Hips measurement label
+  ///
+  /// In en, this message translates to:
+  /// **'Hips'**
+  String get hips;
+
+  /// Arms measurement label
+  ///
+  /// In en, this message translates to:
+  /// **'Arms'**
+  String get arms;
+
+  /// Thighs measurement label
+  ///
+  /// In en, this message translates to:
+  /// **'Thighs'**
+  String get thighs;
+
+  /// Trends section title
+  ///
+  /// In en, this message translates to:
+  /// **'Trends'**
+  String get trends;
+
+  /// Overview section title
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get overview;
+
+  /// Total entries stat label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Entries'**
+  String get total_entries;
+
+  /// Days tracked stat label
+  ///
+  /// In en, this message translates to:
+  /// **'Days Tracked'**
+  String get days_tracked;
+
+  /// Recorded at label
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded At'**
+  String get recorded_at;
+
+  /// BMI category: Underweight
+  ///
+  /// In en, this message translates to:
+  /// **'Underweight'**
+  String get bmi_underweight;
+
+  /// BMI category: Normal
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get bmi_normal;
+
+  /// BMI category: Overweight
+  ///
+  /// In en, this message translates to:
+  /// **'Overweight'**
+  String get bmi_overweight;
+
+  /// BMI category: Obese
+  ///
+  /// In en, this message translates to:
+  /// **'Obese'**
+  String get bmi_obese;
+
+  /// Find gyms screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Find Gyms'**
+  String get find_gyms;
+
+  /// Search gyms hint text
+  ///
+  /// In en, this message translates to:
+  /// **'Search gyms...'**
+  String get search_gyms;
+
+  /// No gyms found message
+  ///
+  /// In en, this message translates to:
+  /// **'No gyms found'**
+  String get no_gyms_found;
+
+  /// Open now status
+  ///
+  /// In en, this message translates to:
+  /// **'Open Now'**
+  String get open_now;
+
+  /// Closed status
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get closed;
+
+  /// Capacity label
+  ///
+  /// In en, this message translates to:
+  /// **'capacity'**
+  String get capacity;
+
+  /// Amenities section title
+  ///
+  /// In en, this message translates to:
+  /// **'Amenities'**
+  String get amenities;
+
+  /// Operating hours section title
+  ///
+  /// In en, this message translates to:
+  /// **'Operating Hours'**
+  String get operating_hours;
+
+  /// Open in maps button
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Maps'**
+  String get open_in_maps;
+
+  /// Apply filters button
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filters'**
+  String get apply_filters;
+
+  /// Clear filters button
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Filters'**
+  String get clear_filters;
+
+  /// Create workout title
+  ///
+  /// In en, this message translates to:
+  /// **'Create Workout'**
+  String get create_workout;
+
+  /// Basic info section title
+  ///
+  /// In en, this message translates to:
+  /// **'Basic Info'**
+  String get basic_info;
+
+  /// Exercise selection section title
+  ///
+  /// In en, this message translates to:
+  /// **'Exercise Selection'**
+  String get exercise_selection;
+
+  /// Exercise configuration section title
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration'**
+  String get exercise_configuration;
+
+  /// Review and save section title
+  ///
+  /// In en, this message translates to:
+  /// **'Review & Save'**
+  String get review;
+
+  /// Workout name field label
+  ///
+  /// In en, this message translates to:
+  /// **'Workout Name'**
+  String get workout_name;
+
+  /// Category field label
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// Estimated duration field label
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated Duration'**
+  String get estimated_duration;
+
+  /// Difficulty field label
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty'**
+  String get difficulty;
+
+  /// Select exercises title
+  ///
+  /// In en, this message translates to:
+  /// **'Select Exercises'**
+  String get select_exercises;
+
+  /// Selected exercises label
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Exercises'**
+  String get selected_exercises;
+
+  /// Rest time field label
+  ///
+  /// In en, this message translates to:
+  /// **'Rest Time'**
+  String get rest_time;
+
+  /// Beginner difficulty level
+  ///
+  /// In en, this message translates to:
+  /// **'Beginner'**
+  String get beginner;
+
+  /// Intermediate difficulty level
+  ///
+  /// In en, this message translates to:
+  /// **'Intermediate'**
+  String get intermediate;
+
+  /// Advanced difficulty level
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get advanced;
+
+  /// Chest muscle group
+  ///
+  /// In en, this message translates to:
+  /// **'Chest'**
+  String get chest_muscle;
+
+  /// Back muscle group
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// Shoulders muscle group
+  ///
+  /// In en, this message translates to:
+  /// **'Shoulders'**
+  String get shoulders;
+
+  /// Arms muscle group
+  ///
+  /// In en, this message translates to:
+  /// **'Arms'**
+  String get arms_muscle;
+
+  /// Legs muscle group
+  ///
+  /// In en, this message translates to:
+  /// **'Legs'**
+  String get legs;
+
+  /// Core muscle group
+  ///
+  /// In en, this message translates to:
+  /// **'Core'**
+  String get core;
+
+  /// Glutes muscle group
+  ///
+  /// In en, this message translates to:
+  /// **'Glutes'**
+  String get glutes;
+
+  /// Cardio muscle group
+  ///
+  /// In en, this message translates to:
+  /// **'Cardio'**
+  String get cardio;
+
+  /// Membership plans screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Membership Plans'**
+  String get membership_plans;
+
+  /// Current plan badge
+  ///
+  /// In en, this message translates to:
+  /// **'CURRENT'**
+  String get current_plan;
+
+  /// Upgrade button
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade'**
+  String get upgrade;
+
+  /// Downgrade button
+  ///
+  /// In en, this message translates to:
+  /// **'Downgrade'**
+  String get downgrade;
+
+  /// Confirm upgrade title
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Upgrade'**
+  String get confirm_upgrade;
+
+  /// Pricing breakdown section title
+  ///
+  /// In en, this message translates to:
+  /// **'Pricing Breakdown'**
+  String get pricing_breakdown;
+
+  /// Prorated adjustment label
+  ///
+  /// In en, this message translates to:
+  /// **'Prorated Adjustment'**
+  String get prorated_adjustment;
+
+  /// Total due today label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Due Today'**
+  String get total_due_today;
+
+  /// Next billing date label
+  ///
+  /// In en, this message translates to:
+  /// **'Next Billing Date'**
+  String get next_billing_date;
+
+  /// Payment method label
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Method'**
+  String get payment_method;
+
+  /// Change payment method button
+  ///
+  /// In en, this message translates to:
+  /// **'Change Payment Method'**
+  String get change_payment_method;
+
+  /// Agree to terms checkbox label
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the terms and conditions'**
+  String get agree_to_terms;
+
+  /// Plan features section title
+  ///
+  /// In en, this message translates to:
+  /// **'Plan Features'**
+  String get plan_features;
+
+  /// Enable notifications setting
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Notifications'**
+  String get enable_notifications;
+
+  /// Notification permission denied title
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Permission Denied'**
+  String get notification_permission_denied;
+
+  /// Notification permission denied message
+  ///
+  /// In en, this message translates to:
+  /// **'Please enable notifications in your device settings to receive workout reminders and updates.'**
+  String get notification_permission_message;
+
+  /// Open settings button
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get open_settings;
+
+  /// Email support label
+  ///
+  /// In en, this message translates to:
+  /// **'Email Support'**
+  String get email_support;
+
+  /// Phone support label
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Support'**
+  String get phone_support;
+
+  /// Live chat label
+  ///
+  /// In en, this message translates to:
+  /// **'Live Chat'**
+  String get live_chat;
 }
 
 class _AppLocalizationsDelegate

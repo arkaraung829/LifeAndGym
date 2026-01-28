@@ -451,4 +451,300 @@ class AppLocalizationsEn extends AppLocalizations {
   String validationFieldRequired(String field) {
     return '$field is required';
   }
+
+  @override
+  String get goals_title => 'Goals';
+
+  @override
+  String get goals_empty => 'No goals yet - Set your first goal!';
+
+  @override
+  String get create_goal => 'Create Goal';
+
+  @override
+  String get goal_name => 'Goal Name';
+
+  @override
+  String get goal_description => 'Description';
+
+  @override
+  String get goal_type => 'Goal Type';
+
+  @override
+  String get target_value => 'Target Value';
+
+  @override
+  String get current_value => 'Current Value';
+
+  @override
+  String get target_date => 'Target Date';
+
+  @override
+  String get days_remaining => 'days remaining';
+
+  @override
+  String get overdue => 'Overdue';
+
+  @override
+  String get update_progress => 'Update Progress';
+
+  @override
+  String get mark_complete => 'Mark as Complete';
+
+  @override
+  String get weight_loss => 'Weight Loss';
+
+  @override
+  String get muscle_gain => 'Muscle Gain';
+
+  @override
+  String get strength => 'Strength';
+
+  @override
+  String get endurance => 'Endurance';
+
+  @override
+  String get flexibility => 'Flexibility';
+
+  @override
+  String get body_fat => 'Body Fat';
+
+  @override
+  String get consistency => 'Consistency';
+
+  @override
+  String get filter_all => 'All';
+
+  @override
+  String get filter_active => 'Active';
+
+  @override
+  String get filter_completed => 'Completed';
+
+  @override
+  String get body_metrics => 'Body Metrics';
+
+  @override
+  String get body_metrics_empty =>
+      'No metrics yet - Track your first measurement!';
+
+  @override
+  String get add_entry => 'Add Entry';
+
+  @override
+  String get latest_metrics => 'Latest Metrics';
+
+  @override
+  String get bmi => 'BMI';
+
+  @override
+  String get muscle_mass => 'Muscle Mass';
+
+  @override
+  String get measurements => 'Measurements';
+
+  @override
+  String get chest => 'Chest';
+
+  @override
+  String get waist => 'Waist';
+
+  @override
+  String get hips => 'Hips';
+
+  @override
+  String get arms => 'Arms';
+
+  @override
+  String get thighs => 'Thighs';
+
+  @override
+  String get trends => 'Trends';
+
+  @override
+  String get overview => 'Overview';
+
+  @override
+  String get total_entries => 'Total Entries';
+
+  @override
+  String get days_tracked => 'Days Tracked';
+
+  @override
+  String get recorded_at => 'Recorded At';
+
+  @override
+  String get bmi_underweight => 'Underweight';
+
+  @override
+  String get bmi_normal => 'Normal';
+
+  @override
+  String get bmi_overweight => 'Overweight';
+
+  @override
+  String get bmi_obese => 'Obese';
+
+  @override
+  String get find_gyms => 'Find Gyms';
+
+  @override
+  String get search_gyms => 'Search gyms...';
+
+  @override
+  String get no_gyms_found => 'No gyms found';
+
+  @override
+  String get open_now => 'Open Now';
+
+  @override
+  String get closed => 'Closed';
+
+  @override
+  String get capacity => 'capacity';
+
+  @override
+  String get amenities => 'Amenities';
+
+  @override
+  String get operating_hours => 'Operating Hours';
+
+  @override
+  String get open_in_maps => 'Open in Maps';
+
+  @override
+  String get apply_filters => 'Apply Filters';
+
+  @override
+  String get clear_filters => 'Clear Filters';
+
+  @override
+  String get create_workout => 'Create Workout';
+
+  @override
+  String get basic_info => 'Basic Info';
+
+  @override
+  String get exercise_selection => 'Exercise Selection';
+
+  @override
+  String get exercise_configuration => 'Configuration';
+
+  @override
+  String get review => 'Review & Save';
+
+  @override
+  String get workout_name => 'Workout Name';
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get estimated_duration => 'Estimated Duration';
+
+  @override
+  String get difficulty => 'Difficulty';
+
+  @override
+  String get select_exercises => 'Select Exercises';
+
+  @override
+  String get selected_exercises => 'Selected Exercises';
+
+  @override
+  String get rest_time => 'Rest Time';
+
+  @override
+  String get beginner => 'Beginner';
+
+  @override
+  String get intermediate => 'Intermediate';
+
+  @override
+  String get advanced => 'Advanced';
+
+  @override
+  String get chest_muscle => 'Chest';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get shoulders => 'Shoulders';
+
+  @override
+  String get arms_muscle => 'Arms';
+
+  @override
+  String get legs => 'Legs';
+
+  @override
+  String get core => 'Core';
+
+  @override
+  String get glutes => 'Glutes';
+
+  @override
+  String get cardio => 'Cardio';
+
+  @override
+  String get membership_plans => 'Membership Plans';
+
+  @override
+  String get current_plan => 'CURRENT';
+
+  @override
+  String get upgrade => 'Upgrade';
+
+  @override
+  String get downgrade => 'Downgrade';
+
+  @override
+  String get confirm_upgrade => 'Confirm Upgrade';
+
+  @override
+  String get pricing_breakdown => 'Pricing Breakdown';
+
+  @override
+  String get prorated_adjustment => 'Prorated Adjustment';
+
+  @override
+  String get total_due_today => 'Total Due Today';
+
+  @override
+  String get next_billing_date => 'Next Billing Date';
+
+  @override
+  String get payment_method => 'Payment Method';
+
+  @override
+  String get change_payment_method => 'Change Payment Method';
+
+  @override
+  String get agree_to_terms => 'I agree to the terms and conditions';
+
+  @override
+  String get plan_features => 'Plan Features';
+
+  @override
+  String get enable_notifications => 'Enable Notifications';
+
+  @override
+  String get notification_permission_denied => 'Notification Permission Denied';
+
+  @override
+  String get notification_permission_message =>
+      'Please enable notifications in your device settings to receive workout reminders and updates.';
+
+  @override
+  String get open_settings => 'Open Settings';
+
+  @override
+  String get email_support => 'Email Support';
+
+  @override
+  String get phone_support => 'Phone Support';
+
+  @override
+  String get live_chat => 'Live Chat';
 }

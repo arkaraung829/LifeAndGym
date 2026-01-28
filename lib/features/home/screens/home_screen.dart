@@ -1067,6 +1067,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             }).toList(),
+            AppSpacing.vGapMd,
+            // View All Gyms button
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.push(RoutePaths.gymFinder);
+                },
+                icon: const Icon(Icons.location_city),
+                label: const Text('View All Gyms'),
+              ),
+            ),
           ],
         ),
       ),
@@ -1081,12 +1094,13 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) => Container(
         padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Profile header
-            Row(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Profile header
+              Row(
               children: [
                 CircleAvatar(
                   radius: 32,
@@ -1187,6 +1201,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             AppSpacing.vGapMd,
           ],
+        ),
+      ),
         ),
       ),
     );

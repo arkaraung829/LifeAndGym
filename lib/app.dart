@@ -5,9 +5,13 @@ import 'package:provider/provider.dart';
 
 import 'core/config/theme_config.dart';
 import 'core/providers/locale_provider.dart';
+import 'core/providers/notification_preferences_provider.dart';
+import 'core/providers/theme_provider.dart';
 import 'core/router/app_router.dart';
 import 'features/auth/providers/auth_provider.dart';
+import 'features/body_metrics/providers/body_metrics_provider.dart';
 import 'features/classes/providers/classes_provider.dart';
+import 'features/goals/providers/goals_provider.dart';
 import 'features/gyms/providers/gym_provider.dart';
 import 'features/membership/providers/membership_provider.dart';
 import 'features/workouts/providers/workout_provider.dart';
@@ -21,14 +25,18 @@ class LifeAndGymApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LocaleProvider()..initialize()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()..initialize()),
+        ChangeNotifierProvider(create: (_) => NotificationPreferencesProvider()..initialize()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => GymProvider()),
         ChangeNotifierProvider(create: (_) => MembershipProvider()),
         ChangeNotifierProvider(create: (_) => ClassesProvider()),
         ChangeNotifierProvider(create: (_) => WorkoutProvider()),
+        ChangeNotifierProvider(create: (_) => GoalsProvider()),
+        ChangeNotifierProvider(create: (_) => BodyMetricsProvider()),
       ],
-      child: Consumer<LocaleProvider>(
-        builder: (context, localeProvider, _) {
+      child: Consumer2<LocaleProvider, ThemeProvider>(
+        builder: (context, localeProvider, themeProvider, _) {
           return MaterialApp.router(
             title: 'LifeAndGym',
             debugShowCheckedModeBanner: false,
@@ -46,7 +54,7 @@ class LifeAndGymApp extends StatelessWidget {
             // Theme
             theme: ThemeConfig.lightTheme,
             darkTheme: ThemeConfig.darkTheme,
-            themeMode: ThemeMode.light,
+            themeMode: themeProvider.themeMode,
 
             // Router
             routerConfig: AppRouter.router,

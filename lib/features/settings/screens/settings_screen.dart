@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -5,6 +6,8 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/providers/locale_provider.dart';
+import '../../../core/providers/notification_preferences_provider.dart';
+import '../../../core/providers/theme_provider.dart';
 import '../../../shared/widgets/card_container.dart';
 
 /// Settings screen for app configuration.
@@ -15,6 +18,8 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final localeProvider = context.watch<LocaleProvider>();
+    final themeProvider = context.watch<ThemeProvider>();
+    final notificationProvider = context.watch<NotificationPreferencesProvider>();
 
     return Scaffold(
       appBar: AppBar(
@@ -45,10 +50,8 @@ class SettingsScreen extends StatelessWidget {
               leading: const Icon(Icons.notifications_outlined),
               title: l10n.notifications,
               trailing: Switch(
-                value: true,
-                onChanged: (value) {
-                  // TODO: Toggle notifications
-                },
+                value: notificationProvider.notificationsEnabled,
+                onChanged: (value) => _handleNotificationToggle(context, value),
                 activeColor: AppColors.primary,
               ),
               onTap: () {},
@@ -56,14 +59,47 @@ class SettingsScreen extends StatelessWidget {
 
             AppSpacing.vGapSm,
 
+            // Daily Workout Reminder
+            if (notificationProvider.notificationsEnabled) ...[
+              ListTileCard(
+                leading: const Icon(Icons.alarm),
+                title: 'Daily Workout Reminder',
+                trailing: Switch(
+                  value: notificationProvider.dailyWorkoutReminderEnabled,
+                  onChanged: (value) {
+                    notificationProvider.setDailyWorkoutReminderEnabled(value);
+                  },
+                  activeColor: AppColors.primary,
+                ),
+                onTap: () {},
+              ),
+              if (notificationProvider.dailyWorkoutReminderEnabled) ...[
+                AppSpacing.vGapSm,
+                ListTileCard(
+                  leading: const Icon(Icons.access_time),
+                  title: 'Reminder Time',
+                  trailing: Text(
+                    notificationProvider.dailyWorkoutReminderTime.format(context),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  onTap: () => _showReminderTimePicker(context),
+                ),
+              ],
+              AppSpacing.vGapSm,
+            ],
+
             // Dark Mode
             ListTileCard(
               leading: const Icon(Icons.dark_mode_outlined),
               title: l10n.darkMode,
               trailing: Switch(
-                value: Theme.of(context).brightness == Brightness.dark,
+                value: themeProvider.themeMode == ThemeMode.dark,
                 onChanged: (value) {
-                  // TODO: Toggle dark mode
+                  themeProvider.setThemeMode(
+                    value ? ThemeMode.dark : ThemeMode.light,
+                  );
                 },
                 activeColor: AppColors.primary,
               ),
@@ -105,6 +141,48 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _handleNotificationToggle(BuildContext context, bool value) async {
+    final notificationProvider = context.read<NotificationPreferencesProvider>();
+
+    if (value) {
+      // Enabling notifications - request permissions
+      final success = await notificationProvider.setNotificationsEnabled(true);
+
+      if (!success && context.mounted) {
+        // Permission denied - show dialog to open settings
+        _showPermissionDeniedDialog(context);
+      }
+    } else {
+      // Disabling notifications - no permission needed
+      await notificationProvider.setNotificationsEnabled(false);
+    }
+  }
+
+  void _showPermissionDeniedDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Notification Permission Required'),
+        content: const Text(
+          'Notifications are disabled in your device settings. To receive notifications, please enable them in your device settings.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await AppSettings.openAppSettings();
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showLanguageDialog(BuildContext context) {
     final localeProvider = context.read<LocaleProvider>();
     final l10n = context.l10n;
@@ -138,6 +216,30 @@ class SettingsScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _showReminderTimePicker(BuildContext context) async {
+    final notificationProvider = context.read<NotificationPreferencesProvider>();
+    final currentTime = notificationProvider.dailyWorkoutReminderTime;
+
+    final time = await showTimePicker(
+      context: context,
+      initialTime: currentTime,
+      helpText: 'Select reminder time',
+    );
+
+    if (time != null) {
+      await notificationProvider.setDailyWorkoutReminderTime(time);
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Daily reminder set for ${time.format(context)}'),
+            backgroundColor: AppColors.success,
+          ),
+        );
+      }
+    }
   }
 
   void _showDeleteAccountDialog(BuildContext context) {

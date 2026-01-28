@@ -453,4 +453,302 @@ class AppLocalizationsMy extends AppLocalizations {
   String validationFieldRequired(String field) {
     return '$field လိုအပ်ပါသည်';
   }
+
+  @override
+  String get goals_title => 'ရည်မှန်းချက်များ';
+
+  @override
+  String get goals_empty =>
+      'ရည်မှန်းချက်မရှိသေးပါ - သင့်ပထမဆုံး ရည်မှန်းချက်ကို သတ်မှတ်ပါ!';
+
+  @override
+  String get create_goal => 'ရည်မှန်းချက် ဖန်တီးရန်';
+
+  @override
+  String get goal_name => 'ရည်မှန်းချက် အမည်';
+
+  @override
+  String get goal_description => 'ဖော်ပြချက်';
+
+  @override
+  String get goal_type => 'ရည်မှန်းချက် အမျိုးအစား';
+
+  @override
+  String get target_value => 'ပန်းတိုင်တန်ဖိုး';
+
+  @override
+  String get current_value => 'လက်ရှိတန်ဖိုး';
+
+  @override
+  String get target_date => 'ပန်းတိုင်ရက်စွဲ';
+
+  @override
+  String get days_remaining => 'ကျန်ရှိနေသော ရက်';
+
+  @override
+  String get overdue => 'သတ်မှတ်ရက်လွန်';
+
+  @override
+  String get update_progress => 'တိုးတက်မှု အပ်ဒိတ်လုပ်ရန်';
+
+  @override
+  String get mark_complete => 'ပြီးစီးကြောင်း အမှတ်အသားပြုရန်';
+
+  @override
+  String get weight_loss => 'ကိုယ်အလေးချိန် လျှော့ချခြင်း';
+
+  @override
+  String get muscle_gain => 'ကြွက်သား တိုးခြင်း';
+
+  @override
+  String get strength => 'ခွန်အား';
+
+  @override
+  String get endurance => 'ခံနိုင်ရည်';
+
+  @override
+  String get flexibility => 'ပျော့ပြောင်းမှု';
+
+  @override
+  String get body_fat => 'ကိုယ်တွင်းအဆီ';
+
+  @override
+  String get consistency => 'တည်ငြိမ်မှု';
+
+  @override
+  String get filter_all => 'အားလုံး';
+
+  @override
+  String get filter_active => 'လက်ရှိလုပ်ဆောင်နေဆဲ';
+
+  @override
+  String get filter_completed => 'ပြီးစီးပြီး';
+
+  @override
+  String get body_metrics => 'ခန္ဓာကိုယ် တိုင်းတာမှုများ';
+
+  @override
+  String get body_metrics_empty =>
+      'တိုင်းတာမှုမရှိသေးပါ - သင့်ပထမဆုံး တိုင်းတာမှုကို မှတ်တမ်းတင်ပါ!';
+
+  @override
+  String get add_entry => 'မှတ်တမ်း ထည့်ရန်';
+
+  @override
+  String get latest_metrics => 'နောက်ဆုံး တိုင်းတာမှုများ';
+
+  @override
+  String get bmi => 'BMI';
+
+  @override
+  String get muscle_mass => 'ကြွက်သား ပမာណ';
+
+  @override
+  String get measurements => 'တိုင်းတာမှုများ';
+
+  @override
+  String get chest => 'ရင်ဘတ်';
+
+  @override
+  String get waist => 'ခါး';
+
+  @override
+  String get hips => 'တင်ပါး';
+
+  @override
+  String get arms => 'လက်မောင်း';
+
+  @override
+  String get thighs => 'ပေါင်';
+
+  @override
+  String get trends => 'လမ်းကြောင်းများ';
+
+  @override
+  String get overview => 'ခြုံငုံသုံးသပ်ချက်';
+
+  @override
+  String get total_entries => 'စုစုပေါင်း မှတ်တမ်းများ';
+
+  @override
+  String get days_tracked => 'မှတ်တမ်းတင်ထားသော ရက်';
+
+  @override
+  String get recorded_at => 'မှတ်တမ်းတင်ထားသည့် အချိန်';
+
+  @override
+  String get bmi_underweight => 'ကိုယ်အလေးချိန်နည်း';
+
+  @override
+  String get bmi_normal => 'ပုံမှန်';
+
+  @override
+  String get bmi_overweight => 'ကိုယ်အလေးချိန်လွန်';
+
+  @override
+  String get bmi_obese => 'အဝလွန်';
+
+  @override
+  String get find_gyms => 'ဂျင်များ ရှာဖွေရန်';
+
+  @override
+  String get search_gyms => 'ဂျင်များ ရှာဖွေရန်...';
+
+  @override
+  String get no_gyms_found => 'ဂျင်မတွေ့ပါ';
+
+  @override
+  String get open_now => 'ယခု ဖွင့်နေသည်';
+
+  @override
+  String get closed => 'ပိတ်သည်';
+
+  @override
+  String get capacity => 'ဆံ့နိုင်မှု';
+
+  @override
+  String get amenities => 'အဆင်ပြေစေသော အရာများ';
+
+  @override
+  String get operating_hours => 'ဖွင့်ချိန်များ';
+
+  @override
+  String get open_in_maps => 'မြေပုံတွင် ဖွင့်ရန်';
+
+  @override
+  String get apply_filters => 'စစ်ထုတ်မှုများ အသုံးပြုရန်';
+
+  @override
+  String get clear_filters => 'စစ်ထုတ်မှုများ ရှင်းလင်းရန်';
+
+  @override
+  String get create_workout => 'လေ့ကျင့်မှု ဖန်တီးရန်';
+
+  @override
+  String get basic_info => 'အခြေခံ အချက်အလက်';
+
+  @override
+  String get exercise_selection => 'လေ့ကျင့်ခန်း ရွေးချယ်မှု';
+
+  @override
+  String get exercise_configuration => 'စီမံဖွဲ့စည်းမှု';
+
+  @override
+  String get review => 'ပြန်လည်သုံးသပ်ပြီး သိမ်းဆည်းရန်';
+
+  @override
+  String get workout_name => 'လေ့ကျင့်မှု အမည်';
+
+  @override
+  String get category => 'အမျိုးအစား';
+
+  @override
+  String get estimated_duration => 'ခန့်မှန်းခြေ ကြာချိန်';
+
+  @override
+  String get difficulty => 'ခက်ခဲမှု အဆင့်';
+
+  @override
+  String get select_exercises => 'လေ့ကျင့်ခန်းများ ရွေးချယ်ရန်';
+
+  @override
+  String get selected_exercises => 'ရွေးချယ်ထားသော လေ့ကျင့်ခန်းများ';
+
+  @override
+  String get rest_time => 'အနားယူချိန်';
+
+  @override
+  String get beginner => 'အစပြုသူ';
+
+  @override
+  String get intermediate => 'အလယ်အလတ်';
+
+  @override
+  String get advanced => 'အဆင့်မြင့်';
+
+  @override
+  String get chest_muscle => 'ရင်ဘတ်';
+
+  @override
+  String get back => 'ကျောရိုး';
+
+  @override
+  String get shoulders => 'ပခုံး';
+
+  @override
+  String get arms_muscle => 'လက်မောင်း';
+
+  @override
+  String get legs => 'ခြေထောက်';
+
+  @override
+  String get core => 'ကိုယ်လတ်';
+
+  @override
+  String get glutes => 'တင်ပါးကြွက်သား';
+
+  @override
+  String get cardio => 'နှလုံးသွေးကြော';
+
+  @override
+  String get membership_plans => 'အသင်းဝင်အစီအစဉ်များ';
+
+  @override
+  String get current_plan => 'လက်ရှိ';
+
+  @override
+  String get upgrade => 'အဆင့်မြှင့်ရန်';
+
+  @override
+  String get downgrade => 'အဆင့်လျှော့ရန်';
+
+  @override
+  String get confirm_upgrade => 'အဆင့်မြှင့်မှု အတည်ပြုရန်';
+
+  @override
+  String get pricing_breakdown => 'စျေးနှုန်း အသေးစိတ်';
+
+  @override
+  String get prorated_adjustment => 'အချိန်အလိုက် ချိန်ညှိမှု';
+
+  @override
+  String get total_due_today => 'ယနေ့ စုစုပေါင်း ပေးရမည့်ပမာဏ';
+
+  @override
+  String get next_billing_date => 'နောက်ထပ် ငွေတောင်းခံမည့် ရက်စွဲ';
+
+  @override
+  String get payment_method => 'ငွေပေးချေမှု နည်းလမ်း';
+
+  @override
+  String get change_payment_method => 'ငွေပေးချေမှု နည်းလမ်း ပြောင်းရန်';
+
+  @override
+  String get agree_to_terms => 'စည်းမျဉ်းစည်းကမ်းများကို သဘောတူပါသည်';
+
+  @override
+  String get plan_features => 'အစီအစဉ် အင်္ဂါရပ်များ';
+
+  @override
+  String get enable_notifications => 'အသိပေးချက်များ ဖွင့်ရန်';
+
+  @override
+  String get notification_permission_denied =>
+      'အသိပေးချက် ခွင့်ပြုချက် ငြင်းပယ်ထားသည်';
+
+  @override
+  String get notification_permission_message =>
+      'လေ့ကျင့်မှု သတိပေးချက်များနှင့် အပ်ဒိတ်များ လက်ခံရရှိရန် သင့်ကိရိယာ ဆက်တင်များတွင် အသိပေးချက်များကို ဖွင့်ပေးပါ။';
+
+  @override
+  String get open_settings => 'ဆက်တင်များ ဖွင့်ရန်';
+
+  @override
+  String get email_support => 'အီးမေးလ် အကူအညီ';
+
+  @override
+  String get phone_support => 'ဖုန်း အကူအညီ';
+
+  @override
+  String get live_chat => 'တိုက်ရိုက် စကားပြောဆိုမှု';
 }

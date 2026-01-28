@@ -263,6 +263,39 @@ class MembershipService {
     }
   }
 
+  /// Upgrade or downgrade membership plan.
+  Future<MembershipModel> upgradeMembership({
+    required String membershipId,
+    required MembershipPlanType newPlanType,
+  }) async {
+    try {
+      AppLogger.info('Upgrading membership: $membershipId to ${newPlanType.name}');
+
+      final response = await _apiClient.post<Map<String, dynamic>>(
+        ApiConfig.upgradeMembership,
+        body: {
+          'newPlanType': newPlanType.value,
+        },
+      );
+
+      final membership = MembershipModel.fromJson(response.data['membership']);
+      AppLogger.info('Membership upgraded successfully');
+      return membership;
+    } on ApiException catch (e) {
+      if (e.code == 'VALIDATION_ERROR') {
+        throw ValidationException(e.message, code: e.code);
+      }
+      rethrow;
+    } catch (e) {
+      AppLogger.error('Failed to upgrade membership', error: e);
+      if (e is AppException) rethrow;
+      throw DatabaseException(
+        'Failed to upgrade membership',
+        originalError: e,
+      );
+    }
+  }
+
   // Helper to calculate membership end date based on plan type
   DateTime _calculateEndDate(DateTime startDate, MembershipPlanType planType) {
     return switch (planType) {

@@ -49,6 +49,8 @@ class RouteNames {
   static const String settings = 'settings';
   static const String notifications = 'notifications';
   static const String membership = 'membership';
+  static const String membershipPlans = 'membership-plans';
+  static const String upgradeConfirmation = 'upgrade-confirmation';
 }
 
 /// Route paths used for navigation.
@@ -100,4 +102,6 @@ class RoutePaths {
   static const String settings = '/settings';
   static const String notifications = '/notifications';
   static const String membership = '/membership';
+  static const String membershipPlans = '/membership-plans';
+  static const String upgradeConfirmation = '/upgrade-confirmation';
 }

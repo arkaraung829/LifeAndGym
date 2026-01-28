@@ -8,6 +8,8 @@ import * as gyms from './handlers/gyms';
 import * as memberships from './handlers/memberships';
 import * as workouts from './handlers/workouts';
 import * as classes from './handlers/classes';
+import * as goals from './handlers/goals';
+import * as metrics from './handlers/metrics';
 
 // Helper to return JSON error for debugging
 function jsonError(message: string, error?: unknown) {
@@ -52,6 +54,10 @@ export async function GET(
         return workouts.handleGet(request, subpath);
       case 'classes':
         return classes.handleGet(request, subpath);
+      case 'goals':
+        return goals.handleGet(request, subpath);
+      case 'metrics':
+        return metrics.handleGet(request, subpath);
       default:
         return errorResponse(new NotFoundError('Endpoint'), request);
     }
@@ -78,6 +84,10 @@ export async function POST(
         return workouts.handlePost(request, subpath);
       case 'classes':
         return classes.handlePost(request, subpath);
+      case 'goals':
+        return goals.handlePost(request, subpath);
+      case 'metrics':
+        return metrics.handlePost(request, subpath);
       default:
         return errorResponse(new NotFoundError('Endpoint'), request);
     }
@@ -98,6 +108,10 @@ export async function PATCH(
     switch (domain) {
       case 'auth':
         return auth.handlePatch(request, subpath);
+      case 'goals':
+        return goals.handlePatch(request, subpath);
+      case 'metrics':
+        return metrics.handlePatch(request, subpath);
       default:
         return errorResponse(new NotFoundError('Endpoint'), request);
     }
@@ -112,7 +126,17 @@ export async function DELETE(
   { params }: { params: Promise<{ path?: string[] }> }
 ) {
   try {
-    return errorResponse(new NotFoundError('Endpoint'), request);
+    const { path } = await params;
+    const { domain, subpath } = parsePath({ path });
+
+    switch (domain) {
+      case 'goals':
+        return goals.handleDelete(request, subpath);
+      case 'metrics':
+        return metrics.handleDelete(request, subpath);
+      default:
+        return errorResponse(new NotFoundError('Endpoint'), request);
+    }
   } catch (error) {
     return errorResponse(error instanceof Error ? error : new Error('Request failed'), request);
   }
