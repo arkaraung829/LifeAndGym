@@ -93,8 +93,7 @@ async function handleListSchedules(request: NextRequest) {
   let dbQuery = supabaseAdmin
     .from(Tables.classSchedules)
     .select(`*, classes:${Tables.classes}(*)`)
-    .neq('status', 'cancelled')
-    .gt('scheduled_at', new Date().toISOString());
+    .neq('status', 'cancelled');
 
   if (query.gymId) {
     dbQuery = dbQuery.eq('gym_id', query.gymId);
@@ -119,6 +118,9 @@ async function handleListSchedules(request: NextRequest) {
       end.setHours(23, 59, 59, 999);
       dbQuery = dbQuery.lte('scheduled_at', end.toISOString());
     }
+  } else {
+    // Only filter future schedules when no date range is specified
+    dbQuery = dbQuery.gt('scheduled_at', new Date().toISOString());
   }
 
   const { data: schedules, error } = await dbQuery.order('scheduled_at');
