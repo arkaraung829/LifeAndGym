@@ -11,17 +11,13 @@ class NotificationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
+    // Since there's no notification data yet, we show the empty state
+    // When notifications are implemented, this will display the list
+    // and the "Mark all read" action will be shown in the app bar
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.notifications),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // TODO: Mark all as read
-            },
-            child: const Text('Mark all read'),
-          ),
-        ],
       ),
       body: Center(
         child: Padding(
