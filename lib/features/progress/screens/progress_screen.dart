@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/router/route_names.dart';
 import '../../../shared/widgets/card_container.dart';
 import '../../../shared/widgets/loading_indicator.dart';
 import '../../auth/providers/auth_provider.dart';
@@ -62,9 +64,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.calendar_month),
-            onPressed: () {
-              // Show date picker for filtering
-            },
+            onPressed: () => _showDateRangePicker(context),
           ),
         ],
       ),
@@ -107,9 +107,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                             context,
                             title: 'Body Metrics',
                             action: TextButton(
-                              onPressed: () {
-                                // Navigate to add metrics
-                              },
+                              onPressed: () => context.push(RoutePaths.bodyMetrics),
                               child: const Text('Log'),
                             ),
                             child: _buildMetricsPlaceholder(context),
@@ -455,6 +453,37 @@ class _ProgressScreenState extends State<ProgressScreen> {
     }
   }
 
+  Future<void> _showDateRangePicker(BuildContext context) async {
+    final now = DateTime.now();
+    final initialDateRange = DateTimeRange(
+      start: now.subtract(const Duration(days: 30)),
+      end: now,
+    );
+
+    final pickedRange = await showDateRangePicker(
+      context: context,
+      initialDateRange: initialDateRange,
+      firstDate: DateTime(2020),
+      lastDate: now,
+      helpText: 'Select date range',
+      cancelText: 'Cancel',
+      confirmText: 'Apply',
+      saveText: 'Apply',
+    );
+
+    if (pickedRange != null && mounted) {
+      final authProvider = context.read<AuthProvider>();
+      if (authProvider.user != null) {
+        final workoutProvider = context.read<WorkoutProvider>();
+        await workoutProvider.loadWorkoutHistory(
+          userId: authProvider.user!.id,
+          startDate: pickedRange.start,
+          endDate: pickedRange.end,
+        );
+      }
+    }
+  }
+
   Widget _buildMetricsPlaceholder(BuildContext context) {
     return CardContainer(
       child: Column(
@@ -478,9 +507,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
           ),
           AppSpacing.vGapMd,
           ElevatedButton(
-            onPressed: () {
-              // Navigate to add metrics
-            },
+            onPressed: () => context.push(RoutePaths.bodyMetrics),
             child: const Text('Add First Entry'),
           ),
         ],

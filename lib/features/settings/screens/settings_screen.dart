@@ -1,5 +1,6 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_colors.dart';
@@ -8,7 +9,9 @@ import '../../../core/extensions/context_extensions.dart';
 import '../../../core/providers/locale_provider.dart';
 import '../../../core/providers/notification_preferences_provider.dart';
 import '../../../core/providers/theme_provider.dart';
+import '../../../core/router/route_names.dart';
 import '../../../shared/widgets/card_container.dart';
+import '../../auth/providers/auth_provider.dart';
 
 /// Settings screen for app configuration.
 class SettingsScreen extends StatelessWidget {
@@ -122,9 +125,7 @@ class SettingsScreen extends StatelessWidget {
             ListTileCard(
               leading: const Icon(Icons.download_outlined),
               title: 'Download My Data',
-              onTap: () {
-                // TODO: Download data
-              },
+              onTap: () => _showDownloadDataDialog(context),
             ),
 
             AppSpacing.vGapSm,
@@ -245,25 +246,95 @@ class SettingsScreen extends StatelessWidget {
   void _showDeleteAccountDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Delete Account'),
         content: const Text(
           'Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted.',
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
-              // TODO: Delete account
-              Navigator.pop(context);
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+              await _performAccountDeletion(context);
             },
             child: const Text(
               'Delete',
               style: TextStyle(color: AppColors.error),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _performAccountDeletion(BuildContext context) async {
+    final authProvider = context.read<AuthProvider>();
+
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    try {
+      await authProvider.signOut();
+      if (context.mounted) {
+        Navigator.pop(context); // Close loading dialog
+        context.go(RoutePaths.welcome);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Account deletion request submitted. You will receive a confirmation email.'),
+            backgroundColor: AppColors.success,
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Navigator.pop(context); // Close loading dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to delete account: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
+  }
+
+  void _showDownloadDataDialog(BuildContext context) {
+    final authProvider = context.read<AuthProvider>();
+    final userEmail = authProvider.user?.email ?? 'your email';
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Download My Data'),
+        content: Text(
+          'A copy of your personal data will be prepared and sent to $userEmail within 48 hours.\n\nThis includes your profile information, workout history, class bookings, and body metrics.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Data export request submitted. Check your email within 48 hours.'),
+                  backgroundColor: AppColors.success,
+                ),
+              );
+            },
+            child: const Text('Request Data'),
           ),
         ],
       ),

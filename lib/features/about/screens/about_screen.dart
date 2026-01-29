@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/extensions/context_extensions.dart';
+import '../../../core/utils/url_launcher_helper.dart';
 import '../../../shared/widgets/card_container.dart';
 
 /// About screen showing app information.
@@ -74,9 +75,7 @@ class AboutScreen extends StatelessWidget {
             ListTileCard(
               leading: const Icon(Icons.privacy_tip_outlined),
               title: l10n.privacyPolicy,
-              onTap: () {
-                // TODO: Open privacy policy
-              },
+              onTap: () => URLLauncherHelper.launchURL('https://lifeandgym.com/privacy'),
             ),
 
             AppSpacing.vGapSm,
@@ -84,9 +83,7 @@ class AboutScreen extends StatelessWidget {
             ListTileCard(
               leading: const Icon(Icons.description_outlined),
               title: l10n.termsOfService,
-              onTap: () {
-                // TODO: Open terms
-              },
+              onTap: () => URLLauncherHelper.launchURL('https://lifeandgym.com/terms'),
             ),
 
             AppSpacing.vGapSm,
@@ -94,9 +91,7 @@ class AboutScreen extends StatelessWidget {
             ListTileCard(
               leading: const Icon(Icons.open_in_new),
               title: 'Visit Our Website',
-              onTap: () {
-                // TODO: Open website
-              },
+              onTap: () => URLLauncherHelper.launchURL('https://lifeandgym.com'),
             ),
 
             AppSpacing.vGapXl,

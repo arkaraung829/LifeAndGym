@@ -872,9 +872,7 @@ class _GymDetailBottomSheet extends StatelessWidget {
                           icon: Icons.phone,
                           title: 'Phone',
                           child: InkWell(
-                            onTap: () {
-                              // TODO: Launch phone dialer
-                            },
+                            onTap: () => URLLauncherHelper.launchPhone(gym.phone!),
                             child: Text(
                               gym.phone!,
                               style: AppTypography.body.copyWith(

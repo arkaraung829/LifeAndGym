@@ -1162,10 +1162,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: const Text('Settings'),
               onTap: () {
                 Navigator.pop(context);
-                // TODO: Navigate to settings screen
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Settings screen coming soon')),
-                );
+                context.push(RoutePaths.settings);
               },
             ),
             AppSpacing.vGapMd,
