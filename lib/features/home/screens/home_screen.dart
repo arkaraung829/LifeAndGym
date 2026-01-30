@@ -249,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Text(
-                  isCheckedIn ? 'Active session' : 'Show QR code',
+                  isCheckedIn ? l10n.activeSession : l10n.showQrCode,
                   style: AppTypography.bodySmall.copyWith(
                     color: Colors.white.withValues(alpha: 0.9),
                   ),
@@ -466,7 +466,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   hasActiveSession
                       ? l10n.tapToResume
                       : userWorkouts.isNotEmpty
-                          ? '${userWorkouts.length} workout plans available'
+                          ? l10n.workoutPlansAvailable(userWorkouts.length)
                           : l10n.noPlannedWorkouts,
                   style: AppTypography.bodySmall.copyWith(
                     color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
@@ -482,6 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showWorkoutOptionsDialog(BuildContext context) {
+    final l10n = context.l10n;
     final workoutProvider = context.read<WorkoutProvider>();
     final userWorkouts = workoutProvider.userWorkouts;
 
@@ -494,7 +495,7 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Start Workout',
+              l10n.startWorkout,
               style: AppTypography.heading3,
             ),
             AppSpacing.vGapMd,
@@ -527,13 +528,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Quick Workout',
+                          l10n.quickWorkout,
                           style: AppTypography.bodyLarge.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(
-                          'Start a free-form workout',
+                          l10n.quickWorkoutDescription,
                           style: AppTypography.bodySmall.copyWith(
                             color: Theme.of(context)
                                 .colorScheme
@@ -553,7 +554,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (userWorkouts.isNotEmpty) ...[
               AppSpacing.vGapMd,
               Text(
-                'Your Workout Plans',
+                l10n.yourWorkoutPlans,
                 style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -622,7 +623,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.pop(context);
                     context.push(RoutePaths.workouts);
                   },
-                  child: const Text('View All Workouts'),
+                  child: Text(l10n.viewAllWorkouts),
                 ),
             ],
 
@@ -634,6 +635,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _startWorkout(BuildContext context, {String? workoutId}) async {
+    final l10n = context.l10n;
     final authProvider = context.read<AuthProvider>();
     final workoutProvider = context.read<WorkoutProvider>();
 
@@ -651,7 +653,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(workoutProvider.errorMessage ?? 'Failed to start workout'),
+          content: Text(workoutProvider.errorMessage ?? l10n.failedToStartWorkout),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
@@ -979,6 +981,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showGymSelectorDialog(BuildContext context) {
+    final l10n = context.l10n;
     final gymProvider = context.read<GymProvider>();
     final gyms = gymProvider.gyms;
     final selectedGym = gymProvider.selectedGym ?? (gyms.isNotEmpty ? gyms.first : null);
@@ -992,7 +995,7 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Select Gym',
+              l10n.selectGym,
               style: AppTypography.heading3,
             ),
             AppSpacing.vGapMd,
@@ -1077,7 +1080,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   context.push(RoutePaths.gymFinder);
                 },
                 icon: const Icon(Icons.location_city),
-                label: const Text('View All Gyms'),
+                label: Text(l10n.viewAllGyms),
               ),
             ),
           ],
@@ -1087,6 +1090,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showProfileMenu(BuildContext context) {
+    final l10n = context.l10n;
     final authProvider = context.read<AuthProvider>();
     final user = authProvider.user;
 
@@ -1143,7 +1147,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // Menu options
             ListTile(
               leading: const Icon(Icons.person_outline),
-              title: const Text('My Profile'),
+              title: Text(l10n.myProfile),
               onTap: () {
                 Navigator.pop(context);
                 context.push(RoutePaths.profile);
@@ -1151,7 +1155,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.card_membership_outlined),
-              title: const Text('Membership'),
+              title: Text(l10n.membership),
               onTap: () {
                 Navigator.pop(context);
                 context.push(RoutePaths.membership);
@@ -1159,12 +1163,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.settings_outlined),
-              title: const Text('Settings'),
+              title: Text(l10n.settings),
               onTap: () {
                 Navigator.pop(context);
                 // TODO: Navigate to settings screen
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Settings screen coming soon')),
+                  SnackBar(content: Text(l10n.settingsComingSoon)),
                 );
               },
             ),
@@ -1173,22 +1177,22 @@ class _HomeScreenState extends State<HomeScreen> {
             AppSpacing.vGapMd,
             ListTile(
               leading: const Icon(Icons.logout, color: AppColors.error),
-              title: const Text('Sign Out', style: TextStyle(color: AppColors.error)),
+              title: Text(l10n.signOut, style: const TextStyle(color: AppColors.error)),
               onTap: () async {
                 Navigator.pop(context);
                 final confirmed = await showDialog<bool>(
                   context: context,
                   builder: (dialogContext) => AlertDialog(
-                    title: const Text('Sign Out'),
-                    content: const Text('Are you sure you want to sign out?'),
+                    title: Text(l10n.signOut),
+                    content: Text(l10n.signOutConfirmation),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(dialogContext, false),
-                        child: const Text('Cancel'),
+                        child: Text(l10n.cancel),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(dialogContext, true),
-                        child: const Text('Sign Out'),
+                        child: Text(l10n.signOut),
                       ),
                     ],
                   ),

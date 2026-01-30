@@ -747,4 +747,217 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get live_chat => 'Live Chat';
+
+  @override
+  String get activeSession => 'Active session';
+
+  @override
+  String get showQrCode => 'Show QR code';
+
+  @override
+  String workoutPlansAvailable(int count) {
+    return '$count workout plans available';
+  }
+
+  @override
+  String get quickWorkout => 'Quick Workout';
+
+  @override
+  String get quickWorkoutDescription => 'Start a free-form workout';
+
+  @override
+  String get yourWorkoutPlans => 'Your Workout Plans';
+
+  @override
+  String get viewAllWorkouts => 'View All Workouts';
+
+  @override
+  String get failedToStartWorkout => 'Failed to start workout';
+
+  @override
+  String get viewAllGyms => 'View All Gyms';
+
+  @override
+  String get myProfile => 'My Profile';
+
+  @override
+  String get membership => 'Membership';
+
+  @override
+  String get signOut => 'Sign Out';
+
+  @override
+  String get signOutConfirmation => 'Are you sure you want to sign out?';
+
+  @override
+  String get settingsComingSoon => 'Settings screen coming soon';
+
+  @override
+  String get selectGym => 'Select Gym';
+
+  @override
+  String get workout => 'Workout';
+
+  @override
+  String get logAtLeastOneSet => 'Log at least one set before finishing';
+
+  @override
+  String get completeWorkout => 'Complete Workout';
+
+  @override
+  String completeWorkoutConfirmation(int count) {
+    return 'You logged $count sets. Complete this workout?';
+  }
+
+  @override
+  String get complete => 'Complete';
+
+  @override
+  String get cancelWorkoutConfirmation =>
+      'Are you sure you want to cancel? All progress will be lost.';
+
+  @override
+  String get keepGoing => 'Keep Going';
+
+  @override
+  String get failedToCancelWorkout => 'Failed to cancel workout';
+
+  @override
+  String get noActiveWorkoutSession => 'No active workout session';
+
+  @override
+  String get addSet => 'Add Set';
+
+  @override
+  String get selectExercise => 'Select Exercise';
+
+  @override
+  String get restTimer => 'Rest Timer';
+
+  @override
+  String get skipRest => 'Skip Rest';
+
+  @override
+  String get bookClasses => 'Book Classes';
+
+  @override
+  String get bookAClass => 'Book a Class';
+
+  @override
+  String get book => 'Book';
+
+  @override
+  String get joinWaitlist => 'Join Waitlist';
+
+  @override
+  String get yesCancel => 'Yes, Cancel';
+
+  @override
+  String get classBookedSuccess =>
+      'Class booked! You\'ll receive a reminder 30 minutes before.';
+
+  @override
+  String get cancelBookingConfirmation =>
+      'Are you sure you want to cancel this booking?';
+
+  @override
+  String get bookingCancelled => 'Booking cancelled';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get tomorrow => 'Tomorrow';
+
+  @override
+  String get monday => 'Mon';
+
+  @override
+  String get tuesday => 'Tue';
+
+  @override
+  String get wednesday => 'Wed';
+
+  @override
+  String get thursday => 'Thu';
+
+  @override
+  String get friday => 'Fri';
+
+  @override
+  String get saturday => 'Sat';
+
+  @override
+  String get sunday => 'Sun';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get yoga => 'Yoga';
+
+  @override
+  String get hiit => 'HIIT';
+
+  @override
+  String get spin => 'Spin';
+
+  @override
+  String get pilates => 'Pilates';
+
+  @override
+  String get full => 'FULL';
+
+  @override
+  String get noUpcomingBookings => 'No upcoming bookings';
+
+  @override
+  String get noClassesScheduled => 'No classes scheduled';
+
+  @override
+  String get notificationPermissionRequired =>
+      'Notification Permission Required';
+
+  @override
+  String dailyReminderSet(String time) {
+    return 'Daily reminder set for $time';
+  }
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get profileUpdated => 'Profile updated successfully';
+
+  @override
+  String get changePhoto => 'Change Photo';
+
+  @override
+  String get uploading => 'Uploading...';
+
+  @override
+  String get takePhoto => 'Take Photo';
+
+  @override
+  String get chooseFromGallery => 'Choose from Gallery';
+
+  @override
+  String get removePhoto => 'Remove Photo';
+
+  @override
+  String get removePhotoConfirmation =>
+      'Are you sure you want to remove your profile photo?';
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get cameraPermissionRequired => 'Camera Permission Required';
+
+  @override
+  String get photoLibraryPermissionRequired =>
+      'Photo Library Permission Required';
+
+  @override
+  String get openSettings => 'Open Settings';
 }

@@ -1254,5 +1254,363 @@
   "live_chat": "Live Chat",
   "@live_chat": {
     "description": "Live chat label"
+  },
+
+  "activeSession": "Active session",
+  "@activeSession": {
+    "description": "Active session status"
+  },
+
+  "showQrCode": "Show QR code",
+  "@showQrCode": {
+    "description": "Show QR code prompt"
+  },
+
+  "workoutPlansAvailable": "{count} workout plans available",
+  "@workoutPlansAvailable": {
+    "description": "Number of workout plans available",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+
+  "quickWorkout": "Quick Workout",
+  "@quickWorkout": {
+    "description": "Quick workout option"
+  },
+
+  "quickWorkoutDescription": "Start a free-form workout",
+  "@quickWorkoutDescription": {
+    "description": "Quick workout description"
+  },
+
+  "yourWorkoutPlans": "Your Workout Plans",
+  "@yourWorkoutPlans": {
+    "description": "User's workout plans section title"
+  },
+
+  "viewAllWorkouts": "View All Workouts",
+  "@viewAllWorkouts": {
+    "description": "View all workouts button"
+  },
+
+  "failedToStartWorkout": "Failed to start workout",
+  "@failedToStartWorkout": {
+    "description": "Workout start failure message"
+  },
+
+  "viewAllGyms": "View All Gyms",
+  "@viewAllGyms": {
+    "description": "View all gyms button"
+  },
+
+  "myProfile": "My Profile",
+  "@myProfile": {
+    "description": "My profile menu item"
+  },
+
+  "membership": "Membership",
+  "@membership": {
+    "description": "Membership menu item"
+  },
+
+  "signOut": "Sign Out",
+  "@signOut": {
+    "description": "Sign out menu item"
+  },
+
+  "signOutConfirmation": "Are you sure you want to sign out?",
+  "@signOutConfirmation": {
+    "description": "Sign out confirmation message"
+  },
+
+  "settingsComingSoon": "Settings screen coming soon",
+  "@settingsComingSoon": {
+    "description": "Settings coming soon message"
+  },
+
+  "selectGym": "Select Gym",
+  "@selectGym": {
+    "description": "Select gym dialog title"
+  },
+
+  "workout": "Workout",
+  "@workout": {
+    "description": "Workout screen title"
+  },
+
+  "logAtLeastOneSet": "Log at least one set before finishing",
+  "@logAtLeastOneSet": {
+    "description": "Warning message when trying to complete workout without sets"
+  },
+
+  "completeWorkout": "Complete Workout",
+  "@completeWorkout": {
+    "description": "Complete workout dialog title"
+  },
+
+  "completeWorkoutConfirmation": "You logged {count} sets. Complete this workout?",
+  "@completeWorkoutConfirmation": {
+    "description": "Complete workout confirmation message",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "12"
+      }
+    }
+  },
+
+  "complete": "Complete",
+  "@complete": {
+    "description": "Complete button"
+  },
+
+  "cancelWorkoutConfirmation": "Are you sure you want to cancel? All progress will be lost.",
+  "@cancelWorkoutConfirmation": {
+    "description": "Cancel workout warning message"
+  },
+
+  "keepGoing": "Keep Going",
+  "@keepGoing": {
+    "description": "Keep going button"
+  },
+
+  "failedToCancelWorkout": "Failed to cancel workout",
+  "@failedToCancelWorkout": {
+    "description": "Cancel workout failure message"
+  },
+
+  "noActiveWorkoutSession": "No active workout session",
+  "@noActiveWorkoutSession": {
+    "description": "No active workout message"
+  },
+
+  "addSet": "Add Set",
+  "@addSet": {
+    "description": "Add set button"
+  },
+
+  "selectExercise": "Select Exercise",
+  "@selectExercise": {
+    "description": "Select exercise dialog title"
+  },
+
+  "restTimer": "Rest Timer",
+  "@restTimer": {
+    "description": "Rest timer label"
+  },
+
+  "skipRest": "Skip Rest",
+  "@skipRest": {
+    "description": "Skip rest button"
+  },
+
+  "bookClasses": "Book Classes",
+  "@bookClasses": {
+    "description": "Book classes screen title"
+  },
+
+  "bookAClass": "Book a Class",
+  "@bookAClass": {
+    "description": "Book a class button"
+  },
+
+  "book": "Book",
+  "@book": {
+    "description": "Book button"
+  },
+
+  "joinWaitlist": "Join Waitlist",
+  "@joinWaitlist": {
+    "description": "Join waitlist button"
+  },
+
+  "yesCancel": "Yes, Cancel",
+  "@yesCancel": {
+    "description": "Confirm cancellation button"
+  },
+
+  "classBookedSuccess": "Class booked! You'll receive a reminder 30 minutes before.",
+  "@classBookedSuccess": {
+    "description": "Class booking success message"
+  },
+
+  "cancelBookingConfirmation": "Are you sure you want to cancel this booking?",
+  "@cancelBookingConfirmation": {
+    "description": "Cancel booking confirmation question"
+  },
+
+  "bookingCancelled": "Booking cancelled",
+  "@bookingCancelled": {
+    "description": "Booking cancelled confirmation"
+  },
+
+  "today": "Today",
+  "@today": {
+    "description": "Today label"
+  },
+
+  "tomorrow": "Tomorrow",
+  "@tomorrow": {
+    "description": "Tomorrow label"
+  },
+
+  "monday": "Mon",
+  "@monday": {
+    "description": "Monday abbreviation"
+  },
+
+  "tuesday": "Tue",
+  "@tuesday": {
+    "description": "Tuesday abbreviation"
+  },
+
+  "wednesday": "Wed",
+  "@wednesday": {
+    "description": "Wednesday abbreviation"
+  },
+
+  "thursday": "Thu",
+  "@thursday": {
+    "description": "Thursday abbreviation"
+  },
+
+  "friday": "Fri",
+  "@friday": {
+    "description": "Friday abbreviation"
+  },
+
+  "saturday": "Sat",
+  "@saturday": {
+    "description": "Saturday abbreviation"
+  },
+
+  "sunday": "Sun",
+  "@sunday": {
+    "description": "Sunday abbreviation"
+  },
+
+  "all": "All",
+  "@all": {
+    "description": "All filter option"
+  },
+
+  "yoga": "Yoga",
+  "@yoga": {
+    "description": "Yoga class type"
+  },
+
+  "hiit": "HIIT",
+  "@hiit": {
+    "description": "HIIT class type"
+  },
+
+  "spin": "Spin",
+  "@spin": {
+    "description": "Spin class type"
+  },
+
+  "pilates": "Pilates",
+  "@pilates": {
+    "description": "Pilates class type"
+  },
+
+  "booked": "BOOKED",
+  "@booked": {
+    "description": "Booked status label"
+  },
+
+  "full": "FULL",
+  "@full": {
+    "description": "Full capacity status label"
+  },
+
+  "noUpcomingBookings": "No upcoming bookings",
+  "@noUpcomingBookings": {
+    "description": "Empty bookings state message"
+  },
+
+  "noClassesScheduled": "No classes scheduled",
+  "@noClassesScheduled": {
+    "description": "Empty schedule state message"
+  },
+
+  "notificationPermissionRequired": "Notification Permission Required",
+  "@notificationPermissionRequired": {
+    "description": "Notification permission dialog title"
+  },
+
+  "dailyReminderSet": "Daily reminder set for {time}",
+  "@dailyReminderSet": {
+    "description": "Daily reminder confirmation message",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "8:00 AM"
+      }
+    }
+  },
+
+  "deleteAccount": "Delete Account",
+  "@deleteAccount": {
+    "description": "Delete account option"
+  },
+
+  "profileUpdated": "Profile updated successfully",
+  "@profileUpdated": {
+    "description": "Profile update success message"
+  },
+
+  "changePhoto": "Change Photo",
+  "@changePhoto": {
+    "description": "Change photo button"
+  },
+
+  "uploading": "Uploading...",
+  "@uploading": {
+    "description": "Upload in progress message"
+  },
+
+  "takePhoto": "Take Photo",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+
+  "chooseFromGallery": "Choose from Gallery",
+  "@chooseFromGallery": {
+    "description": "Choose from gallery option"
+  },
+
+  "removePhoto": "Remove Photo",
+  "@removePhoto": {
+    "description": "Remove photo option/dialog title"
+  },
+
+  "removePhotoConfirmation": "Are you sure you want to remove your profile photo?",
+  "@removePhotoConfirmation": {
+    "description": "Remove photo confirmation message"
+  },
+
+  "remove": "Remove",
+  "@remove": {
+    "description": "Remove button"
+  },
+
+  "cameraPermissionRequired": "Camera Permission Required",
+  "@cameraPermissionRequired": {
+    "description": "Camera permission dialog title"
+  },
+
+  "photoLibraryPermissionRequired": "Photo Library Permission Required",
+  "@photoLibraryPermissionRequired": {
+    "description": "Photo library permission dialog title"
+  },
+
+  "openSettings": "Open Settings",
+  "@openSettings": {
+    "description": "Button text to open device settings"
   }
 }

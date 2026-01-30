@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/extensions/context_extensions.dart';
 import '../../../core/services/error_handler_service.dart';
 import '../../../core/services/notification_service.dart';
 import '../../../shared/widgets/card_container.dart';
@@ -27,7 +28,8 @@ class _ClassesScreenState extends State<ClassesScreen> {
   bool _isInitialized = false;
   bool _showMyBookings = false;
 
-  final _filters = ['All', 'Yoga', 'HIIT', 'Spin', 'Strength', 'Pilates', 'Cardio'];
+  // Filters will be built using l10n in build method
+  List<String> get _filters => ['All', 'Yoga', 'HIIT', 'Spin', 'Strength', 'Pilates', 'Cardio'];
 
   @override
   void initState() {
@@ -110,7 +112,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_showMyBookings ? 'My Bookings' : 'Book Classes'),
+        title: Text(_showMyBookings ? context.l10n.myBookings : context.l10n.bookClasses),
         actions: [
           IconButton(
             icon: Icon(_showMyBookings ? Icons.calendar_today : Icons.event),
@@ -153,7 +155,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
         itemBuilder: (context, index) {
           final isSelected = index == _selectedDayIndex;
           final date = _weekDays[index];
-          final dayName = _getDayName(date, index);
+          final dayName = _getDayName(context, date, index);
 
           return GestureDetector(
             onTap: () async {
@@ -209,11 +211,34 @@ class _ClassesScreenState extends State<ClassesScreen> {
     );
   }
 
-  String _getDayName(DateTime date, int index) {
-    if (index == 0) return 'Today';
-    if (index == 1) return 'Tmrw';
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  String _getDayName(BuildContext context, DateTime date, int index) {
+    final l10n = context.l10n;
+    if (index == 0) return context.l10n.today;
+    if (index == 1) return context.l10n.tomorrow.substring(0, 4); // Tmrw
+    final days = [context.l10n.monday, context.l10n.tuesday, context.l10n.wednesday, context.l10n.thursday, context.l10n.friday, context.l10n.saturday, context.l10n.sunday];
     return days[date.weekday - 1];
+  }
+
+  String _getLocalizedFilter(BuildContext context, String filter) {
+    final l10n = context.l10n;
+    switch (filter) {
+      case 'All':
+        return context.l10n.all;
+      case 'Yoga':
+        return context.l10n.yoga;
+      case 'HIIT':
+        return context.l10n.hiit;
+      case 'Spin':
+        return context.l10n.spin;
+      case 'Strength':
+        return context.l10n.strength;
+      case 'Pilates':
+        return context.l10n.pilates;
+      case 'Cardio':
+        return context.l10n.cardio;
+      default:
+        return filter;
+    }
   }
 
   Widget _buildFilterChips() {
@@ -229,7 +254,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: FilterChip(
-              label: Text(filter),
+              label: Text(_getLocalizedFilter(context, filter)),
               selected: isSelected,
               onSelected: (selected) {
                 setState(() {
@@ -262,7 +287,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
             ),
             AppSpacing.vGapMd,
             Text(
-              'No classes scheduled',
+              context.l10n.noClassesScheduled,
               style: AppTypography.bodyLarge.copyWith(
                 color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
               ),
@@ -308,7 +333,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
             ),
             AppSpacing.vGapMd,
             Text(
-              'No upcoming bookings',
+              context.l10n.noUpcomingBookings,
               style: AppTypography.bodyLarge.copyWith(
                 color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
               ),
@@ -320,7 +345,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
                   _showMyBookings = false;
                 });
               },
-              child: const Text('Book a Class'),
+              child: Text(context.l10n.bookAClass),
             ),
           ],
         ),
@@ -431,9 +456,9 @@ class _ClassesScreenState extends State<ClassesScreen> {
                     const SizedBox(width: 4),
                     Text(
                       isBooked
-                          ? 'BOOKED'
+                          ? context.l10n.booked
                           : isFull
-                              ? 'FULL'
+                              ? context.l10n.full
                               : '${schedule.spotsRemaining}/${schedule.capacity}',
                       style: AppTypography.labelSmall.copyWith(
                         color: isBooked
@@ -454,7 +479,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
                     foregroundColor: AppColors.error,
                     minimumSize: const Size(100, 36),
                   ),
-                  child: const Text('Cancel'),
+                  child: Text(context.l10n.cancel),
                 )
               else
                 ElevatedButton(
@@ -464,7 +489,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(100, 36),
                   ),
-                  child: Text(isFull ? 'Join Waitlist' : 'Book'),
+                  child: Text(isFull ? context.l10n.joinWaitlist : context.l10n.book),
                 ),
             ],
           ),
@@ -544,7 +569,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.error,
             ),
-            child: const Text('Cancel Booking'),
+            child: Text(context.l10n.cancelBooking),
           ),
         ],
       ),
@@ -565,6 +590,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
   }
 
   Future<void> _bookClass(String scheduleId) async {
+    final l10n = context.l10n;
     final authProvider = context.read<AuthProvider>();
     final classesProvider = context.read<ClassesProvider>();
 
@@ -580,7 +606,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
     final shouldSetReminder = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Book Class'),
+        title: Text(context.l10n.bookClass),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -611,11 +637,11 @@ class _ClassesScreenState extends State<ClassesScreen> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         ElevatedButton(
           onPressed: () => Navigator.pop(context, true),
-          child: const Text('Book'),
+          child: Text(context.l10n.book),
         ),
       ],
     ),
@@ -639,8 +665,8 @@ class _ClassesScreenState extends State<ClassesScreen> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Class booked! You\'ll receive a reminder 30 minutes before.'),
+        SnackBar(
+          content: Text(context.l10n.classBookedSuccess),
           backgroundColor: AppColors.success,
         ),
       );
@@ -656,6 +682,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
   }
 
   Future<void> _cancelBooking(String bookingId) async {
+    final l10n = context.l10n;
     final classesProvider = context.read<ClassesProvider>();
 
     // Find the booking to get schedule ID
@@ -667,17 +694,17 @@ class _ClassesScreenState extends State<ClassesScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Cancel Booking'),
-        content: const Text('Are you sure you want to cancel this booking?'),
+        title: Text(context.l10n.cancelBooking),
+        content: Text(context.l10n.cancelBookingConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('No'),
+            child: Text(context.l10n.no),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            child: const Text('Yes, Cancel'),
+            child: Text(context.l10n.yesCancel),
           ),
         ],
       ),
@@ -694,8 +721,8 @@ class _ClassesScreenState extends State<ClassesScreen> {
       await NotificationService.instance.cancelClassReminder(booking.classScheduleId);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Booking cancelled'),
+        SnackBar(
+          content: Text(context.l10n.bookingCancelled),
         ),
       );
       // Reload schedules to update spots

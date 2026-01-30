@@ -1069,7 +1069,7 @@ class _OperatingHoursWidget extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(AppSpacing.sm),
         decoration: BoxDecoration(
-          color: Colors.green.withValues(alpha: 0.15),
+          color: AppColors.successLight,
           borderRadius: AppSpacing.borderRadiusSm,
         ),
         child: Row(
@@ -1077,13 +1077,13 @@ class _OperatingHoursWidget extends StatelessWidget {
             const Icon(
               Icons.access_time,
               size: 16,
-              color: Colors.green,
+              color: AppColors.success,
             ),
             const SizedBox(width: 8),
             Text(
               'Open 24 Hours',
               style: AppTypography.body.copyWith(
-                color: Colors.green,
+                color: AppColors.success,
                 fontWeight: FontWeight.w600,
               ),
             ),

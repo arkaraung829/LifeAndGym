@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/extensions/context_extensions.dart';
 import '../../../core/services/error_handler_service.dart';
 import '../../../core/services/image_upload_service.dart';
 import '../../../shared/widgets/input_field.dart';
@@ -97,8 +98,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Profile updated successfully'),
+          SnackBar(
+            content: Text(context.l10n.profileUpdated),
             backgroundColor: AppColors.success,
           ),
         );
@@ -121,7 +122,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Profile'),
+        title: Text(context.l10n.editProfile),
       ),
       body: SingleChildScrollView(
         padding: AppSpacing.screenPadding,
@@ -283,7 +284,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         AppSpacing.vGapMd,
         TextButton(
           onPressed: _isUploadingImage ? null : _showImagePicker,
-          child: Text(_isUploadingImage ? 'Uploading...' : 'Change Photo'),
+          child: Text(_isUploadingImage ? context.l10n.uploading : context.l10n.changePhoto),
         ),
       ],
     );
@@ -300,7 +301,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             children: [
               ListTile(
                 leading: const Icon(Icons.camera_alt),
-                title: const Text('Take Photo'),
+                title: Text(context.l10n.takePhoto),
                 onTap: () {
                   Navigator.pop(context);
                   _handleCameraPhoto();
@@ -308,7 +309,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.photo_library),
-                title: const Text('Choose from Gallery'),
+                title: Text(context.l10n.chooseFromGallery),
                 onTap: () {
                   Navigator.pop(context);
                   _handleGalleryPhoto();
@@ -317,7 +318,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               if (context.read<AuthProvider>().user?.avatarUrl != null)
                 ListTile(
                   leading: const Icon(Icons.delete, color: AppColors.error),
-                  title: const Text('Remove Photo', style: TextStyle(color: AppColors.error)),
+                  title: Text(context.l10n.removePhoto, style: const TextStyle(color: AppColors.error)),
                   onTap: () {
                     Navigator.pop(context);
                     _handleRemovePhoto();
@@ -467,8 +468,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Remove Photo'),
-        content: const Text('Are you sure you want to remove your profile photo?'),
+        title: Text(context.l10n.removePhoto),
+        content: Text(context.l10n.removePhotoConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
@@ -476,7 +477,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('Remove', style: TextStyle(color: AppColors.error)),
+            child: Text(context.l10n.remove, style: const TextStyle(color: AppColors.error)),
           ),
         ],
       ),
@@ -534,7 +535,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Camera Permission Required'),
+        title: Text(context.l10n.cameraPermissionRequired),
         content: const Text(
           'Camera access is disabled in your device settings. To take photos, please enable camera permission in your device settings.',
         ),
@@ -559,7 +560,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Photo Library Permission Required'),
+        title: Text(context.l10n.photoLibraryPermissionRequired),
         content: const Text(
           'Photo library access is disabled in your device settings. To choose photos, please enable photo library permission in your device settings.',
         ),

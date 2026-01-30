@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/extensions/context_extensions.dart';
 import '../../../shared/widgets/card_container.dart';
 import '../../../shared/widgets/primary_button.dart';
 import '../models/exercise_model.dart';
@@ -179,12 +180,13 @@ class _ActiveWorkoutScreenState extends State<ActiveWorkoutScreen> {
   }
 
   Future<void> _completeWorkout() async {
+    final l10n = context.l10n;
     final provider = context.read<WorkoutProvider>();
     final logs = provider.sessionLogs;
 
     if (logs.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Log at least one set before finishing')),
+        SnackBar(content: Text(l10n.logAtLeastOneSet)),
       );
       return;
     }
@@ -192,16 +194,16 @@ class _ActiveWorkoutScreenState extends State<ActiveWorkoutScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Complete Workout'),
-        content: Text('You logged ${logs.length} sets. Complete this workout?'),
+        title: Text(l10n.completeWorkout),
+        content: Text(l10n.completeWorkoutConfirmation(logs.length)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Complete'),
+            child: Text(l10n.complete),
           ),
         ],
       ),
@@ -216,24 +218,25 @@ class _ActiveWorkoutScreenState extends State<ActiveWorkoutScreen> {
   }
 
   Future<void> _cancelWorkout() async {
+    final l10n = context.l10n;
     final provider = context.read<WorkoutProvider>();
 
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Cancel Workout'),
-        content: const Text('Are you sure you want to cancel? All progress will be lost.'),
+        title: Text(l10n.cancelWorkout),
+        content: Text(l10n.cancelWorkoutConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Keep Going'),
+            child: Text(l10n.keepGoing),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.error,
             ),
-            child: const Text('Cancel Workout'),
+            child: Text(l10n.cancelWorkout),
           ),
         ],
       ),
@@ -249,7 +252,7 @@ class _ActiveWorkoutScreenState extends State<ActiveWorkoutScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(provider.errorMessage ?? 'Failed to cancel workout'),
+            content: Text(provider.errorMessage ?? l10n.failedToCancelWorkout),
             backgroundColor: AppColors.error,
           ),
         );
@@ -261,19 +264,20 @@ class _ActiveWorkoutScreenState extends State<ActiveWorkoutScreen> {
   Widget build(BuildContext context) {
     return Consumer<WorkoutProvider>(
       builder: (context, provider, child) {
+        final l10n = context.l10n;
         final session = provider.activeSession;
         final logs = provider.sessionLogs;
 
         if (session == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Workout')),
-            body: const Center(child: Text('No active workout session')),
+            appBar: AppBar(title: Text(l10n.workout)),
+            body: Center(child: Text(l10n.noActiveWorkoutSession)),
           );
         }
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(session.workout?.name ?? 'Quick Workout'),
+            title: Text(session.workout?.name ?? l10n.quickWorkout),
             actions: [
               IconButton(
                 icon: const Icon(Icons.close),
@@ -304,7 +308,7 @@ class _ActiveWorkoutScreenState extends State<ActiveWorkoutScreen> {
               ? FloatingActionButton.extended(
                   onPressed: _addExercise,
                   icon: const Icon(Icons.add),
-                  label: const Text('Add Exercise'),
+                  label: Text(l10n.addExercise),
                 )
               : null,
         );
@@ -460,6 +464,8 @@ class _ActiveWorkoutScreenState extends State<ActiveWorkoutScreen> {
   }
 
   Widget _buildBottomBar(List<WorkoutLogModel> logs) {
+    final l10n = context.l10n;
+
     return Container(
       padding: AppSpacing.paddingMd,
       decoration: BoxDecoration(
@@ -481,13 +487,13 @@ class _ActiveWorkoutScreenState extends State<ActiveWorkoutScreen> {
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text('Cancel'),
+                child: Text(l10n.cancel),
               ),
             ),
             AppSpacing.hGapMd,
             Expanded(
               child: PrimaryButton(
-                text: 'Finish Workout',
+                text: l10n.finishWorkout,
                 onPressed: logs.isNotEmpty ? _completeWorkout : null,
               ),
             ),
@@ -535,6 +541,7 @@ class _ExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final muscleColor = AppColors.getMuscleGroupColor(
       exercise.primaryMuscle,
     );
@@ -596,7 +603,7 @@ class _ExerciseCard extends StatelessWidget {
               const SizedBox(width: 40),
               Expanded(
                 child: Text(
-                  'SET',
+                  l10n.sets.toUpperCase(),
                   style: AppTypography.caption.copyWith(
                     color: AppColors.onSurfaceDimDark,
                   ),
@@ -605,7 +612,7 @@ class _ExerciseCard extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  'REPS',
+                  l10n.reps.toUpperCase(),
                   style: AppTypography.caption.copyWith(
                     color: AppColors.onSurfaceDimDark,
                   ),
@@ -614,7 +621,7 @@ class _ExerciseCard extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  'WEIGHT',
+                  l10n.weight.toUpperCase(),
                   style: AppTypography.caption.copyWith(
                     color: AppColors.onSurfaceDimDark,
                   ),
@@ -637,7 +644,7 @@ class _ExerciseCard extends StatelessWidget {
           TextButton.icon(
             onPressed: onAddSet,
             icon: const Icon(Icons.add, size: 18),
-            label: const Text('Add Set'),
+            label: Text(l10n.addSet),
           ),
         ],
       ),
@@ -813,6 +820,8 @@ class _ExerciseSelectorState extends State<_ExerciseSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return DraggableScrollableSheet(
       initialChildSize: 0.9,
       minChildSize: 0.5,
@@ -843,7 +852,7 @@ class _ExerciseSelectorState extends State<_ExerciseSelector> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Select Exercise', style: AppTypography.heading3),
+                    Text(l10n.selectExercise, style: AppTypography.heading3),
                     IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () => Navigator.pop(context),

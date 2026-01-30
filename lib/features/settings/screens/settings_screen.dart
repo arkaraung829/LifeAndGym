@@ -23,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.settings),
+        title: Text(context.l10n.settings),
       ),
       body: SingleChildScrollView(
         padding: AppSpacing.screenPadding,
@@ -162,7 +162,7 @@ class SettingsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Notification Permission Required'),
+        title: Text(context.l10n.notificationPermissionRequired),
         content: const Text(
           'Notifications are disabled in your device settings. To receive notifications, please enable them in your device settings.',
         ),
@@ -176,7 +176,7 @@ class SettingsScreen extends StatelessWidget {
               Navigator.pop(context);
               await AppSettings.openAppSettings();
             },
-            child: const Text('Open Settings'),
+            child: Text(context.l10n.openSettings),
           ),
         ],
       ),
@@ -190,7 +190,7 @@ class SettingsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l10n.language),
+        title: Text(context.l10n.language),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: LocaleProvider.supportedLocales.map((locale) {
@@ -211,7 +211,7 @@ class SettingsScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
+            child: Text(context.l10n.cancel),
           ),
         ],
       ),
@@ -234,7 +234,7 @@ class SettingsScreen extends StatelessWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Daily reminder set for ${time.format(context)}'),
+            content: Text(context.l10n.dailyReminderSet(time.format(context))),
             backgroundColor: AppColors.success,
           ),
         );
@@ -246,7 +246,7 @@ class SettingsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Account'),
+        title: Text(context.l10n.deleteAccount),
         content: const Text(
           'Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted.',
         ),

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 import '../../core/constants/app_typography.dart';
+import '../../core/extensions/context_extensions.dart';
 import '../../core/router/route_names.dart';
 import '../../features/auth/providers/auth_provider.dart';
 
@@ -96,7 +97,7 @@ class GuestModeBanner extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('Sign Up'),
+            child: Text(context.l10n.signUp),
           ),
         ],
       ),

@@ -157,7 +157,7 @@ class AppLocalizationsMy extends AppLocalizations {
   String get noClassesScheduledToday => 'ယနေ့အတန်းမရှိပါ';
 
   @override
-  String get booked => 'ကြိုတင်မှာထားပြီး';
+  String get booked => 'မှာထားပြီး';
 
   @override
   String spotsRemaining(int count) {
@@ -751,4 +751,218 @@ class AppLocalizationsMy extends AppLocalizations {
 
   @override
   String get live_chat => 'တိုက်ရိုက် စကားပြောဆိုမှု';
+
+  @override
+  String get activeSession => 'လက်ရှိလုပ်ဆောင်မှု';
+
+  @override
+  String get showQrCode => 'QR ကုဒ် ပြရန်';
+
+  @override
+  String workoutPlansAvailable(int count) {
+    return '$count လေ့ကျင့်မှု အစီအစဉ် ရရှိနိုင်သည်';
+  }
+
+  @override
+  String get quickWorkout => 'အမြန် လေ့ကျင့်မှု';
+
+  @override
+  String get quickWorkoutDescription => 'အခမဲ့ပုံစံ လေ့ကျင့်မှု စတင်ပါ';
+
+  @override
+  String get yourWorkoutPlans => 'သင့် လေ့ကျင့်မှု အစီအစဉ်များ';
+
+  @override
+  String get viewAllWorkouts => 'လေ့ကျင့်မှုများ အားလုံးကြည့်ရန်';
+
+  @override
+  String get failedToStartWorkout => 'လေ့ကျင့်မှု စတင်မှု မအောင်မြင်ပါ';
+
+  @override
+  String get viewAllGyms => 'ဂျင်များ အားလုံးကြည့်ရန်';
+
+  @override
+  String get myProfile => 'ကျွန်ုပ်၏ ကိုယ်ရေးအချက်အလက်';
+
+  @override
+  String get membership => 'အသင်းဝင်အခြေအနေ';
+
+  @override
+  String get signOut => 'ထွက်ရန်';
+
+  @override
+  String get signOutConfirmation => 'ထွက်လိုသည်မှာ သေချာပါသလား?';
+
+  @override
+  String get settingsComingSoon => 'ဆက်တင် မကြာမီလာမည်';
+
+  @override
+  String get selectGym => 'ဂျင် ရွေးချယ်ရန်';
+
+  @override
+  String get workout => 'လေ့ကျင့်မှု';
+
+  @override
+  String get logAtLeastOneSet =>
+      'အဆုံးသတ်ခြင်းမပြုမီ အနည်းဆုံး တစ်ကြိမ် မှတ်တမ်းတင်ပါ';
+
+  @override
+  String get completeWorkout => 'လေ့ကျင့်မှု ပြီးစီးပါပြီ';
+
+  @override
+  String completeWorkoutConfirmation(int count) {
+    return 'သင်သည် $count ကြိမ် မှတ်တမ်းတင်ပြီးပါပြီ။ ဤလေ့ကျင့်မှုကို ပြီးစီးမည်လား?';
+  }
+
+  @override
+  String get complete => 'ပြီးစီး';
+
+  @override
+  String get cancelWorkoutConfirmation =>
+      'ပယ်ဖျက်လိုသည်မှာ သေချာပါသလား? တိုးတက်မှုအားလုံး ပျောက်သွားပါမည်။';
+
+  @override
+  String get keepGoing => 'ဆက်လုပ်မည်';
+
+  @override
+  String get failedToCancelWorkout => 'လေ့ကျင့်မှု ပယ်ဖျက်မှု မအောင်မြင်ပါ';
+
+  @override
+  String get noActiveWorkoutSession => 'လက်ရှိလေ့ကျင့်မှု မရှိပါ';
+
+  @override
+  String get addSet => 'အကြိမ် ထည့်ရန်';
+
+  @override
+  String get selectExercise => 'လေ့ကျင့်ခန်း ရွေးချယ်ရန်';
+
+  @override
+  String get restTimer => 'အနားယူချိန်တိုင်းကိရိယာ';
+
+  @override
+  String get skipRest => 'အနားမယူတော့ပါ';
+
+  @override
+  String get bookClasses => 'အတန်းများ ကြိုတင်မှာယူရန်';
+
+  @override
+  String get bookAClass => 'အတန်း ကြိုတင်မှာယူရန်';
+
+  @override
+  String get book => 'မှာယူမည်';
+
+  @override
+  String get joinWaitlist => 'စောင့်ဆိုင်းစာရင်းသို့ ဝင်ရန်';
+
+  @override
+  String get yesCancel => 'ဟုတ်ကဲ့၊ ပယ်ဖျက်မည်';
+
+  @override
+  String get classBookedSuccess =>
+      'အတန်း ကြိုတင်မှာယူပြီးပါပြီ! အတန်းမတိုင်မီ ၃၀ မိနစ်က သတိပေးချက် ရရှိပါမည်။';
+
+  @override
+  String get cancelBookingConfirmation =>
+      'ကြိုတင်မှာယူမှုကို ပယ်ဖျက်လိုသည်မှာ သေချာပါသလား?';
+
+  @override
+  String get bookingCancelled => 'ကြိုတင်မှာယူမှု ပယ်ဖျက်ပြီးပါပြီ';
+
+  @override
+  String get today => 'ယနေ့';
+
+  @override
+  String get tomorrow => 'မနက်ဖြန်';
+
+  @override
+  String get monday => 'တနင်္လာ';
+
+  @override
+  String get tuesday => 'အင်္ဂါ';
+
+  @override
+  String get wednesday => 'ဗုဒ္ဓဟူး';
+
+  @override
+  String get thursday => 'ကြာသပတေး';
+
+  @override
+  String get friday => 'သောကြာ';
+
+  @override
+  String get saturday => 'စနေ';
+
+  @override
+  String get sunday => 'တနင်္ဂနွေ';
+
+  @override
+  String get all => 'အားလုံး';
+
+  @override
+  String get yoga => 'ယောဂ';
+
+  @override
+  String get hiit => 'HIIT';
+
+  @override
+  String get spin => 'စပင်';
+
+  @override
+  String get pilates => 'ပိုင်လိတ်';
+
+  @override
+  String get full => 'ပြည့်ပြီ';
+
+  @override
+  String get noUpcomingBookings => 'လာမည့် ကြိုတင်မှာယူမှု မရှိပါ';
+
+  @override
+  String get noClassesScheduled => 'စီစဉ်ထားသော အတန်း မရှိပါ';
+
+  @override
+  String get notificationPermissionRequired =>
+      'အသိပေးချက် ခွင့်ပြုချက် လိုအပ်သည်';
+
+  @override
+  String dailyReminderSet(String time) {
+    return 'နေ့စဉ် သတိပေးချက်ကို $time အတွက် သတ်မှတ်ပြီးပါပြီ';
+  }
+
+  @override
+  String get deleteAccount => 'အကောင့် ဖျက်ရန်';
+
+  @override
+  String get profileUpdated => 'ကိုယ်ရေးအချက်အလက် အပ်ဒိတ်လုပ်ပြီးပါပြီ';
+
+  @override
+  String get changePhoto => 'ဓာတ်ပုံ ပြောင်းရန်';
+
+  @override
+  String get uploading => 'တင်နေသည်...';
+
+  @override
+  String get takePhoto => 'ဓာတ်ပုံ ရိုက်ရန်';
+
+  @override
+  String get chooseFromGallery => 'ပုံစုမှ ရွေးချယ်ရန်';
+
+  @override
+  String get removePhoto => 'ဓာတ်ပုံ ဖယ်ရှားရန်';
+
+  @override
+  String get removePhotoConfirmation =>
+      'သင့်ပရိုဖိုင်ဓာတ်ပုံကို ဖယ်ရှားလိုသည်မှာ သေချာပါသလား?';
+
+  @override
+  String get remove => 'ဖယ်ရှားရန်';
+
+  @override
+  String get cameraPermissionRequired => 'ကင်မရာ ခွင့်ပြုချက် လိုအပ်သည်';
+
+  @override
+  String get photoLibraryPermissionRequired =>
+      'ဓာတ်ပုံစု ခွင့်ပြုချက် လိုအပ်သည်';
+
+  @override
+  String get openSettings => 'ဆက်တင်များ ဖွင့်ရန်';
 }

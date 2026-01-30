@@ -479,5 +479,141 @@
 
   "phone_support": "ဖုန်း အကူအညီ",
 
-  "live_chat": "တိုက်ရိုက် စကားပြောဆိုမှု"
+  "live_chat": "တိုက်ရိုက် စကားပြောဆိုမှု",
+
+  "activeSession": "လက်ရှိလုပ်ဆောင်မှု",
+
+  "showQrCode": "QR ကုဒ် ပြရန်",
+
+  "workoutPlansAvailable": "{count} လေ့ကျင့်မှု အစီအစဉ် ရရှိနိုင်သည်",
+
+  "quickWorkout": "အမြန် လေ့ကျင့်မှု",
+
+  "quickWorkoutDescription": "အခမဲ့ပုံစံ လေ့ကျင့်မှု စတင်ပါ",
+
+  "yourWorkoutPlans": "သင့် လေ့ကျင့်မှု အစီအစဉ်များ",
+
+  "viewAllWorkouts": "လေ့ကျင့်မှုများ အားလုံးကြည့်ရန်",
+
+  "failedToStartWorkout": "လေ့ကျင့်မှု စတင်မှု မအောင်မြင်ပါ",
+
+  "viewAllGyms": "ဂျင်များ အားလုံးကြည့်ရန်",
+
+  "myProfile": "ကျွန်ုပ်၏ ကိုယ်ရေးအချက်အလက်",
+
+  "membership": "အသင်းဝင်အခြေအနေ",
+
+  "signOut": "ထွက်ရန်",
+
+  "signOutConfirmation": "ထွက်လိုသည်မှာ သေချာပါသလား?",
+
+  "settingsComingSoon": "ဆက်တင် မကြာမီလာမည်",
+
+  "selectGym": "ဂျင် ရွေးချယ်ရန်",
+
+  "workout": "လေ့ကျင့်မှု",
+
+  "logAtLeastOneSet": "အဆုံးသတ်ခြင်းမပြုမီ အနည်းဆုံး တစ်ကြိမ် မှတ်တမ်းတင်ပါ",
+
+  "completeWorkout": "လေ့ကျင့်မှု ပြီးစီးပါပြီ",
+
+  "completeWorkoutConfirmation": "သင်သည် {count} ကြိမ် မှတ်တမ်းတင်ပြီးပါပြီ။ ဤလေ့ကျင့်မှုကို ပြီးစီးမည်လား?",
+
+  "complete": "ပြီးစီး",
+
+  "cancelWorkoutConfirmation": "ပယ်ဖျက်လိုသည်မှာ သေချာပါသလား? တိုးတက်မှုအားလုံး ပျောက်သွားပါမည်။",
+
+  "keepGoing": "ဆက်လုပ်မည်",
+
+  "failedToCancelWorkout": "လေ့ကျင့်မှု ပယ်ဖျက်မှု မအောင်မြင်ပါ",
+
+  "noActiveWorkoutSession": "လက်ရှိလေ့ကျင့်မှု မရှိပါ",
+
+  "addSet": "အကြိမ် ထည့်ရန်",
+
+  "selectExercise": "လေ့ကျင့်ခန်း ရွေးချယ်ရန်",
+
+  "restTimer": "အနားယူချိန်တိုင်းကိရိယာ",
+
+  "skipRest": "အနားမယူတော့ပါ",
+
+  "bookClasses": "အတန်းများ ကြိုတင်မှာယူရန်",
+
+  "bookAClass": "အတန်း ကြိုတင်မှာယူရန်",
+
+  "book": "မှာယူမည်",
+
+  "joinWaitlist": "စောင့်ဆိုင်းစာရင်းသို့ ဝင်ရန်",
+
+  "yesCancel": "ဟုတ်ကဲ့၊ ပယ်ဖျက်မည်",
+
+  "classBookedSuccess": "အတန်း ကြိုတင်မှာယူပြီးပါပြီ! အတန်းမတိုင်မီ ၃၀ မိနစ်က သတိပေးချက် ရရှိပါမည်။",
+
+  "cancelBookingConfirmation": "ကြိုတင်မှာယူမှုကို ပယ်ဖျက်လိုသည်မှာ သေချာပါသလား?",
+
+  "bookingCancelled": "ကြိုတင်မှာယူမှု ပယ်ဖျက်ပြီးပါပြီ",
+
+  "today": "ယနေ့",
+
+  "tomorrow": "မနက်ဖြန်",
+
+  "monday": "တနင်္လာ",
+
+  "tuesday": "အင်္ဂါ",
+
+  "wednesday": "ဗုဒ္ဓဟူး",
+
+  "thursday": "ကြာသပတေး",
+
+  "friday": "သောကြာ",
+
+  "saturday": "စနေ",
+
+  "sunday": "တနင်္ဂနွေ",
+
+  "all": "အားလုံး",
+
+  "yoga": "ယောဂ",
+
+  "hiit": "HIIT",
+
+  "spin": "စပင်",
+
+  "pilates": "ပိုင်လိတ်",
+
+  "booked": "မှာထားပြီး",
+
+  "full": "ပြည့်ပြီ",
+
+  "noUpcomingBookings": "လာမည့် ကြိုတင်မှာယူမှု မရှိပါ",
+
+  "noClassesScheduled": "စီစဉ်ထားသော အတန်း မရှိပါ",
+
+  "notificationPermissionRequired": "အသိပေးချက် ခွင့်ပြုချက် လိုအပ်သည်",
+
+  "dailyReminderSet": "နေ့စဉ် သတိပေးချက်ကို {time} အတွက် သတ်မှတ်ပြီးပါပြီ",
+
+  "deleteAccount": "အကောင့် ဖျက်ရန်",
+
+  "profileUpdated": "ကိုယ်ရေးအချက်အလက် အပ်ဒိတ်လုပ်ပြီးပါပြီ",
+
+  "changePhoto": "ဓာတ်ပုံ ပြောင်းရန်",
+
+  "uploading": "တင်နေသည်...",
+
+  "takePhoto": "ဓာတ်ပုံ ရိုက်ရန်",
+
+  "chooseFromGallery": "ပုံစုမှ ရွေးချယ်ရန်",
+
+  "removePhoto": "ဓာတ်ပုံ ဖယ်ရှားရန်",
+
+  "removePhotoConfirmation": "သင့်ပရိုဖိုင်ဓာတ်ပုံကို ဖယ်ရှားလိုသည်မှာ သေချာပါသလား?",
+
+  "remove": "ဖယ်ရှားရန်",
+
+  "cameraPermissionRequired": "ကင်မရာ ခွင့်ပြုချက် လိုအပ်သည်",
+
+  "photoLibraryPermissionRequired": "ဓာတ်ပုံစု ခွင့်ပြုချက် လိုအပ်သည်",
+
+  "openSettings": "ဆက်တင်များ ဖွင့်ရန်"
 }

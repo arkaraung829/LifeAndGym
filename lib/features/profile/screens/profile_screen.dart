@@ -37,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.profile),
+        title: Text(context.l10n.profile),
         actions: [
           if (!authProvider.isGuest)
             IconButton(
@@ -446,7 +446,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l10n.language),
+        title: Text(context.l10n.language),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -471,7 +471,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel),
+          child: Text(context.l10n.cancel),
         ),
       ],
     ),
@@ -488,16 +488,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           final confirmed = await showDialog<bool>(
             context: context,
             builder: (dialogContext) => AlertDialog(
-              title: Text(l10n.logout),
-              content: Text(l10n.logoutConfirmation),
+              title: Text(context.l10n.logout),
+              content: Text(context.l10n.logoutConfirmation),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(dialogContext, false),
-                  child: Text(l10n.cancel),
+                  child: Text(context.l10n.cancel),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(dialogContext, true),
-                  child: Text(l10n.logout),
+                  child: Text(context.l10n.logout),
                 ),
               ],
             ),
@@ -536,7 +536,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               ListTile(
                 leading: const Icon(Icons.camera_alt),
-                title: const Text('Take Photo'),
+                title: Text(context.l10n.takePhoto),
                 onTap: () {
                   Navigator.pop(context);
                   _handleCameraPhoto();
@@ -544,7 +544,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.photo_library),
-                title: const Text('Choose from Gallery'),
+                title: Text(context.l10n.chooseFromGallery),
                 onTap: () {
                   Navigator.pop(context);
                   _handleGalleryPhoto();
@@ -553,7 +553,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (hasAvatar)
                 ListTile(
                   leading: const Icon(Icons.delete, color: AppColors.error),
-                  title: const Text('Remove Photo', style: TextStyle(color: AppColors.error)),
+                  title: Text(context.l10n.removePhoto, style: const TextStyle(color: AppColors.error)),
                   onTap: () {
                     Navigator.pop(context);
                     _handleRemovePhoto();
@@ -690,7 +690,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Remove Photo'),
-        content: const Text('Are you sure you want to remove your profile photo?'),
+        content: Text(context.l10n.removePhotoConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),

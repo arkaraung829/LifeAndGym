@@ -380,7 +380,7 @@ abstract class AppLocalizations {
   /// **'No classes scheduled today'**
   String get noClassesScheduledToday;
 
-  /// Booked status
+  /// Booked status label
   ///
   /// In en, this message translates to:
   /// **'BOOKED'**
@@ -1537,6 +1537,408 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Live Chat'**
   String get live_chat;
+
+  /// Active session status
+  ///
+  /// In en, this message translates to:
+  /// **'Active session'**
+  String get activeSession;
+
+  /// Show QR code prompt
+  ///
+  /// In en, this message translates to:
+  /// **'Show QR code'**
+  String get showQrCode;
+
+  /// Number of workout plans available
+  ///
+  /// In en, this message translates to:
+  /// **'{count} workout plans available'**
+  String workoutPlansAvailable(int count);
+
+  /// Quick workout option
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Workout'**
+  String get quickWorkout;
+
+  /// Quick workout description
+  ///
+  /// In en, this message translates to:
+  /// **'Start a free-form workout'**
+  String get quickWorkoutDescription;
+
+  /// User's workout plans section title
+  ///
+  /// In en, this message translates to:
+  /// **'Your Workout Plans'**
+  String get yourWorkoutPlans;
+
+  /// View all workouts button
+  ///
+  /// In en, this message translates to:
+  /// **'View All Workouts'**
+  String get viewAllWorkouts;
+
+  /// Workout start failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to start workout'**
+  String get failedToStartWorkout;
+
+  /// View all gyms button
+  ///
+  /// In en, this message translates to:
+  /// **'View All Gyms'**
+  String get viewAllGyms;
+
+  /// My profile menu item
+  ///
+  /// In en, this message translates to:
+  /// **'My Profile'**
+  String get myProfile;
+
+  /// Membership menu item
+  ///
+  /// In en, this message translates to:
+  /// **'Membership'**
+  String get membership;
+
+  /// Sign out menu item
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get signOut;
+
+  /// Sign out confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to sign out?'**
+  String get signOutConfirmation;
+
+  /// Settings coming soon message
+  ///
+  /// In en, this message translates to:
+  /// **'Settings screen coming soon'**
+  String get settingsComingSoon;
+
+  /// Select gym dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Select Gym'**
+  String get selectGym;
+
+  /// Workout screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Workout'**
+  String get workout;
+
+  /// Warning message when trying to complete workout without sets
+  ///
+  /// In en, this message translates to:
+  /// **'Log at least one set before finishing'**
+  String get logAtLeastOneSet;
+
+  /// Complete workout dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Workout'**
+  String get completeWorkout;
+
+  /// Complete workout confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'You logged {count} sets. Complete this workout?'**
+  String completeWorkoutConfirmation(int count);
+
+  /// Complete button
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get complete;
+
+  /// Cancel workout warning message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel? All progress will be lost.'**
+  String get cancelWorkoutConfirmation;
+
+  /// Keep going button
+  ///
+  /// In en, this message translates to:
+  /// **'Keep Going'**
+  String get keepGoing;
+
+  /// Cancel workout failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to cancel workout'**
+  String get failedToCancelWorkout;
+
+  /// No active workout message
+  ///
+  /// In en, this message translates to:
+  /// **'No active workout session'**
+  String get noActiveWorkoutSession;
+
+  /// Add set button
+  ///
+  /// In en, this message translates to:
+  /// **'Add Set'**
+  String get addSet;
+
+  /// Select exercise dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Select Exercise'**
+  String get selectExercise;
+
+  /// Rest timer label
+  ///
+  /// In en, this message translates to:
+  /// **'Rest Timer'**
+  String get restTimer;
+
+  /// Skip rest button
+  ///
+  /// In en, this message translates to:
+  /// **'Skip Rest'**
+  String get skipRest;
+
+  /// Book classes screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Book Classes'**
+  String get bookClasses;
+
+  /// Book a class button
+  ///
+  /// In en, this message translates to:
+  /// **'Book a Class'**
+  String get bookAClass;
+
+  /// Book button
+  ///
+  /// In en, this message translates to:
+  /// **'Book'**
+  String get book;
+
+  /// Join waitlist button
+  ///
+  /// In en, this message translates to:
+  /// **'Join Waitlist'**
+  String get joinWaitlist;
+
+  /// Confirm cancellation button
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, Cancel'**
+  String get yesCancel;
+
+  /// Class booking success message
+  ///
+  /// In en, this message translates to:
+  /// **'Class booked! You\'ll receive a reminder 30 minutes before.'**
+  String get classBookedSuccess;
+
+  /// Cancel booking confirmation question
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel this booking?'**
+  String get cancelBookingConfirmation;
+
+  /// Booking cancelled confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Booking cancelled'**
+  String get bookingCancelled;
+
+  /// Today label
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// Tomorrow label
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get tomorrow;
+
+  /// Monday abbreviation
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get monday;
+
+  /// Tuesday abbreviation
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get tuesday;
+
+  /// Wednesday abbreviation
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get wednesday;
+
+  /// Thursday abbreviation
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get thursday;
+
+  /// Friday abbreviation
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get friday;
+
+  /// Saturday abbreviation
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get saturday;
+
+  /// Sunday abbreviation
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get sunday;
+
+  /// All filter option
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// Yoga class type
+  ///
+  /// In en, this message translates to:
+  /// **'Yoga'**
+  String get yoga;
+
+  /// HIIT class type
+  ///
+  /// In en, this message translates to:
+  /// **'HIIT'**
+  String get hiit;
+
+  /// Spin class type
+  ///
+  /// In en, this message translates to:
+  /// **'Spin'**
+  String get spin;
+
+  /// Pilates class type
+  ///
+  /// In en, this message translates to:
+  /// **'Pilates'**
+  String get pilates;
+
+  /// Full capacity status label
+  ///
+  /// In en, this message translates to:
+  /// **'FULL'**
+  String get full;
+
+  /// Empty bookings state message
+  ///
+  /// In en, this message translates to:
+  /// **'No upcoming bookings'**
+  String get noUpcomingBookings;
+
+  /// Empty schedule state message
+  ///
+  /// In en, this message translates to:
+  /// **'No classes scheduled'**
+  String get noClassesScheduled;
+
+  /// Notification permission dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Permission Required'**
+  String get notificationPermissionRequired;
+
+  /// Daily reminder confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Daily reminder set for {time}'**
+  String dailyReminderSet(String time);
+
+  /// Delete account option
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccount;
+
+  /// Profile update success message
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get profileUpdated;
+
+  /// Change photo button
+  ///
+  /// In en, this message translates to:
+  /// **'Change Photo'**
+  String get changePhoto;
+
+  /// Upload in progress message
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading...'**
+  String get uploading;
+
+  /// Take photo option
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo'**
+  String get takePhoto;
+
+  /// Choose from gallery option
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get chooseFromGallery;
+
+  /// Remove photo option/dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Photo'**
+  String get removePhoto;
+
+  /// Remove photo confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove your profile photo?'**
+  String get removePhotoConfirmation;
+
+  /// Remove button
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// Camera permission dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Permission Required'**
+  String get cameraPermissionRequired;
+
+  /// Photo library permission dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Photo Library Permission Required'**
+  String get photoLibraryPermissionRequired;
+
+  /// Button text to open device settings
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettings;
 }
 
 class _AppLocalizationsDelegate
