@@ -27,8 +27,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
   final int _totalSteps = 4;
 
   // Step 1: Basic Info
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+  String _workoutName = 'Full Body Workout';
   String _category = 'Strength';
   double _estimatedDuration = 45;
   String _difficulty = 'Intermediate';
@@ -39,6 +38,21 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
 
   // Step 3: Exercise Configuration
   final Map<String, Map<String, dynamic>> _exerciseConfigs = {};
+
+  static const List<String> workoutNames = [
+    'Full Body Workout',
+    'Upper Body Strength',
+    'Lower Body Strength',
+    'Core & Abs',
+    'Cardio Blast',
+    'HIIT Training',
+    'Yoga Flow',
+    'Morning Stretch',
+    'Leg Day',
+    'Arm Day',
+    'Back & Shoulders',
+    'Chest & Triceps',
+  ];
 
   static const List<String> categories = [
     'Strength',
@@ -78,8 +92,6 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
   @override
   void dispose() {
     _pageController.dispose();
-    _nameController.dispose();
-    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -202,10 +214,8 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
       // Create workout
       final workout = await workoutProvider.createWorkout(
         userId: authProvider.user!.id,
-        name: _nameController.text.trim(),
-        description: _descriptionController.text.trim().isEmpty
-            ? null
-            : _descriptionController.text.trim(),
+        name: _workoutName,
+        description: null,
         category: _category,
         estimatedDuration: _estimatedDuration.toInt(),
         difficulty: _difficulty,
@@ -403,32 +413,26 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
             ),
             AppSpacing.vGapMd,
 
-            // Workout name
-            TextFormField(
-              controller: _nameController,
+            // Workout name dropdown
+            DropdownButtonFormField<String>(
+              value: _workoutName,
               decoration: const InputDecoration(
                 labelText: 'Workout Name',
-                hintText: 'e.g. Upper Body Strength',
                 border: OutlineInputBorder(),
               ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Please enter a workout name';
+              items: workoutNames.map((name) {
+                return DropdownMenuItem(
+                  value: name,
+                  child: Text(name),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() {
+                    _workoutName = value;
+                  });
                 }
-                return null;
               },
-            ),
-            AppSpacing.vGapMd,
-
-            // Description
-            TextFormField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Description (Optional)',
-                hintText: 'Describe your workout...',
-                border: OutlineInputBorder(),
-              ),
-              maxLines: 3,
             ),
             AppSpacing.vGapMd,
 
@@ -806,9 +810,7 @@ class _CreateWorkoutScreenState extends State<CreateWorkoutScreen> {
                   ],
                 ),
                 AppSpacing.vGapSm,
-                _buildInfoRow('Name', _nameController.text),
-                if (_descriptionController.text.isNotEmpty)
-                  _buildInfoRow('Description', _descriptionController.text),
+                _buildInfoRow('Name', _workoutName),
                 _buildInfoRow('Category', _category),
                 _buildInfoRow('Duration', '${_estimatedDuration.toInt()} min'),
                 _buildInfoRow('Difficulty', _difficulty),
