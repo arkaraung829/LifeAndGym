@@ -1612,5 +1612,108 @@
   "openSettings": "Open Settings",
   "@openSettings": {
     "description": "Button text to open device settings"
+  },
+
+  "myWorkouts": "My Workouts",
+  "@myWorkouts": {
+    "description": "My workouts tab title"
+  },
+
+  "templates": "Templates",
+  "@templates": {
+    "description": "Workout templates tab title"
+  },
+
+  "history": "History",
+  "@history": {
+    "description": "Workout history tab title"
+  },
+
+  "setReminder": "Set reminder",
+  "@setReminder": {
+    "description": "Set reminder tooltip"
+  },
+
+  "noWorkoutTemplatesAvailable": "No workout templates available",
+  "@noWorkoutTemplatesAvailable": {
+    "description": "Empty templates message"
+  },
+
+  "workoutHistoryWillAppearHere": "Your workout history will appear here",
+  "@workoutHistoryWillAppearHere": {
+    "description": "Empty history message"
+  },
+
+  "failedToStartWorkout": "Failed to start workout",
+  "@failedToStartWorkout": {
+    "description": "Error message when workout fails to start"
+  },
+
+  "setWorkoutReminder": "Set Workout Reminder",
+  "@setWorkoutReminder": {
+    "description": "Set workout reminder dialog title"
+  },
+
+  "getRemindedToDo": "Get reminded to do: {workoutName}",
+  "@getRemindedToDo": {
+    "description": "Reminder dialog message",
+    "placeholders": {
+      "workoutName": {
+        "type": "String",
+        "example": "Full Body Workout"
+      }
+    }
+  },
+
+  "date": "Date",
+  "@date": {
+    "description": "Date label"
+  },
+
+  "time": "Time",
+  "@time": {
+    "description": "Time label"
+  },
+
+  "reminderSetFor": "Reminder set for {date} at {time}",
+  "@reminderSetFor": {
+    "description": "Reminder confirmation message",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Jan 30, 2026"
+      },
+      "time": {
+        "type": "String",
+        "example": "3:00 PM"
+      }
+    }
+  },
+
+  "todayAt": "Today at {time}",
+  "@todayAt": {
+    "description": "Today with time format",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "3:00 PM"
+      }
+    }
+  },
+
+  "yesterdayAt": "Yesterday at {time}",
+  "@yesterdayAt": {
+    "description": "Yesterday with time format",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "3:00 PM"
+      }
+    }
+  },
+
+  "min": "min",
+  "@min": {
+    "description": "Minutes abbreviation"
   }
 }

@@ -615,5 +615,35 @@
 
   "photoLibraryPermissionRequired": "ဓာတ်ပုံစု ခွင့်ပြုချက် လိုအပ်သည်",
 
-  "openSettings": "ဆက်တင်များ ဖွင့်ရန်"
+  "openSettings": "ဆက်တင်များ ဖွင့်ရန်",
+
+  "myWorkouts": "ကျွန်ုပ် လေ့ကျင့်မှုများ",
+
+  "templates": "နမူနာများ",
+
+  "history": "မှတ်တမ်း",
+
+  "setReminder": "သတိပေးချက် သတ်မှတ်ရန်",
+
+  "noWorkoutTemplatesAvailable": "လေ့ကျင့်မှု နမူနာများ မရှိပါ",
+
+  "workoutHistoryWillAppearHere": "သင့် လေ့ကျင့်မှု မှတ်တမ်း ဤနေရာတွင် ပေါ်လာမည်",
+
+  "failedToStartWorkout": "လေ့ကျင့်မှု စတင်ရန် မအောင်မြင်ပါ",
+
+  "setWorkoutReminder": "လေ့ကျင့်မှု သတိပေးချက် သတ်မှတ်ရန်",
+
+  "getRemindedToDo": "လုပ်ရန် သတိပေးရန်: {workoutName}",
+
+  "date": "ရက်စွဲ",
+
+  "time": "အချိန်",
+
+  "reminderSetFor": "{date} တွင် {time} အတွက် သတိပေးချက် သတ်မှတ်ပြီးပါပြီ",
+
+  "todayAt": "ယနေ့ {time}",
+
+  "yesterdayAt": "မနေ့က {time}",
+
+  "min": "မိနစ်"
 }

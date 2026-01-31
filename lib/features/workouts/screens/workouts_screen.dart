@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/extensions/context_extensions.dart';
 import '../../../core/router/route_names.dart';
 import '../../../core/services/notification_service.dart';
 import '../../../shared/widgets/card_container.dart';
@@ -52,7 +53,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Workouts'),
+        title: Text(context.l10n.workouts),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -65,10 +66,10 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
         child: Column(
           children: [
             TabBar(
-              tabs: const [
-                Tab(text: 'My Workouts'),
-                Tab(text: 'Templates'),
-                Tab(text: 'History'),
+              tabs: [
+                Tab(text: context.l10n.myWorkouts),
+                Tab(text: context.l10n.templates),
+                Tab(text: context.l10n.history),
               ],
               labelStyle: AppTypography.labelLarge,
             ),
@@ -150,7 +151,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.notifications_outlined),
-                  tooltip: 'Set reminder',
+                  tooltip: context.l10n.setReminder,
                   onPressed: () => _showSetReminderDialog(context, workout),
                 ),
                 IconButton(
@@ -174,8 +175,8 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
     }
 
     if (publicWorkouts.isEmpty) {
-      return const Center(
-        child: Text('No workout templates available'),
+      return Center(
+        child: Text(context.l10n.noWorkoutTemplatesAvailable),
       );
     }
 
@@ -244,8 +245,8 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
     }
 
     if (history.isEmpty) {
-      return const Center(
-        child: Text('Your workout history will appear here'),
+      return Center(
+        child: Text(context.l10n.workoutHistoryWillAppearHere),
       );
     }
 
@@ -278,7 +279,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        session.workout?.name ?? 'Quick Workout',
+                        session.workout?.name ?? context.l10n.quickWorkout,
                         style: AppTypography.bodyLarge.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -298,7 +299,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
                 if (session.durationMinutes != null)
                   Chip(
                     label: Text(
-                      '${session.durationMinutes} min',
+                      '${session.durationMinutes} ${context.l10n.min}',
                       style: const TextStyle(fontSize: 12),
                     ),
                     visualDensity: VisualDensity.compact,
@@ -336,11 +337,12 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
   String _formatSessionDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date);
+    final timeStr = DateFormat('h:mm a').format(date);
 
     if (difference.inDays == 0) {
-      return 'Today at ${DateFormat('h:mm a').format(date)}';
+      return context.l10n.todayAt(timeStr);
     } else if (difference.inDays == 1) {
-      return 'Yesterday at ${DateFormat('h:mm a').format(date)}';
+      return context.l10n.yesterdayAt(timeStr);
     } else if (difference.inDays < 7) {
       return DateFormat('EEEE').format(date);
     } else {
@@ -366,7 +368,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(workoutProvider.errorMessage ?? 'Failed to start workout'),
+          content: Text(workoutProvider.errorMessage ?? context.l10n.failedToStartWorkout),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
@@ -383,21 +385,21 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
 
     final result = await showDialog<Map<String, dynamic>>(
       context: context,
-      builder: (context) => StatefulBuilder(
+      builder: (dialogContext) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Set Workout Reminder'),
+          title: Text(dialogContext.l10n.setWorkoutReminder),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Get reminded to do: ${workout.name}',
+                dialogContext.l10n.getRemindedToDo(workout.name),
                 style: AppTypography.bodyLarge,
               ),
               AppSpacing.vGapLg,
               ListTile(
                 leading: const Icon(Icons.calendar_today),
-                title: const Text('Date'),
+                title: Text(dialogContext.l10n.date),
                 subtitle: Text(
                   DateFormat('MMM d, yyyy').format(selectedDate),
                 ),
@@ -415,7 +417,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.access_time),
-                title: const Text('Time'),
+                title: Text(dialogContext.l10n.time),
                 subtitle: Text(
                   selectedTime.format(context),
                 ),
@@ -434,14 +436,14 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(dialogContext.l10n.cancel),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, {
                 'date': selectedDate,
                 'time': selectedTime,
               }),
-              child: const Text('Set Reminder'),
+              child: Text(dialogContext.l10n.setReminder),
             ),
           ],
         ),
@@ -471,10 +473,13 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
 
     if (!mounted) return;
 
+    final dateStr = DateFormat('MMM d, yyyy').format(date);
+    final timeStr = time.format(context);
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Reminder set for ${DateFormat('MMM d, yyyy').format(date)} at ${time.format(context)}',
+          context.l10n.reminderSetFor(dateStr, timeStr),
         ),
         backgroundColor: AppColors.success,
       ),
