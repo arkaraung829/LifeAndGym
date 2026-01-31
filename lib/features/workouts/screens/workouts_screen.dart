@@ -98,6 +98,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
 
     if (userWorkouts.isEmpty) {
       return EmptyStates.noWorkouts(
+        context,
         onAction: () => _showCreateWorkoutDialog(context),
       );
     }

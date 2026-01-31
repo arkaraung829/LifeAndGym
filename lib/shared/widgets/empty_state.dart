@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/constants/app_spacing.dart';
+import '../../core/extensions/context_extensions.dart';
 import 'primary_button.dart';
 
 /// Empty state widget for when there's no content to display.
@@ -72,60 +73,60 @@ class EmptyState extends StatelessWidget {
 class EmptyStates {
   EmptyStates._();
 
-  static Widget noWorkouts({VoidCallback? onAction}) {
+  static Widget noWorkouts(BuildContext context, {VoidCallback? onAction}) {
     return EmptyState(
       icon: Icons.fitness_center,
-      title: 'No Workouts Yet',
-      description: 'Start your fitness journey by logging your first workout.',
-      actionText: 'Start Workout',
+      title: context.l10n.noWorkoutsYetTitle,
+      description: context.l10n.startFitnessJourney,
+      actionText: context.l10n.startWorkout,
       onAction: onAction,
     );
   }
 
-  static Widget noClasses({VoidCallback? onAction}) {
+  static Widget noClasses(BuildContext context, {VoidCallback? onAction}) {
     return EmptyState(
       icon: Icons.event_busy,
-      title: 'No Classes Available',
-      description: 'Check back later for upcoming classes.',
-      actionText: 'Refresh',
+      title: context.l10n.noClassesAvailable,
+      description: context.l10n.checkBackLater,
+      actionText: context.l10n.refresh,
       onAction: onAction,
     );
   }
 
-  static Widget noBookings({VoidCallback? onAction}) {
+  static Widget noBookings(BuildContext context, {VoidCallback? onAction}) {
     return EmptyState(
       icon: Icons.calendar_today,
-      title: 'No Bookings',
-      description: 'You haven\'t booked any classes yet.',
-      actionText: 'Browse Classes',
+      title: context.l10n.noBookings,
+      description: context.l10n.noBookingsYet,
+      actionText: context.l10n.browseClasses,
       onAction: onAction,
     );
   }
 
-  static Widget noExercises({VoidCallback? onAction}) {
+  static Widget noExercises(BuildContext context, {VoidCallback? onAction}) {
     return EmptyState(
       icon: Icons.search_off,
-      title: 'No Exercises Found',
-      description: 'Try adjusting your search or filters.',
-      actionText: 'Clear Filters',
+      title: context.l10n.noExercisesFound,
+      description: context.l10n.tryAdjustingFilters,
+      actionText: context.l10n.clearFilters,
       onAction: onAction,
     );
   }
 
-  static Widget noNotifications() {
-    return const EmptyState(
+  static Widget noNotifications(BuildContext context) {
+    return EmptyState(
       icon: Icons.notifications_off,
-      title: 'No Notifications',
-      description: 'You\'re all caught up!',
+      title: context.l10n.noNotifications,
+      description: context.l10n.youreAllCaughtUp,
     );
   }
 
-  static Widget noSearchResults({VoidCallback? onAction}) {
+  static Widget noSearchResults(BuildContext context, {VoidCallback? onAction}) {
     return EmptyState(
       icon: Icons.search_off,
-      title: 'No Results Found',
-      description: 'Try different keywords or filters.',
-      actionText: 'Clear Search',
+      title: context.l10n.noResultsFound,
+      description: context.l10n.tryDifferentKeywords,
+      actionText: context.l10n.clearSearch,
       onAction: onAction,
     );
   }

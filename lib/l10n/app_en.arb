@@ -1853,5 +1853,80 @@
   "youreAllCaughtUp": "You're all caught up!",
   "@youreAllCaughtUp": {
     "description": "Empty notifications message"
+  },
+
+  "noWorkoutsYetTitle": "No Workouts Yet",
+  "@noWorkoutsYetTitle": {
+    "description": "Empty workouts title"
+  },
+
+  "startFitnessJourney": "Start your fitness journey by logging your first workout.",
+  "@startFitnessJourney": {
+    "description": "Empty workouts description"
+  },
+
+  "startWorkout": "Start Workout",
+  "@startWorkout": {
+    "description": "Start workout button"
+  },
+
+  "noClassesAvailable": "No Classes Available",
+  "@noClassesAvailable": {
+    "description": "Empty classes title"
+  },
+
+  "checkBackLater": "Check back later for upcoming classes.",
+  "@checkBackLater": {
+    "description": "Empty classes description"
+  },
+
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Refresh button"
+  },
+
+  "noBookings": "No Bookings",
+  "@noBookings": {
+    "description": "Empty bookings title"
+  },
+
+  "noBookingsYet": "You haven't booked any classes yet.",
+  "@noBookingsYet": {
+    "description": "Empty bookings description"
+  },
+
+  "browseClasses": "Browse Classes",
+  "@browseClasses": {
+    "description": "Browse classes button"
+  },
+
+  "noExercisesFound": "No Exercises Found",
+  "@noExercisesFound": {
+    "description": "Empty exercises title"
+  },
+
+  "tryAdjustingFilters": "Try adjusting your search or filters.",
+  "@tryAdjustingFilters": {
+    "description": "Empty exercises description"
+  },
+
+  "clearFilters": "Clear Filters",
+  "@clearFilters": {
+    "description": "Clear filters button"
+  },
+
+  "noResultsFound": "No Results Found",
+  "@noResultsFound": {
+    "description": "Empty search title"
+  },
+
+  "tryDifferentKeywords": "Try different keywords or filters.",
+  "@tryDifferentKeywords": {
+    "description": "Empty search description"
+  },
+
+  "clearSearch": "Clear Search",
+  "@clearSearch": {
+    "description": "Clear search button"
   }
 }
