@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/app_colors.dart';
@@ -590,6 +591,8 @@ class _ClassesScreenState extends State<ClassesScreen> {
   }
 
   Future<void> _bookClass(String scheduleId) async {
+    HapticFeedback.mediumImpact();
+
     final l10n = context.l10n;
     final authProvider = context.read<AuthProvider>();
     final classesProvider = context.read<ClassesProvider>();
@@ -657,6 +660,8 @@ class _ClassesScreenState extends State<ClassesScreen> {
     if (!mounted) return;
 
     if (success) {
+      HapticFeedback.heavyImpact();
+
       // Schedule reminder notification
       await NotificationService.instance.scheduleClassReminder(
         scheduleId,
@@ -668,11 +673,14 @@ class _ClassesScreenState extends State<ClassesScreen> {
         SnackBar(
           content: Text(context.l10n.classBookedSuccess),
           backgroundColor: AppColors.success,
+          behavior: SnackBarBehavior.floating,
         ),
       );
       // Reload schedules to update spots
       await _loadSchedulesForDay(_selectedDayIndex);
     } else {
+      HapticFeedback.heavyImpact();
+
       ErrorHandlerService().showErrorSnackBar(
         context,
         classesProvider.error ?? 'Failed to book class',

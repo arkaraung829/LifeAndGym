@@ -1928,5 +1928,20 @@
   "clearSearch": "Clear Search",
   "@clearSearch": {
     "description": "Clear search button"
+  },
+
+  "cancelBooking": "Cancel Booking",
+  "@cancelBooking": {
+    "description": "Cancel booking dialog title"
+  },
+
+  "no": "No",
+  "@no": {
+    "description": "No button"
+  },
+
+  "yes": "Yes",
+  "@yes": {
+    "description": "Yes button"
   }
 }
