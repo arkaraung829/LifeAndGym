@@ -1838,5 +1838,20 @@
   "addFirstEntry": "Add First Entry",
   "@addFirstEntry": {
     "description": "Add first entry button"
+  },
+
+  "markAllRead": "Mark all read",
+  "@markAllRead": {
+    "description": "Mark all notifications as read button"
+  },
+
+  "noNotifications": "No Notifications",
+  "@noNotifications": {
+    "description": "Empty notifications title"
+  },
+
+  "youreAllCaughtUp": "You're all caught up!",
+  "@youreAllCaughtUp": {
+    "description": "Empty notifications message"
   }
 }

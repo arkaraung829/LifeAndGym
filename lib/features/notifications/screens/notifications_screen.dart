@@ -19,7 +19,7 @@ class NotificationsScreen extends StatelessWidget {
             onPressed: () {
               // TODO: Mark all as read
             },
-            child: const Text('Mark all read'),
+            child: Text(l10n.markAllRead),
           ),
         ],
       ),
@@ -36,12 +36,12 @@ class NotificationsScreen extends StatelessWidget {
               ),
               AppSpacing.vGapLg,
               Text(
-                'No Notifications',
+                l10n.noNotifications,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               AppSpacing.vGapMd,
               Text(
-                'You\'re all caught up!',
+                l10n.youreAllCaughtUp,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
