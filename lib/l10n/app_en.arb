@@ -1715,5 +1715,128 @@
   "min": "min",
   "@min": {
     "description": "Minutes abbreviation"
+  },
+
+  "progress": "Progress",
+  "@progress": {
+    "description": "Progress screen title"
+  },
+
+  "trackYourProgress": "Track Your Progress",
+  "@trackYourProgress": {
+    "description": "Guest mode progress title"
+  },
+
+  "signInToTrackProgress": "Sign in to track your workouts and see your progress over time.",
+  "@signInToTrackProgress": {
+    "description": "Guest mode progress message"
+  },
+
+  "recentWorkouts": "Recent Workouts",
+  "@recentWorkouts": {
+    "description": "Recent workouts section title"
+  },
+
+  "bodyMetrics": "Body Metrics",
+  "@bodyMetrics": {
+    "description": "Body metrics section title"
+  },
+
+  "log": "Log",
+  "@log": {
+    "description": "Log button text"
+  },
+
+  "hours": "Hours",
+  "@hours": {
+    "description": "Hours label for stats"
+  },
+
+  "calories": "Calories",
+  "@calories": {
+    "description": "Calories label for stats"
+  },
+
+  "startYourStreak": "Start Your Streak!",
+  "@startYourStreak": {
+    "description": "Start streak message"
+  },
+
+  "completeWorkoutToBegin": "Complete a workout today to begin.",
+  "@completeWorkoutToBegin": {
+    "description": "Complete workout to begin message"
+  },
+
+  "dayStreak": "{count} Day Streak!",
+  "@dayStreak": {
+    "description": "Current streak message",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "7"
+      }
+    }
+  },
+
+  "keepItUpLongestStreak": "Keep it up! Your longest streak was {count} days.",
+  "@keepItUpLongestStreak": {
+    "description": "Longest streak encouragement",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "14"
+      }
+    }
+  },
+
+  "youreBestStreak": "You're on fire! This is your best streak!",
+  "@youreBestStreak": {
+    "description": "Best streak message"
+  },
+
+  "noWorkoutsYet": "No workouts yet",
+  "@noWorkoutsYet": {
+    "description": "Empty workouts message"
+  },
+
+  "startFirstWorkoutToSeeHere": "Start your first workout to see it here",
+  "@startFirstWorkoutToSeeHere": {
+    "description": "Empty workouts hint"
+  },
+
+  "sets": "sets",
+  "@sets": {
+    "description": "Sets label (lowercase)"
+  },
+
+  "yesterday": "Yesterday",
+  "@yesterday": {
+    "description": "Yesterday label"
+  },
+
+  "daysAgo": "{count} days ago",
+  "@daysAgo": {
+    "description": "Days ago format",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+
+  "trackYourBodyMetrics": "Track your body metrics",
+  "@trackYourBodyMetrics": {
+    "description": "Track metrics title"
+  },
+
+  "logWeightMeasurementsAndMore": "Log weight, measurements, and more",
+  "@logWeightMeasurementsAndMore": {
+    "description": "Track metrics description"
+  },
+
+  "addFirstEntry": "Add First Entry",
+  "@addFirstEntry": {
+    "description": "Add first entry button"
   }
 }

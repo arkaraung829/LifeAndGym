@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../core/constants/app_typography.dart';
+import '../../../core/extensions/context_extensions.dart';
 import '../../../shared/widgets/card_container.dart';
 import '../../../shared/widgets/loading_indicator.dart';
 import '../../auth/providers/auth_provider.dart';
@@ -58,15 +59,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Progress'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.calendar_month),
-            onPressed: () {
-              // Show date picker for filtering
-            },
-          ),
-        ],
+        title: Text(context.l10n.progress),
       ),
       body: authProvider.isGuest
           ? _buildGuestState(context)
@@ -96,7 +89,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                           // Recent Workouts
                           _buildSection(
                             context,
-                            title: 'Recent Workouts',
+                            title: context.l10n.recentWorkouts,
                             child: _buildRecentWorkouts(context, workoutProvider),
                           ),
 
@@ -105,12 +98,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
                           // Body Metrics
                           _buildSection(
                             context,
-                            title: 'Body Metrics',
+                            title: context.l10n.bodyMetrics,
                             action: TextButton(
                               onPressed: () {
                                 // Navigate to add metrics
                               },
-                              child: const Text('Log'),
+                              child: Text(context.l10n.log),
                             ),
                             child: _buildMetricsPlaceholder(context),
                           ),
@@ -137,12 +130,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
             AppSpacing.vGapLg,
             Text(
-              'Track Your Progress',
+              context.l10n.trackYourProgress,
               style: AppTypography.heading3,
             ),
             AppSpacing.vGapSm,
             Text(
-              'Sign in to track your workouts and see your progress over time.',
+              context.l10n.signInToTrackProgress,
               style: AppTypography.bodySmall.copyWith(
                 color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
               ),
@@ -176,45 +169,45 @@ class _ProgressScreenState extends State<ProgressScreen> {
       return calories.toString();
     }
 
-    final summaryStats = [
-      {'label': 'Workouts', 'value': completedWorkouts.toString(), 'icon': Icons.fitness_center},
-      {'label': 'Hours', 'value': totalHours, 'icon': Icons.timer},
-      {'label': 'Calories', 'value': formatCalories(totalCalories), 'icon': Icons.local_fire_department},
-    ];
-
     return Row(
-      children: summaryStats.map((stat) {
-        return Expanded(
-          child: CardContainer(
-            margin: EdgeInsets.only(
-              right: stat == summaryStats.last ? 0 : 8,
+      children: [
+        _buildSummaryCard(context, context.l10n.workouts, completedWorkouts.toString(), Icons.fitness_center, isFirst: true),
+        _buildSummaryCard(context, context.l10n.hours, totalHours, Icons.timer),
+        _buildSummaryCard(context, context.l10n.calories, formatCalories(totalCalories), Icons.local_fire_department, isLast: true),
+      ],
+    );
+  }
+
+  Widget _buildSummaryCard(BuildContext context, String label, String value, IconData icon, {bool isFirst = false, bool isLast = false}) {
+    return Expanded(
+      child: CardContainer(
+        margin: EdgeInsets.only(
+          right: isLast ? 0 : 8,
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: AppColors.primary,
+              size: 28,
             ),
-            child: Column(
-              children: [
-                Icon(
-                  stat['icon'] as IconData,
-                  color: AppColors.primary,
-                  size: 28,
-                ),
-                AppSpacing.vGapSm,
-                Text(
-                  stat['value'] as String,
-                  style: AppTypography.heading2,
-                ),
-                Text(
-                  stat['label'] as String,
-                  style: AppTypography.caption.copyWith(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.6),
-                  ),
-                ),
-              ],
+            AppSpacing.vGapSm,
+            Text(
+              value,
+              style: AppTypography.heading2,
             ),
-          ),
-        );
-      }).toList(),
+            Text(
+              label,
+              style: AppTypography.caption.copyWith(
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -249,13 +242,13 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Start Your Streak!',
+                    context.l10n.startYourStreak,
                     style: AppTypography.heading3.copyWith(
                       color: Colors.white,
                     ),
                   ),
                   Text(
-                    'Complete a workout today to begin.',
+                    context.l10n.completeWorkoutToBegin,
                     style: AppTypography.bodySmall.copyWith(
                       color: Colors.white.withValues(alpha: 0.9),
                     ),
@@ -293,15 +286,15 @@ class _ProgressScreenState extends State<ProgressScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$currentStreak Day Streak!',
+                  context.l10n.dayStreak(currentStreak),
                   style: AppTypography.heading3.copyWith(
                     color: Colors.white,
                   ),
                 ),
                 Text(
                   longestStreak > currentStreak
-                      ? 'Keep it up! Your longest streak was $longestStreak days.'
-                      : "You're on fire! This is your best streak!",
+                      ? context.l10n.keepItUpLongestStreak(longestStreak)
+                      : context.l10n.youreBestStreak,
                   style: AppTypography.bodySmall.copyWith(
                     color: Colors.white.withValues(alpha: 0.9),
                   ),
@@ -353,15 +346,16 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
             AppSpacing.vGapMd,
             Text(
-              'No workouts yet',
-              style: AppTypography.bodyLarge,
+              context.l10n.noWorkoutsYet,
+              style: AppTypography.bodyLarge.copyWith(fontWeight: FontWeight.w600),
             ),
             AppSpacing.vGapXs,
             Text(
-              'Start your first workout to see it here',
+              context.l10n.startFirstWorkoutToSeeHere,
               style: AppTypography.bodySmall.copyWith(
                 color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
               ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -394,13 +388,13 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      session.workout?.name ?? 'Quick Workout',
+                      session.workout?.name ?? context.l10n.quickWorkout,
                       style: AppTypography.bodyLarge.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
-                      _formatDate(session.startedAt),
+                      _formatDate(context, session.startedAt),
                       style: AppTypography.bodySmall.copyWith(
                         color: Theme.of(context)
                             .colorScheme
@@ -422,7 +416,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   ),
                   if (session.totalSets != null)
                     Text(
-                      '${session.totalSets} sets',
+                      '${session.totalSets} ${context.l10n.sets}',
                       style: AppTypography.caption.copyWith(
                         color: Theme.of(context)
                             .colorScheme
@@ -439,16 +433,16 @@ class _ProgressScreenState extends State<ProgressScreen> {
     );
   }
 
-  String _formatDate(DateTime date) {
+  String _formatDate(BuildContext context, DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date);
 
     if (difference.inDays == 0) {
-      return 'Today';
+      return context.l10n.today;
     } else if (difference.inDays == 1) {
-      return 'Yesterday';
+      return context.l10n.yesterday;
     } else if (difference.inDays < 7) {
-      return '${difference.inDays} days ago';
+      return context.l10n.daysAgo(difference.inDays);
     } else {
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       return '${months[date.month - 1]} ${date.day}';
@@ -466,22 +460,23 @@ class _ProgressScreenState extends State<ProgressScreen> {
           ),
           AppSpacing.vGapMd,
           Text(
-            'Track your body metrics',
-            style: AppTypography.bodyLarge,
+            context.l10n.trackYourBodyMetrics,
+            style: AppTypography.bodyLarge.copyWith(fontWeight: FontWeight.w600),
           ),
           AppSpacing.vGapXs,
           Text(
-            'Log weight, measurements, and more',
+            context.l10n.logWeightMeasurementsAndMore,
             style: AppTypography.bodySmall.copyWith(
               color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
             ),
+            textAlign: TextAlign.center,
           ),
           AppSpacing.vGapMd,
           ElevatedButton(
             onPressed: () {
               // Navigate to add metrics
             },
-            child: const Text('Add First Entry'),
+            child: Text(context.l10n.addFirstEntry),
           ),
         ],
       ),
